@@ -1,19 +1,6 @@
 <template>
     <div>
-        <div v-if="!mapLoaded && mission != null" class="overlay">
-            <div class="background">
-                <video
-                    loop
-                    muted
-                    autoplay
-                    poster="/img/jpg/loading.jpg"
-                    class="video"
-                >
-                    <source src="/video/loading.webm" type="video/webm" />
-                    <source src="/video/loading.mp4" type="video/mp4" />
-                    <source src="/video/loading.ogv" type="video/ogg" />
-                </video>
-            </div>
+        <div v-if="!mapLoaded && mission != null" class="overlay" :style="'background: #ccc url(\'/img/jpg/mission-backgrounds/' + mission.background + '.jpg\') no-repeat; background-size: cover'">
             <div class="overlay-container">
                 <img
                     class="img-fluid"
@@ -25,12 +12,12 @@
                         <img
                             src="/img/game-icons/mission-inverted.png"
                             class="img-fluid"
-                            alt="Mission Icon"
+                            :alt="$t('mission-icon')"
                         />
                     </div>
                     <div class="footer-text">
-                        <h2>{{ mission.missionType }}</h2>
-                        <h1>{{ mission.name }}</h1>
+                        <h2>{{ lang('mission-types.' + mission.missionType.toLowerCase(), mission.missionType) }}</h2>
+                        <h1>{{ lang('missions.' + mission.slug, mission.name) }}</h1>
                     </div>
                     <div
                         class="loader"
@@ -67,7 +54,7 @@
                     :class="{ selected: currentLayer === i }"
                 >
                     <div @click="changeLevel(i)" class="floor">
-                        Level {{ i }}
+                        {{ $t('map.level-number', { levelNumber: i }) }}
                     </div>
                     <div
                         :class="{ 'has-search-results': hasSearchResults(i) }"
@@ -82,202 +69,11 @@
                     v-if="mission.satelliteView"
                 >
                     <div @click="changeLevel(-99)" class="floor">
-                        Satellite
+                        {{ $t('map.satellite') }}
                     </div>
                 </div>
             </div>
-            <l-map
-                id="map"
-                ref="map"
-                @click="addMarker"
-                :minZoom="3"
-                :maxZoom="5"
-                :maxBounds="[
-                    [
-                        this.mission.topLeftCoordinate.split(',')[0],
-                        this.mission.topLeftCoordinate.split(',')[1]
-                    ],
-                    [
-                        this.mission.bottomRightCoordinate.split(',')[0],
-                        this.mission.bottomRightCoordinate.split(',')[1]
-                    ]
-                ]"
-                :crs="crs"
-                @pm:drawstart="initDraw"
-                @pm:create="pmLayer"
-                @pm:drawend="endDraw"
-            >
-                <l-tile-layer
-                    v-for="floor in range(
-                        mission.lowestFloorNumber,
-                        mission.highestFloorNumber
-                    )"
-                    :key="floor"
-                    :noWrap="true"
-                    :visible="currentLayer === floor"
-                    :url="mapUrl + floor + '/{z}/{x}/{y}.png'"
-                ></l-tile-layer>
-                <l-tile-layer
-                    v-if="mission.satelliteView"
-                    :noWrap="true"
-                    :visible="currentLayer === -99"
-                    :url="mapUrl + '-99/{z}/{x}/{y}.png'"
-                ></l-tile-layer>
-                <div
-                    v-for="floor in range(
-                        mission.lowestFloorNumber,
-                        mission.highestFloorNumber
-                    )"
-                    :key="'layer' + floor"
-                >
-                    <l-layer-group
-                        v-for="disguise in disguises"
-                        :key="floor + disguise.name"
-                        :visible="
-                            currentLayer == floor &&
-                                editor.currentDisguise == disguise.id
-                        "
-                    >
-                        <l-polygon
-                            v-for="item in disguise.areas.filter(
-                                el => el.level == floor
-                            )"
-                            :key="item.id"
-                            :lat-lngs="parseCoords(item.vertices)"
-                            :fillColor="
-                                item.type === 'trespassing' ? 'yellow' : '#f00'
-                            "
-                            :stroke="false"
-                            :weight="4"
-                            :opacity="0.75"
-                            @click="deletePoly(item, 'disguise-areas')"
-                        >
-                            <l-tooltip>
-                                {{
-                                    item.type === 'trespassing'
-                                        ? 'Trespassing'
-                                        : 'Hostile'
-                                }}
-                            </l-tooltip>
-                        </l-polygon>
-                    </l-layer-group>
-                    <l-layer-group
-                        v-for="(group, key) in layerGroups"
-                        :key="floor + key"
-                        :visible="currentLayer == floor && !isLayerHidden(key)"
-                    >
-                        <div v-if="group.name === 'Ledge'">
-                            <l-polyline
-                                v-for="ledge in ledges.filter(
-                                    el => el.level == floor
-                                )"
-                                :key="ledge.id"
-                                color="#fff"
-                                :weight="4"
-                                :opacity="0.75"
-                                :lat-lngs="parseCoords(ledge.vertices)"
-                                @click="deletePoly(ledge, 'ledges')"
-                            >
-                                <l-tooltip>Ledge</l-tooltip>
-                            </l-polyline>
-                        </div>
-                        <div v-else-if="group.name === 'Foliage'">
-                            <l-polygon
-                                v-for="item in foliage.filter(
-                                    el => el.level == floor
-                                )"
-                                :key="item.id"
-                                color="#248f24"
-                                fillColor="#248f24"
-                                :weight="4"
-                                :opacity="0.75"
-                                :lat-lngs="parseCoords(item.vertices)"
-                                @click="deletePoly(item, 'foliage')"
-                            >
-                                <l-tooltip>Foliage</l-tooltip>
-                            </l-polygon>
-                        </div>
-                        <div v-else>
-                            <l-marker
-                                v-for="item in group.items.filter(
-                                    el => el.level == floor
-                                )"
-                                :key="item.id"
-                                :latLng="item.latLng"
-                                :draggable="editor.mode === 'items'"
-                                @dragend="moveMarker($event, item)"
-                            >
-                                <l-icon
-                                    :icon-url="
-                                        '/img/map-icons/' + item.icon + '.png'
-                                    "
-                                    :icon-size="[32, 32]"
-                                    :icon-anchor="[16, 16]"
-                                    :class-name="
-                                        isSearchResult(item)
-                                            ? 'search-result'
-                                            : ''
-                                    "
-                                ></l-icon>
-                                <l-popup>
-                                    <img
-                                        v-if="item.image"
-                                        :src="'/img/png/' + item.image + '.png'"
-                                        alt="Image template holder"
-                                    />
-                                    <div data-name="name">{{ item.name }}</div>
-                                    <div data-name="group">
-                                        {{ item.group }}
-                                    </div>
-                                    <div data-name="target">
-                                        <i
-                                            v-if="item.target"
-                                            :class="'far ' + item.targetIcon"
-                                        ></i>
-                                        <span>{{ item.target }}</span>
-                                    </div>
-                                    <div data-name="notes">
-                                        <div
-                                            v-for="note in item.notes"
-                                            :key="note.id"
-                                            :class="note.type"
-                                        >
-                                            <div class="in-game-description">
-                                                In-game Description:
-                                            </div>
-                                            <div data-name="note-contents">
-                                                {{ note.text }}
-                                            </div>
-                                        </div>
-                                    </div>
-                                    <div class="btn-group">
-                                        <button
-                                            class="btn btn-danger btn-sm"
-                                            data-action="delete-btn"
-                                            @click="deleteMarker(item)"
-                                            v-tooltip:top="'Delete'"
-                                        >
-                                            <i class="fas fa-times"></i>
-                                        </button>
-                                        <button
-                                            class="btn btn-warning btn-sm"
-                                            data-action="edit-btn"
-                                            @click="editMarker(item)"
-                                            data-node-id="x"
-                                            v-tooltip:top="'Edit'"
-                                        >
-                                            <i class="fas fa-pencil-alt"></i>
-                                        </button>
-                                    </div>
-                                </l-popup>
-                                <l-tooltip v-if="item.tooltip">
-                                    {{ item.tooltip }}
-                                </l-tooltip>
-                            </l-marker>
-                        </div>
-                    </l-layer-group>
-                </div>
-            </l-map>
+            <div id="map"></div>
             <nav class="navbar navbar-fixed-right navbar-dark">
                 <button
                     class="navbar-toggler"
@@ -286,7 +82,7 @@
                     data-target="#navbarSupportedContent"
                     aria-controls="navbarSupportedContent"
                     aria-expanded="false"
-                    aria-label="Toggle navigation"
+                    :aria-label="$t('map.toggle-navigation')"
                 >
                     <span class="navbar-toggler-icon"></span>
                 </button>
@@ -297,34 +93,44 @@
                     <div class="header">
                         <router-link :to="{ name: 'home' }">
                             <img
-                                src="/img/png/logos/map-header.png"
+                                src="/img/png/logos/hitmaps.png"
                                 class="img-fluid"
                             />
                         </router-link>
                     </div>
                     <div class="editor-enabled" v-if="editor.enabled">
-                        <h3 v-if="editor.mode === ''">Editor Enabled</h3>
+                        <h3 v-if="editor.mode === ''">
+                            <i class="fas fa-fw fa-pencil-alt"></i>
+                            {{ $t('map.editor-enabled' )}}
+                        </h3>
                         <h3 v-else-if="editor.mode === 'items'">
-                            ADD / REMOVE ITEMS
+                            <i class="fas fa-fw fa-map-marker-alt"></i>
+                            {{ $t('map.add-remove-items') }}
                         </h3>
                         <h3 v-else-if="editor.mode === 'ledges'">
-                            ADD / REMOVE LEDGES
+                            <i class="fas fa-fw fa-bezier-curve"></i>
+                            {{ $t('map.add-remove-ledges') }}
                         </h3>
                         <h3 v-else-if="editor.mode === 'foliage'">
-                            ADD / REMOVE FOLIAGE
+                            <i class="fas fa-fw fa-leaf"></i>
+                            {{ $t('map.add-remove-foliage') }}
                         </h3>
                         <h3 v-else-if="editor.mode === 'disguises'">
-                            MANAGE DISGUISE AREAS
+                            <i class="fas fa-fw fa-user-tie"></i>
+                            {{ $t('map.manage-disguise-areas') }}
                         </h3>
                     </div>
                     <div id="map-control">
                         <div class="control-buttons">
+                            <button data-toggle="modal" class="btn control-button" data-target="#locale-modal" v-tooltip:bottom="$t('language-modal.change-language')">
+                                <country-flag :country="getCountryFlag()" />
+                            </button>
                             <button
                                 v-if="isLoggedIn"
                                 id="edit-button"
-                                @click="editor.enabled = !editor.enabled"
+                                @click="toggleEditor"
                                 class="btn control-button"
-                                v-tooltip:top="'Edit Map'"
+                                v-tooltip:top="$t('map.edit-map')"
                             >
                                 <i class="fas fa-pencil-alt"></i>
                             </button>
@@ -332,27 +138,24 @@
                                 <button
                                     v-if="isLoggedIn"
                                     class="btn control-button"
-                                    v-tooltip:top="'Profile'"
+                                    v-tooltip:top="$t('profile.profile')"
                                 >
                                     <i class="fas fa-user-circle"></i>
                                 </button>
                             </router-link>
-                            <a href="#">
-                                <button
-                                    v-if="isLoggedIn"
-                                    class="btn control-button"
-                                    v-tooltip:top="'Log Out'"
-                                >
-                                    <i class="fas fa-sign-out-alt"></i>
-                                </button>
-                            </a>
+                            <button
+                                v-if="isLoggedIn"
+                                class="btn control-button"
+                                v-tooltip:top="$t('authentication.log-out')"
+                                @click="logout"
+                            >
+                                <i class="fas fa-sign-out-alt"></i>
+                            </button>
                             <router-link :to="{ name: 'login' }">
                                 <button
                                     v-if="!isLoggedIn"
                                     class="btn control-button"
-                                    v-tooltip:bottom="
-                                        'Login / Register to edit'
-                                    "
+                                    v-tooltip:bottom="$t('map.login-to-edit')"
                                 >
                                     <i class="fas fa-sign-in-alt"></i>
                                 </button>
@@ -379,7 +182,7 @@
                                 :class="{ selected: currentLayer === i }"
                             >
                                 <div @click="changeLevel(i)" class="floor">
-                                    Level {{ i }}
+                                    {{ $t('map.level-number', { levelNumber: i }) }}
                                 </div>
                                 <div
                                     :class="{
@@ -397,7 +200,7 @@
                                 :class="{ selected: currentLayer === -99 }"
                             >
                                 <div @click="changeLevel(-99)" class="floor">
-                                    Satellite
+                                    {{ $t('map.satellite' )}}
                                 </div>
                             </div>
                         </div>
@@ -444,7 +247,7 @@
                                 @click="clearSearch"
                                 id="clear-search"
                                 class="btn control-button"
-                                v-tooltip:top="'Clear Search'"
+                                v-tooltip:top="$t('map.clear-search')"
                                 v-show="searchedItem != null"
                             >
                                 <i class="fas fa-times"></i>
@@ -469,7 +272,7 @@
                                         <span class="disguise-text">
                                             {{
                                                 currentDisguise === null
-                                                    ? 'Disguises'
+                                                    ? $t('map.disguises')
                                                     : currentDisguise.name
                                             }}
                                         </span>
@@ -491,7 +294,7 @@
                                             class="full-width selected"
                                             style="background: url('/img/jpg/disguises/none.jpg'); "
                                         >
-                                            <p class="disguise-info">None</p>
+                                            <p class="disguise-info">{{ $t('map.none') }}</p>
                                         </div>
                                         <div
                                             @click="changeDisguise(disguise)"
@@ -516,7 +319,7 @@
                             <button
                                 id="clear-disguise-search"
                                 class="btn control-button"
-                                v-tooltip:top="'Clear Search'"
+                                v-tooltip:top="$t('map.clear-search')"
                                 style="display: none"
                             >
                                 <i class="fas fa-times"></i>
@@ -529,7 +332,7 @@
                                 class="btn control-button"
                             >
                                 <i class="far fa-fw fa-eye-slash"></i>
-                                Hide All
+                                {{ $t('map.hide-all') }}
                             </button>
                             <button
                                 id="show-all"
@@ -537,7 +340,7 @@
                                 class="btn control-button"
                             >
                                 <i class="far fa-fw fa-eye"></i>
-                                Show All
+                                {{ $t('map.show-all') }}
                             </button>
                         </div>
                         <div v-if="mission.missionType == 'Sniper Assassin'">
@@ -578,7 +381,7 @@
                                                 :alt="group.name + ' Icon'"
                                                 class="img-fluid"
                                             />
-                                            <span>{{ group.name }}</span>
+                                            <span>{{ lang('map.groups.' + group.name, group.name) }}</span>
                                         </div>
                                         <div
                                             v-if="group.collapsible"
@@ -654,7 +457,7 @@
                                         aria-expanded="false"
                                         :aria-controls="'body-' + index"
                                     >
-                                        {{ type.name }}
+                                        {{ lang('map.types.' + type.name, type.name) }}
                                         <span class="float-right">
                                             <i class="fas fa-caret-down"></i>
                                             <i class="fas fa-caret-up"></i>
@@ -713,7 +516,7 @@
                                                     :alt="group.name + ' Icon'"
                                                     class="img-fluid"
                                                 />
-                                                <span>{{ group.name }}</span>
+                                                <span>{{ lang('map.groups.' + type.name + '|' + group.name, group.name) }}</span>
                                             </div>
                                             <div
                                                 v-if="group.collapsible"
@@ -782,12 +585,11 @@
                         class="edit-menu"
                         v-show="editor.enabled && editor.mode === ''"
                     >
-                        <h2>Editor Menu</h2>
-                        <h3>What would you like to do?</h3>
+                        <h3>{{ $t('map.what-would-you-like-to-do') }}</h3>
                         <div class="editor-button" @click="editorMenu('items')">
                             <h3>
                                 <i class="fas fa-fw fa-map-marker-alt"></i>
-                                Add / Remove Items
+                                {{ $t('map.add-remove-items') }}
                             </h3>
                         </div>
                         <div
@@ -797,7 +599,7 @@
                         >
                             <h3>
                                 <i class="fas fa-fw fa-bezier-curve"></i>
-                                Add / Remove Ledges
+                                {{ $t('map.add-remove-ledges') }}
                             </h3>
                         </div>
                         <div
@@ -807,7 +609,7 @@
                         >
                             <h3>
                                 <i class="fas fa-fw fa-leaf"></i>
-                                Add / Remove Foliage
+                                {{ $t('map.add-remove-foliage') }}
                             </h3>
                         </div>
                         <div
@@ -817,14 +619,14 @@
                         >
                             <h3>
                                 <i class="fas fa-fw fa-user-tie"></i>
-                                Manage Disguise Areas
+                                {{ $t('map.manage-disguise-areas') }}
                             </h3>
                         </div>
-                        <p>
-                            Click the
-                            <i class="fas fa-pencil-alt"></i>
-                            icon to close the editor menu.
-                        </p>
+                        <i18n path="map.click-icon-to-close" tag="p">
+                            <span slot="pencilIcon">
+                                <i class="fas fa-pencil-alt"></i>
+                            </span>
+                        </i18n>
                     </div>
                     <div
                         class="items-menu"
@@ -832,21 +634,20 @@
                     >
                         <p>
                             <i class="fas fa-fw fa-plus-circle"></i>
-                            Click anywhere on the map to add a new item.
+                            {{ $t('map.click-to-add') }}
                         </p>
                         <p>
                             <i class="fas fa-fw fa-arrows-alt"></i>
-                            Drag and drop an existing item to move it.
+                            {{ $t('map.drag-to-move') }}
                         </p>
                         <p>
                             <i class="fas fa-fw fa-trash"></i>
-                            Click on an existing item and then the "Delete"
-                            button to delete it.
+                            {{ $t('map.click-item-to-delete') }}
                         </p>
                         <div class="editor-button" @click="editorMenu('')">
                             <h3>
                                 <i class="fas fa-times-circle"></i>
-                                Close Item Menu
+                                {{ $t('map.close-item-menu') }}
                             </h3>
                         </div>
                     </div>
@@ -856,25 +657,27 @@
                     >
                         <p data-ledge="delete-help">
                             <i class="fas fa-trash"></i>
-                            Click on an existing ledge to delete it.
+                            {{ $t('map.click-ledge-to-delete') }}
                         </p>
-                        <div class="editor-button" @click="toggleDraw('Line')">
+                        <div class="editor-button"
+                             :class="{'selected': editor.polyActive}"
+                             @click="toggleDraw('Line')">
                             <h3>
                                 <i class="fas fa-plus-circle"></i>
-                                Add Ledge
+                                {{ $t('map.add-ledge') }}
                             </h3>
-                            <p>Click here to enable / disable ledge builder</p>
+                            <p>{{ $t('map.toggle-ledge-builder') }}</p>
                         </div>
                         <div
                             class="editor-button"
                             @click="
                                 editorMenu('')
-                                $refs.map.mapObject.pm.disableDraw('Line')
+                                map.pm.disableDraw('Line')
                             "
                         >
                             <h3>
                                 <i class="fas fa-times-circle"></i>
-                                Close Ledge Menu
+                                {{ $t('map.close-ledge-menu') }}
                             </h3>
                         </div>
                     </div>
@@ -888,26 +691,27 @@
                         </p>
                         <div
                             class="editor-button"
+                            :class="{'selected': editor.polyActive}"
                             @click="toggleDraw('Polygon')"
                         >
                             <h3>
                                 <i class="fas fa-plus-circle"></i>
-                                Add Foliage
+                                {{ $t('map.add-foliage') }}
                             </h3>
                             <p>
-                                Click here to enable / disable foliage builder
+                                {{ $t('map.toggle-foliage-builder') }}
                             </p>
                         </div>
                         <div
                             class="editor-button"
                             @click="
                                 editorMenu('')
-                                $refs.map.mapObject.pm.disableDraw('Polygon')
+                                map.pm.disableDraw('Polygon')
                             "
                         >
                             <h3>
                                 <i class="fas fa-times-circle"></i>
-                                Close Foliage Menu
+                                {{ $t('map.close-foliage-menu') }}
                             </h3>
                         </div>
                     </div>
@@ -917,18 +721,13 @@
                     >
                         <p data-disguise="delete-help">
                             <i class="fas fa-trash"></i>
-                            Click on an existing region to delete it.
+                            {{ $t('map.delete-existing-region') }}
                         </p>
-                        <p>
-                            Select a disguise from the dropdown below to edit
-                            its layout.
-                        </p>
+                        <p>{{ $t('map.select-disguise-for-editing') }}</p>
                         <div class="search-box">
                             <select
                                 ref="disguisePicker"
-                                @change="
-                                    editor.currentDisguise = $event.target.value
-                                "
+                                @change="partialChangeDisguise($event.target.value)"
                                 name="disguise-menu-dropdown"
                                 class="selectpicker"
                                 data-style="control-button"
@@ -947,6 +746,7 @@
                             class="editor-button"
                             data-disguise="add"
                             data-type="trespassing"
+                            :class="{'selected': editor.polyActive && editor.disguiseType === 'trespassing'}"
                             @click="
                                 toggleDraw('Polygon')
                                 editor.disguiseType = 'trespassing'
@@ -955,17 +755,15 @@
                         >
                             <h3>
                                 <i class="fas fa-plus-circle"></i>
-                                Add Trespassing Region
+                                {{ $t('map.add-trespassing-region') }}
                             </h3>
-                            <p>
-                                Click here to enable / disable trespassing
-                                region builder
-                            </p>
+                            <p>{{ $t('map.toggle-trespassing-builder') }}</p>
                         </div>
                         <div
                             class="editor-button"
                             data-disguise="add"
                             data-type="hostile"
+                            :class="{'selected': editor.polyActive && editor.disguiseType === 'hostile'}"
                             @click="
                                 toggleDraw('Polygon')
                                 editor.disguiseType = 'hostile'
@@ -974,12 +772,9 @@
                         >
                             <h3>
                                 <i class="fas fa-plus-circle"></i>
-                                Add Hostile Region
+                                {{ $t('map.add-hostile-region') }}
                             </h3>
-                            <p>
-                                Click here to enable / disable hostile region
-                                builder
-                            </p>
+                            <p>{{ $t('map.toggle-hostile-builder') }}</p>
                         </div>
                         <div
                             class="editor-button"
@@ -989,23 +784,20 @@
                         >
                             <h3>
                                 <i class="fas fa-copy"></i>
-                                Copy Regions
+                                {{ $t('map.copy-regions') }}
                             </h3>
-                            <p>
-                                Click here to copy disguise regions from one
-                                disguise to another
-                            </p>
+                            <p>{{ $t('map.click-to-copy-regions') }}</p>
                         </div>
                         <div
                             class="editor-button"
                             @click="
                                 editorMenu('')
-                                $refs.map.mapObject.pm.disableDraw('Polygon')
+                                map.pm.disableDraw('Polygon')
                             "
                         >
                             <h3>
                                 <i class="fas fa-times-circle"></i>
-                                Close Disguise Area Menu
+                                {{ $t('map.close-disguise-menu') }}
                             </h3>
                         </div>
                     </div>
@@ -1018,14 +810,13 @@
                 role="dialog"
             >
                 <div class="alert alert-warning">
-                    When copying, any existing target disguise regions will be
-                    deleted before copying.
+                    {{ $t('map.copy-disguises-warning') }}
                 </div>
                 <div class="row">
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="original-disguise">
-                                Source Disguise
+                                {{ $t('map.source-disguise') }}
                             </label>
                             <br />
                             <select
@@ -1036,7 +827,7 @@
                                 required
                             >
                                 <option disabled selected>
-                                    Select
+                                    {{ $t('form.select') }}
                                 </option>
                                 <option
                                     v-for="disguise in disguises"
@@ -1050,7 +841,7 @@
                     <div class="col-md-6">
                         <div class="form-group">
                             <label for="target-disguise">
-                                Target Disguise
+                                {{ $t('map.target-disguise') }}
                             </label>
                             <br />
                             <select
@@ -1061,7 +852,7 @@
                                 required
                             >
                                 <option disabled selected>
-                                    Select
+                                    {{ $t('form.select') }}
                                 </option>
                                 <option
                                     v-for="disguise in disguises"
@@ -1082,217 +873,159 @@
                         <img
                             src="/img/game-icons/modal-continue.png"
                             class="normal img-fluid"
-                            alt="Submit Icon"
+                            :alt="$t('form.submit-icon')"
                         />
                         <img
                             src="/img/game-icons/modal-continue-inverted.png"
                             class="inverted img-fluid"
-                            alt="Submit Icon"
+                            :alt="$t('form.submit-icon')"
                         />
-                        Copy
+                        {{ $t('form.copy') }}
                     </game-button>
                     <game-button type="button" data-dismiss="modal">
                         <img
                             src="/img/game-icons/modal-close.png"
                             class="normal img-fluid"
-                            alt="Cancel Icon"
+                            :alt="$t('form.cancel-icon')"
                         />
                         <img
                             src="/img/game-icons/modal-close-inverted.png"
                             class="inverted img-fluid"
-                            alt="Cancel Icon"
+                            :alt="$t('form.cancel-icon')"
                         />
-                        Cancel
+                        {{ $t('form.cancel') }}
                     </game-button>
                 </template>
             </modal>
-            <div
-                class="modal"
-                ref="confirmMoveModal"
-                id="confirm-move-modal"
-                tabindex="-1"
-                role="dialog"
-            >
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Confirm Move</h5>
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div class="alert alert-warning">
-                                Are you sure you want to re-position this item?
-                            </div>
-                        </div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-dismiss="modal"
-                            >
-                                No, cancel
-                            </button>
-                            <button
-                                type="button"
-                                @click="confirmMove"
-                                class="btn btn-primary"
-                            >
-                                Yes, save
-                            </button>
-                        </div>
-                    </div>
+            <modal :modal-title="$t('map.confirm-move')"
+                   id="confirm-move-modal"
+                   tabindex="-1"
+                   role="dialog"
+                   dismissable>
+                <div class="alert alert-warning">
+                    {{ $t('map.confirm-reposition') }}
                 </div>
-            </div>
-            <div
-                class="modal"
-                ref="editModal"
-                id="editModal"
-                tabindex="-1"
-                role="dialog"
-            >
-                <div class="modal-dialog modal-lg" role="document">
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <h5 class="modal-title">Test</h5>
-                            <button
-                                type="button"
-                                class="close"
-                                data-dismiss="modal"
-                                aria-label="Close"
-                            >
-                                <span aria-hidden="true">&times;</span>
-                            </button>
-                        </div>
-                        <div class="modal-body">
-                            <div
-                                v-show="
+                <template v-slot:modal-footer>
+                    <game-button type="button" @click="cancelMoveMarker" data-dismiss="modal">
+                        <img
+                                src="/img/game-icons/modal-close.png"
+                                class="normal img-fluid"
+                                :alt="$t('form.cancel-icon')"
+                        />
+                        <img
+                                src="/img/game-icons/modal-close-inverted.png"
+                                class="inverted img-fluid"
+                                :alt="$t('form.cancel-icon')"
+                        />
+                        {{ $t('form.cancel') }}
+                    </game-button>
+                    <game-button
+                            type="submit"
+                            @click="confirmMove"
+                    >
+                        <img
+                                src="/img/game-icons/modal-continue.png"
+                                class="normal img-fluid"
+                                :alt="$t('form.submit-icon')"
+                        />
+                        <img
+                                src="/img/game-icons/modal-continue-inverted.png"
+                                class="inverted img-fluid"
+                                :alt="$t('form.submit-icon')"
+                        />
+                        {{ $t('form.save') }}
+                    </game-button>
+                </template>
+            </modal>
+            <modal :modal-title="$t('map.add-edit-item')"
+                   id="editModal"
+                   tabindex="-1"
+                   role="dialog"
+                   dismissable>
+                <div
+                        v-show="
                                     mission.missionType != 'Sniper Assassin'
                                 "
+                >
+                    <h3>{{ $t('map.apply-template') }}</h3>
+                    <div class="form-group row">
+                        <label
+                                for="template"
+                                class="col sm-2 col-form-label"
+                        >
+                            {{ $t('map.template') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <select
+                                    @change="applyTemplate"
+                                    name="template"
+                                    ref="templatePicker"
+                                    class="form-control selectpicker"
+                                    title="Select One"
+                                    data-live-search="true"
                             >
-                                <div
-                                    class="alert alert-primary"
-                                    style="font-size: .8em"
-                                >
-                                    You can now use a template to auto-fill item
-                                    information for common items!
-                                    <b>
-                                        If you select a template, all
-                                        information in "Item Info" and "Notes"
-                                        will be replaced with the template's
-                                        information.
-                                    </b>
-                                </div>
-                                <h3>Apply Template</h3>
-                                <div class="form-group row">
-                                    <label
-                                        for="template"
-                                        class="col sm-2 col-form-label"
-                                    >
-                                        Template
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <select
-                                            @change="applyTemplate"
-                                            name="template"
-                                            ref="templatePicker"
-                                            class="form-control selectpicker"
-                                            title="Select One"
-                                            data-live-search="true"
-                                        >
-                                            <optgroup
-                                                v-for="(group,
+                                <optgroup
+                                        v-for="(group,
                                                 key) in editor.templates"
-                                                :key="key"
-                                                :label="key"
-                                            >
-                                                <option
-                                                    v-for="item in group"
-                                                    :key="item.id"
-                                                    :value="key + '|' + item.id"
-                                                >
-                                                    {{ item.name }}
-                                                </option>
-                                            </optgroup>
-                                        </select>
-                                    </div>
-                                </div>
-                                <hr />
-                            </div>
-                            <h3>Item Info</h3>
-                            <div
-                                class="alert alert-dark"
-                                style="font-size: .8em"
-                            >
-                                Please indicate the following under the notes
-                                section when adding items:
-                                <ul>
-                                    <li>
-                                        Any
-                                        <b>required</b>
-                                        items, such as needing a wrench for
-                                        loosening valves (use type
-                                        "Requirement")
-                                    </li>
-                                    <li>
-                                        Whether or not the action is
-                                        <b>suspicious</b>
-                                        when wearing a certain disguise (use
-                                        type "Warning")
-                                    </li>
-                                    <li>
-                                        If you feel something
-                                        <b>requires more information</b>
-                                        , use the "Information" type
-                                    </li>
-                                    <li>
-                                        You may add the in-game description for
-                                        items by using the "Description" type
-                                        <b>
-                                            if there is no name field provided.
-                                        </b>
-                                    </li>
-                                    <li>
-                                        Any notes with blank text will not be
-                                        added to the node
-                                    </li>
-                                </ul>
-                            </div>
-                            <div class="form-group row">
-                                <label
-                                    for="subgroup"
-                                    class="col-sm-2 col-form-label"
+                                        :key="key"
+                                        :label="key"
                                 >
-                                    Category
-                                </label>
-                                <div class="col-sm-10">
-                                    <select
-                                        @change="selectSubgroup"
-                                        name="subgroup"
-                                        ref="subgroupPicker"
-                                        class="form-control selectpicker"
-                                        title="Select One"
-                                        data-live-search="true"
+                                    <option
+                                            v-for="item in group"
+                                            :key="item.id"
+                                            :value="key + '|' + item.id"
                                     >
-                                        <optgroup
-                                            v-for="(category,
+                                        {{ item.name }}
+                                    </option>
+                                </optgroup>
+                            </select>
+                        </div>
+                    </div>
+                    <hr />
+                </div>
+                <h3>Item Info</h3>
+                <div
+                        class="alert alert-dark"
+                        style="font-size: .8em"
+                >
+                    {{ $t('map.please-indicate-when-adding') }}
+                    <ul>
+                        <li>{{ $t('map.required-items') }}</li>
+                        <li>{{ $t('map.suspicious-items') }}</li>
+                        <li>{{ $t('map.information-items') }}</li>
+                        <li>{{ $t('map.in-game-description-items') }}</li>
+                        <li>{{ $t('map.blank-notes') }}</li>
+                    </ul>
+                </div>
+                <div class="form-group row">
+                    <label
+                            for="subgroup"
+                            class="col-sm-2 col-form-label"
+                    >
+                        {{ $t('map.category') }}
+                    </label>
+                    <div class="col-sm-10">
+                        <select
+                                @change="selectSubgroup"
+                                name="subgroup"
+                                ref="subgroupPicker"
+                                class="form-control selectpicker"
+                                title="Select One"
+                                data-live-search="true"
+                        >
+                            <optgroup
+                                    v-for="(category,
                                             key) in categories"
-                                            :key="key"
-                                            :label="key"
-                                        >
-                                            <option
-                                                v-for="group in category"
-                                                :key="group.id"
-                                                :value="
+                                    :key="key"
+                                    :label="key"
+                            >
+                                <option
+                                        v-for="group in category"
+                                        :key="group.id"
+                                        :value="
                                                     key + '|' + group.subgroup
                                                 "
-                                                :data-content="
+                                        :data-content="
                                                     `<img height='24' width='24' src='/img/map-icons/` +
                                                         group.icon +
                                                         `.png' alt='` +
@@ -1300,49 +1033,49 @@
                                                         ` Icon'> ` +
                                                         group.group
                                                 "
-                                            >
-                                                {{ group.group }}
-                                            </option>
-                                        </optgroup>
-                                    </select>
-                                    <small
-                                        v-if="editor.currentCategory"
-                                        class="form-text text-muted"
-                                        id="note-help-text"
-                                    >
-                                        {{ currentCategory.note }}
-                                    </small>
-                                </div>
-                            </div>
-                            <div
-                                v-show="pickIconAllowed"
-                                class="form-group row"
-                                id="icon-form-group"
-                            >
-                                <label
-                                    for="icon"
-                                    class="col-sm-2 col-form-label"
                                 >
-                                    Icon
-                                </label>
-                                <div class="col-sm-10">
-                                    <select
-                                        name="icon"
-                                        @change="selectIcon"
-                                        ref="iconPicker"
-                                        class="form-control selectpicker"
-                                        data-live-search="true"
-                                    >
-                                        <optgroup
-                                            v-for="(group, key) in editor.icons"
-                                            :key="key"
-                                            :label="key"
-                                        >
-                                            <option
-                                                v-for="icon in group"
-                                                :key="icon.id"
-                                                :value="icon.icon"
-                                                :data-content="
+                                    {{ group.group }}
+                                </option>
+                            </optgroup>
+                        </select>
+                        <small
+                                v-if="editor.currentCategory"
+                                class="form-text text-muted"
+                                id="note-help-text"
+                        >
+                            {{ currentCategory.note }}
+                        </small>
+                    </div>
+                </div>
+                <div
+                        v-show="pickIconAllowed"
+                        class="form-group row"
+                        id="icon-form-group"
+                >
+                    <label
+                            for="icon"
+                            class="col-sm-2 col-form-label"
+                    >
+                        {{ $t('map.icon') }}
+                    </label>
+                    <div class="col-sm-10">
+                        <select
+                                name="icon"
+                                @change="selectIcon"
+                                ref="iconPicker"
+                                class="form-control selectpicker"
+                                data-live-search="true"
+                        >
+                            <optgroup
+                                    v-for="(group, key) in editor.icons"
+                                    :key="key"
+                                    :label="key"
+                            >
+                                <option
+                                        v-for="icon in group"
+                                        :key="icon.id"
+                                        :value="icon.icon"
+                                        :data-content="
                                                     `<img height='24' width='24' src='/img/map-icons/` +
                                                         icon.icon +
                                                         `.png' alt='` +
@@ -1350,303 +1083,339 @@
                                                         ` Icon'> ` +
                                                         icon.altText
                                                 "
-                                            >
-                                                {{ icon.altText }}
-                                            </option>
-                                        </optgroup>
-                                    </select>
-                                </div>
-                            </div>
-                            <div v-if="editor.currentCategory">
-                                <div
-                                    class="form-group row"
-                                    v-if="currentCategory.requireName"
                                 >
-                                    <label
-                                        for="name"
-                                        class="col-sm-2 col-form-label"
-                                    >
-                                        Name
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <input
-                                            type="text"
-                                            name="name"
-                                            v-model="currentCategory.name"
-                                            class="form-control"
-                                        />
-                                        <small class="form-text text-muted">
-                                            Enter the name as it appears
-                                            in-game.
-                                        </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="form-group row"
-                                    v-if="currentCategory.requireAction"
-                                >
-                                    <label
-                                        for="action"
-                                        class="col-sm-2 col-form-label"
-                                    >
-                                        Action
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <input
-                                            type="text"
-                                            name="action"
-                                            v-model="currentCategory.action"
-                                            class="form-control"
-                                        />
-                                        <small class="form-text text-muted">
-                                            Enter the action that is performed
-                                            (such as "loosen the valve", "turn
-                                            on radio", "trigger fire alarm",
-                                            etc.)
-                                        </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="form-group row"
-                                    v-if="currentCategory.requireTarget"
-                                >
-                                    <label
-                                        for="target"
-                                        class="col-sm-2 col-form-label"
-                                    >
-                                        Target
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <input
-                                            type="text"
-                                            name="target"
-                                            v-model="currentCategory.target"
-                                            class="form-control"
-                                        />
-                                        <small class="form-text text-muted">
-                                            Who will be poisoned?
-                                        </small>
-                                    </div>
-                                </div>
-                                <div
-                                    class="form-group row"
-                                    v-if="currentCategory.requirePickup"
-                                >
-                                    <label
-                                        for="pickup-type"
-                                        class="col-sm-2 col-form-label"
-                                    >
-                                        Type
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <div class="form-check">
-                                            <input
-                                                class="form-check-input"
-                                                type="radio"
-                                                v-model="
-                                                    currentCategory.pickupType
-                                                "
-                                                name="pickup-type"
-                                                value="large"
-                                                checked
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                for="large"
-                                            >
-                                                Pickup (Large)
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input
-                                                class="form-check-input"
-                                                type="radio"
-                                                v-model="
-                                                    currentCategory.pickupType
-                                                "
-                                                name="pickup-type"
-                                                value="small"
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                for="small"
-                                            >
-                                                Stash (Small)
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                                <div
-                                    class="form-group row"
-                                    v-if="currentCategory.requireDirection"
-                                >
-                                    <label
-                                        for="stairwell-direction"
-                                        class="col-sm-2 col-form-label"
-                                    >
-                                        Direction
-                                    </label>
-                                    <div class="col-sm-10">
-                                        <div class="form-check">
-                                            <input
-                                                class="form-check-input"
-                                                type="radio"
-                                                v-model="
-                                                    currentCategory.stairwellDirection
-                                                "
-                                                name="stairwell-direction"
-                                                value="up-stair"
-                                                checked
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                for="up-stair"
-                                            >
-                                                Up Only
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input
-                                                class="form-check-input"
-                                                type="radio"
-                                                v-model="
-                                                    currentCategory.stairwellDirection
-                                                "
-                                                name="stairwell-direction"
-                                                value="up-down-stair"
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                for="up-down-stair"
-                                            >
-                                                Up and Down
-                                            </label>
-                                        </div>
-                                        <div class="form-check">
-                                            <input
-                                                class="form-check-input"
-                                                type="radio"
-                                                v-model="
-                                                    currentCategory.stairwellDirection
-                                                "
-                                                name="stairwell-direction"
-                                                value="down-stair"
-                                            />
-                                            <label
-                                                class="form-check-label"
-                                                for="down-stair"
-                                            >
-                                                Down Only
-                                            </label>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
-                            <h3>Notes</h3>
-                            <div id="suggest-notes">
-                                <div
-                                    v-for="note in editor.notes"
-                                    :key="note.type"
-                                >
-                                    <div class="form-group row">
-                                        <label
-                                            for="note-type[]"
-                                            class="col-sm-2 col-form-label"
-                                        >
-                                            Type
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <select
-                                                v-model="note.type"
-                                                class="form-control"
-                                                name="note-type[]"
-                                            >
-                                                <option value="requirement">
-                                                    Requirement
-                                                </option>
-                                                <option value="warning">
-                                                    Warning
-                                                </option>
-                                                <option value="info">
-                                                    Information
-                                                </option>
-                                                <option value="description">
-                                                    Description
-                                                </option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="form-group row">
-                                        <label
-                                            for="note-text[]"
-                                            class="col-sm-2 col-form-label"
-                                        >
-                                            Text
-                                        </label>
-                                        <div class="col-sm-10">
-                                            <input
+                                    {{ icon.altText }}
+                                </option>
+                            </optgroup>
+                        </select>
+                    </div>
+                </div>
+                <div v-if="editor.currentCategory">
+                    <div
+                            class="form-group row"
+                            v-if="currentCategory.requireName"
+                    >
+                        <label
+                                for="name"
+                                class="col-sm-2 col-form-label"
+                        >
+                            {{ $t('map.name') }}
+                        </label>
+                        <div class="col-sm-10">
+                                        <textarea
                                                 type="text"
-                                                name="note-text[]"
-                                                v-model="note.text"
+                                                name="name"
+                                                v-model="currentCategory.name"
                                                 class="form-control"
-                                            />
-                                        </div>
-                                    </div>
-                                </div>
+                                        ></textarea>
+                            <small class="form-text text-muted">
+                                {{ $t('map.name-note') }}
+                            </small>
+                        </div>
+                    </div>
+                    <div class="form-group row">
+                        <label for="quantity" class="col-sm-2 col-form-label">
+                            {{ $t('map.quantity') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <select name="quantity"
+                                    v-model="currentCategory.defaultQuantity"
+                                    class="form-control">
+                                <option v-for="n in 10" :value="n">
+                                    {{ n }}
+                                </option>
+                            </select>
+                        </div>
+                    </div>
+                    <div
+                            class="form-group row"
+                            v-if="currentCategory.requireAction"
+                    >
+                        <label
+                                for="action"
+                                class="col-sm-2 col-form-label"
+                        >
+                            {{ $t('map.action') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <input
+                                    type="text"
+                                    name="action"
+                                    v-model="currentCategory.action"
+                                    class="form-control"
+                            />
+                            <small class="form-text text-muted">
+                                {{ $t('map.action-note') }}
+                            </small>
+                        </div>
+                    </div>
+                    <div
+                            class="form-group row"
+                            v-if="currentCategory.requireTarget"
+                    >
+                        <label
+                                for="target"
+                                class="col-sm-2 col-form-label"
+                        >
+                            {{ $t('map.target') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <input
+                                    type="text"
+                                    name="target"
+                                    v-model="currentCategory.target"
+                                    class="form-control"
+                            />
+                            <small class="form-text text-muted">
+                                {{ $t('map.target-note') }}
+                            </small>
+                        </div>
+                    </div>
+                    <div
+                            class="form-group row"
+                            v-if="currentCategory.requirePickup"
+                    >
+                        <label
+                                for="pickup-type"
+                                class="col-sm-2 col-form-label"
+                        >
+                            {{ $t('map.type') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        v-model="
+                                                    currentCategory.pickupType
+                                                "
+                                        name="pickup-type"
+                                        value="large"
+                                        checked
+                                />
+                                <label
+                                        class="form-check-label"
+                                        for="large"
+                                >
+                                    {{ $t('map.pickup-large') }}
+                                </label>
                             </div>
-                            <div class="form-group row">
-                                <div class="col-sm-8 offset-sm-2">
-                                    <button
-                                        type="button"
-                                        @click="editor.notes.push({})"
-                                        id="add-note-button"
-                                        class="btn btn-dark"
-                                    >
-                                        + Add Another Note
-                                    </button>
-                                </div>
+                            <div class="form-check">
+                                <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        v-model="
+                                                    currentCategory.pickupType
+                                                "
+                                        name="pickup-type"
+                                        value="small"
+                                />
+                                <label
+                                        class="form-check-label"
+                                        for="small"
+                                >
+                                    {{ $t('stash.small') }}
+                                </label>
                             </div>
                         </div>
-                        <div class="modal-footer">
-                            <button
-                                type="button"
-                                class="btn btn-secondary"
-                                data-dismiss="modal"
-                            >
-                                Close
-                            </button>
-                            <button
-                                type="button"
-                                @click="saveMarker"
-                                class="btn btn-primary"
-                            >
-                                Save changes
-                            </button>
+                    </div>
+                    <div
+                            class="form-group row"
+                            v-if="currentCategory.requireDirection"
+                    >
+                        <label
+                                for="stairwell-direction"
+                                class="col-sm-2 col-form-label"
+                        >
+                            {{ $t('map.direction') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <div class="form-check">
+                                <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        v-model="
+                                                    currentCategory.stairwellDirection
+                                                "
+                                        name="stairwell-direction"
+                                        value="up-stair"
+                                        checked
+                                />
+                                <label
+                                        class="form-check-label"
+                                        for="up-stair"
+                                >
+                                    {{ $t('map.direction-up') }}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        v-model="
+                                                    currentCategory.stairwellDirection
+                                                "
+                                        name="stairwell-direction"
+                                        value="up-down-stair"
+                                />
+                                <label
+                                        class="form-check-label"
+                                        for="up-down-stair"
+                                >
+                                    {{ $t('map.direction-up-down') }}
+                                </label>
+                            </div>
+                            <div class="form-check">
+                                <input
+                                        class="form-check-input"
+                                        type="radio"
+                                        v-model="
+                                                    currentCategory.stairwellDirection
+                                                "
+                                        name="stairwell-direction"
+                                        value="down-stair"
+                                />
+                                <label
+                                        class="form-check-label"
+                                        for="down-stair"
+                                >
+                                    {{ $t('map.direction-down') }}
+                                </label>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
+                <h3>{{ $t('map.notes') }}</h3>
+                <div id="suggest-notes">
+                    <div
+                            v-for="note in editor.notes"
+                            :key="note.type"
+                    >
+                        <div class="form-group row">
+                            <label
+                                    for="note-type[]"
+                                    class="col-sm-2 col-form-label"
+                            >
+                                {{ $t('map.type') }}
+                            </label>
+                            <div class="col-sm-10">
+                                <select
+                                        v-model="note.type"
+                                        class="form-control"
+                                        name="note-type[]"
+                                >
+                                    <option value="requirement">
+                                        {{ $t('map.requirement') }}
+                                    </option>
+                                    <option value="warning">
+                                        {{ $t('map.warning') }}
+                                    </option>
+                                    <option value="info">
+                                        {{ $t('map.information') }}
+                                    </option>
+                                    <option value="description">
+                                        {{ $t('map.description') }}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="form-group row">
+                            <label
+                                    for="note-text[]"
+                                    class="col-sm-2 col-form-label"
+                            >
+                                {{ $t('map.text') }}
+                            </label>
+                            <div class="col-sm-10">
+                                <input
+                                        type="text"
+                                        name="note-text[]"
+                                        v-model="note.text"
+                                        class="form-control"
+                                />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-sm-8 offset-sm-2">
+                        <button
+                                type="button"
+                                @click="editor.notes.push({})"
+                                id="add-note-button"
+                                class="btn btn-dark"
+                        >
+                            <i class="fas fa-plus-circle"></i>
+                            {{ $t('map.add-another-note') }}
+                        </button>
+                    </div>
+                </div>
+                <template v-slot:modal-footer>
+                    <game-button type="button" data-dismiss="modal">
+                        <img
+                                src="/img/game-icons/modal-close.png"
+                                class="normal img-fluid"
+                                :alt="$t('form.cancel-icon')"
+                        />
+                        <img
+                                src="/img/game-icons/modal-close-inverted.png"
+                                class="inverted img-fluid"
+                                :alt="$t('form.cancel-icon')"
+                        />
+                        {{ $t('form.close') }}
+                    </game-button>
+                    <game-button
+                            type="submit"
+                            @click="saveMarker"
+                    >
+                        <img
+                                src="/img/game-icons/modal-continue.png"
+                                class="normal img-fluid"
+                                :alt="$t('form.submit-icon')"
+                        />
+                        <img
+                                src="/img/game-icons/modal-continue-inverted.png"
+                                class="inverted img-fluid"
+                                :alt="$t('form.submit-icon')"
+                        />
+                        {{ $t('form.save') }}
+                    </game-button>
+                </template>
+            </modal>
         </div>
+        <script type="text/html" id="popup-template">
+            <div>
+                <img src="#" alt="Image template holder">
+                <div data-name="name">Stove</div>
+                <div data-name="group">Explosion</div>
+                <div data-name="target">
+                    <i class="far"></i>
+                    <span>Start Gas Leak</span>
+                </div>
+                <div data-name="notes"></div>
+                <div data-authenticated-only>
+                    <button class="btn btn-danger btn-sm" data-action="delete-btn" data-node-id="x" data-toggle="tooltip" title="Delete">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <button class="btn btn-warning btn-sm" data-action="edit-btn" data-node-id="x" data-toggle="tooltip" title="Edit">
+                        <i class="fas fa-pencil-alt"></i>
+                    </button>
+                </div>
+            </div>
+        </script>
+        <script type="text/html" id="popup-note-template" aria-hidden="true">
+            <div>
+                <div>
+                    <div class="in-game-description">{{ $t('map.in-game-description') }}</div>
+                    <div data-name="note-contents"></div>
+                </div>
+            </div>
+        </script>
     </div>
 </template>
 
 <script>
-import {
-    LMap,
-    LTileLayer,
-    LMarker,
-    LLayerGroup,
-    LTooltip,
-    LPopup,
-    LPolyline,
-    LPolygon,
-    LIcon
-} from 'vue2-leaflet'
 import Vue from 'vue'
-import 'leaflet/dist/leaflet.css'
-
-import 'leaflet.pm'
-import 'leaflet.pm/dist/leaflet.pm.css'
 
 import CxltToaster from 'cxlt-vue2-toastr'
 import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
@@ -1654,24 +1423,17 @@ import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 import GameButton from '../components/GameButton'
 import Modal from '../components/Modal'
 
+import LanguageHelpers from "../components/LanguageHelpers";
+
 Vue.use(CxltToaster)
 export default {
     name: 'map-view',
     components: {
-        LMap,
-        LTileLayer,
-        LMarker,
-        LLayerGroup,
-        LTooltip,
-        LPopup,
-        LPolyline,
-        LPolygon,
-        LIcon,
         GameButton,
         Modal
     },
     title() {
-        return this.mission ? this.mission.name : 'Loading'
+        return this.mission ? this.lang('missions.' + this.mission.slug, this.mission.name) : 'Loading'
     },
     data() {
         return {
@@ -1681,12 +1443,16 @@ export default {
             nodes: null,
             searchableNodes: null,
             currentLayer: 0,
-            crs: L.CRS.Simple,
-            layerGroups: {},
+            overlays: [],
+            layerGroups: [],
+            map: null,
+            mapLayers: [],
             categories: {},
             mapLoaded: false,
             hiddenLayers: [],
             searchedItem: null,
+            floorsWithSearchResults: [],
+            floorCountOverride: [],
             editor: {
                 enabled: false,
                 mode: '',
@@ -1698,8 +1464,11 @@ export default {
                 notes: [],
                 clickedPoint: {},
                 currentMarker: {},
+                originalLatLng: null,
                 vertices: [],
-                workingLayers: []
+                workingLayers: [],
+                polyActive: false,
+                currentMarkerNode: null
             },
             copyDisguiseArea: {
                 source: -1,
@@ -1779,7 +1548,6 @@ export default {
                     atob(localStorage.getItem('token').split('.')[1])
                 )
                 var now = new Date()
-                console.log(new Date(data.exp * 1000).getTime() - now.getTime())
                 if (new Date(data.exp * 1000).getTime() - now.getTime() > 0)
                     return true
             }
@@ -1787,6 +1555,13 @@ export default {
         }
     },
     methods: {
+        getCountryFlag: function() {
+            return LanguageHelpers.getCountryFlagForLocale(this.$i18n);
+        },
+        logout: function() {
+            localStorage.removeItem('token');
+            location.reload();
+        },
         noDuplicates: function(val) {
             var filtered_array = []
             for (var i = 0; i < val.length; i++) {
@@ -1809,7 +1584,10 @@ export default {
             return array
         },
         changeLevel: function(level) {
-            this.currentLayer = level
+            this.map.removeLayer(this.mapLayers[this.currentLayer]);
+            this.currentLayer = level;
+            this.map.addLayer(this.mapLayers[this.currentLayer]);
+            this.updateNodeLayerState();
         },
         collapsible: function(type, group) {
             return (
@@ -1819,18 +1597,139 @@ export default {
             )
         },
         editorMenu: function(menu) {
-            this.editor.mode = menu
+            this.editor.mode = menu;
+            if (menu === '') {
+                this.toggleDraw('ALL');
+            }
+            this.updateNodeLayerState();
+        },
+        buildMarker: function(node) {
+            const that = this;
+            const icon = node.icon === 'area' ?
+                new L.DivIcon({
+                    className: 'area-icon',
+                    html: node.name.replace(/(?:\r\n|\r|\n)/g, '<br>')
+                }) :
+                L.icon({iconUrl: '/img/map-icons/' + node.icon + '.png',
+                    iconSize: [32, 32],
+                    iconAnchor: [16, 16],
+                    popupAnchor: [0, 0]
+                });
+            return L.marker([node.latitude, node.longitude], {
+                icon: icon,
+                custom: {
+                    id: node.id,
+                    node: node
+                },
+                riseOnHover: true
+            }).on('click', function(e) {
+                that.editor.currentMarker = node;
+            }).on('dragend', this.moveMarker);
+        },
+        buildPopup: function(element) {
+            let node = element.options.custom.node;
+
+            let $template = $($('#popup-template').html());
+            $template.find('[data-name="group"]').html(node.group).end()
+                .find('[data-name="name"]').html(node.name).end()
+                .find('[data-node-id="x"]').attr('data-node-id', node.id).end()
+                .find('[data-name="target"]').find('span').html(node.target);
+
+            if (node.target !== null && node.target !== '' && node.targetIcon !== '') {
+                $template.find('[data-name="target"]').find('i').addClass(node.targetIcon).show();
+            } else {
+                $template.find('[data-name="target"]').find('i').hide();
+            }
+
+            if (node.image !== null) {
+                $template.find('img').attr('src', '/img/png/' + node.image + '.png');
+            } else {
+                $template.find('img').remove();
+            }
+
+            for (let i in node.notes) {
+                let $noteTemplate = $($('#popup-note-template').html());
+
+                $noteTemplate.find('[data-name="note-contents"]').html(node.notes[i].text).parent().addClass(node.notes[i].type);
+
+                $template.find('[data-name="notes"]').append($noteTemplate.html());
+            }
+
+            if (!this.isLoggedIn) {
+                // Yeah, this isn't the most "secure" thing... but the editor won't work unless you're authenticated.
+                // Additionally, anyone can create an account, so it's not confidential information.
+                $template.find('[data-authenticated-only]').html('');
+            }
+
+            return $template.html();
+        },
+        buildLedge: function(ledge) {
+            const that = this;
+            const polyline = L.polyline(this.parseCoords(ledge.vertices), {
+                color: '#fff',
+                weight: 4,
+                opacity: .75,
+                custom: {
+                    id: ledge.id
+                }
+            }).on('click', function() {
+                that.editor.currentMarker = this;
+                that.deletePoly(ledge, 'ledges');
+            });
+
+            return polyline.bindTooltip('Ledge', {sticky: true});
+        },
+        buildFoliage: function(foliage) {
+            const that = this;
+            const polygon = L.polygon(this.parseCoords(foliage.vertices), {
+                color: '#248f24',
+                weight: 4,
+                opacity: .75,
+                custom: {
+                    id: foliage.id
+                }
+            }).on('click', function() {
+                that.deletePoly(foliage, 'foliage');
+            });
+
+            return polygon.bindTooltip('Foliage', {sticky: true});
+        },
+        buildDisguiseArea: function(disguiseArea) {
+            const that = this;
+            const polygon = L.polygon(this.parseCoords(disguiseArea.vertices), {
+                color: disguiseArea.type === 'trespassing' ? 'yellow' : '#f00',
+                stroke: false,
+                weight: 4,
+                opacity: .75,
+                custom: {
+                    id: disguiseArea.id
+                }
+            }).on('click', function() {
+                that.deletePoly(disguiseArea, 'disguise-areas')
+            });
+
+            const tooltip = disguiseArea.type === 'trespassing' ? 'Trespassing' : 'Hostile Area';
+            return polygon.bindTooltip(tooltip, {sticky: true});
+        },
+        toggleEditor: function() {
+            if (this.editor.enabled) {
+                this.toggleDraw('ALL');
+            }
+
+            this.editor.enabled = !this.editor.enabled;
         },
         addMarker: function(event) {
             if (!this.editor.enabled || this.editor.mode !== 'items') return
             this.editor.clickedPoint = event.latlng
-            let element = this.$refs.editModal
+            let element = '#editModal'
             //Reset old data
             if (this.currentCategory) {
                 this.currentCategory.nodeId = undefined
                 this.currentCategory.name = undefined
+                this.currentCategory.defaultQuantity = 1
                 this.currentCategory.action = undefined
                 this.currentCategory.target = undefined
+                this.currentCategory.image = undefined
             }
 
             this.editor.currentCategory = undefined
@@ -1840,22 +1739,24 @@ export default {
             this.editor.notes = []
             $(element).modal('show')
         },
-        moveMarker: function(event, item) {
-            console.log(event)
-            if (this.editor.mode === '') {
-                //Resetting the position
-                event.target.setLatLng([item.latitude, item.longitude])
-                return
-            }
+        moveMarker: function(event) {
+            let item = event.target;
             item.latitude = event.target.getLatLng().lat
             item.longitude = event.target.getLatLng().lng
             this.editor.currentMarker = item
-            $(this.$refs.confirmMoveModal).modal('show')
+            this.editor.currentMarkerNode = item.options.custom.node;
+            this.editor.originalLatLng = [item.options.custom.node.latitude, item.options.custom.node.longitude];
+            $('#confirm-move-modal').modal('show')
         },
-        editMarker: function(item) {
+        cancelMoveMarker: function() {
+            this.editor.currentMarker.setLatLng(this.editor.originalLatLng);
+        },
+        editMarker: function() {
+            const item = this.editor.currentMarker;
             this.editor.notes = item.notes
             this.editor.currentCategory = item.type + '|' + item.subgroup
             this.editor.clickedPoint = L.latLng(item.latitude, item.longitude)
+            this.currentCategory.icon = item.icon;
             $(this.$refs.subgroupPicker).selectpicker(
                 'val',
                 item.type + '|' + item.subgroup
@@ -1866,19 +1767,24 @@ export default {
             )
             this.currentCategory.nodeId = item.id
             this.currentCategory.name = item.name
+            this.currentCategory.defaultQuantity = item.quantity
             this.currentCategory.action = item.target
             this.currentCategory.target = item.target
+            this.currentCategory.image = item.image
 
-            $(this.$refs.editModal).modal('show')
+            $('#editModal').modal('show')
         },
         confirmMove: function() {
             var data = new FormData()
-            console.log(this.editor.currentMarker)
-            data.append('node-id', this.editor.currentMarker.id)
+            data.append('node-id', this.editor.currentMarkerNode.id)
             data.append('latitude', this.editor.currentMarker.latitude)
             data.append('longitude', this.editor.currentMarker.longitude)
-            this.$request(true, 'nodes/move', data).then(() =>
-                $(this.$refs.confirmMoveModal).modal('hide')
+            this.$request(true, 'nodes/move', data).then(() => {
+                    this.$toast.success({
+                        message: 'Item moved!'
+                    });
+                    $('#confirm-move-modal').modal('hide')
+                }
             )
         },
         selectSubgroup: function(event) {
@@ -1911,6 +1817,7 @@ export default {
             this.currentCategory.name = currentTemplate.name
             this.currentCategory.action = currentTemplate.target
             this.currentCategory.target = currentTemplate.target
+            this.currentCategory.defaultQuantity = 1
             this.currentCategory.image = currentTemplate.image
 
             if (currentTemplate.description)
@@ -1947,6 +1854,7 @@ export default {
             data.append('icon', this.currentCategory.icon)
             data.append('subgroup', this.editor.currentCategory)
             data.append('name', this.currentCategory.name || '')
+            data.append('quantity', this.currentCategory.defaultQuantity || 1)
             data.append('target', this.currentCategory.target || '')
             data.append('level', this.currentLayer)
             data.append('latitude', this.editor.clickedPoint.lat)
@@ -1968,28 +1876,41 @@ export default {
                 data.append('note-text[]', element.text)
             })
             this.$request(true, url, data).then(resp => {
-                //TODO Make this a method
+                if (this.editor.mode === 'items' && this.currentCategory.nodeId) {
+                    this.editor.currentMarkerNode.deleted = true;
+                }
+
                 if (resp.data.data.approved) {
                     resp.data.data.latLng = L.latLng(
                         resp.data.data.latitude,
                         resp.data.data.longitude
-                    )
-                    this.layerGroups[
-                        resp.data.data.type + '|' + resp.data.data.group
-                    ].items.push(resp.data.data)
+                    );
+                    let node = resp.data.data;
+
+                    let marker = this.buildMarker(node).bindPopup(this.buildPopup);
+                    if (node.tooltip !== '') {
+                        marker.bindTooltip(node.tooltip);
+                    }
+                    marker.addTo(this.overlays[node.level][node.type + '|' + node.group]);
                 }
-                $(this.$refs.editModal).modal('hide')
+                $('#editModal').modal('hide');
+                this.editor.currentMarker = null;
+                let toastMessage = this.currentCategory.nodeId ? 'Item edited!' : 'Item added!';
+                this.$toast.success({
+                    message: toastMessage
+                });
+                this.updateNodeLayerState();
             })
         },
-        deleteMarker: function(node) {
+        deleteMarker: function() {
+            const node = this.editor.currentMarker;
             this.$request(false, 'nodes/delete/' + node.id).then(resp => {
-                console.log('Node successfully deleted')
-                this.layerGroups[node.type + '|' + node.group].items.splice(
-                    this.layerGroups[
-                        node.type + '|' + node.group
-                    ].items.indexOf(node),
-                    1
-                )
+                node.deleted = true;
+                this.editor.currentMarker = null;
+                this.$toast.success({
+                    message: 'Item deleted!'
+                });
+                this.updateNodeLayerState();
             })
         },
         deletePoly: function(item, type) {
@@ -2015,6 +1936,8 @@ export default {
                                     this.foliage.indexOf(foliageObject),
                                     1
                                 )
+                                this.map.removeLayer(this.editor.currentMarker);
+                                this.editor.currentMarker = null;
                             }
                         )
                     }
@@ -2041,6 +1964,8 @@ export default {
                                     this.ledges.indexOf(ledgeObject),
                                     1
                                 )
+                                this.map.removeLayer(this.editor.currentMarker);
+                                this.editor.currentMarker = null;
                             }
                         )
                     }
@@ -2073,6 +1998,8 @@ export default {
                                 disguise.areas.indexOf(disguiseArea),
                                 1
                             )
+                            this.map.removeLayer(this.editor.currentMarker);
+                            this.editor.currentMarker = null;
                         })
                     }
                     break
@@ -2085,6 +2012,17 @@ export default {
                 this.hiddenLayers.indexOf(name.split('|')[0] + '|') != -1
             )
         },
+        hideAll: function() {
+            this.hiddenLayers.push('Points of Interest|', 'Weapons and Tools|', 'Navigation|');
+            this.updateNodeLayerState();
+        },
+        toggleLayerGroup: function(layer, shouldShow) {
+            if (shouldShow) {
+                this.map.addLayer(layer);
+            } else {
+                this.map.removeLayer(layer);
+            }
+        },
         toggleLayer: function(name, hideAll) {
             if (name === '|') {
                 this.hiddenLayers = []
@@ -2092,53 +2030,64 @@ export default {
                 if (hideAll) {
                     this.hiddenLayers = ['Points of Interest|', 'Weapons and Tools|', 'Navigation|']
                 }
+            } else {
+                if (name.includes('*')) {
+                    // Case 1: Toggling top level category
+                    let prefix = name.replace('*', '')
 
-                return
-            }
-
-            if (name.includes('*')) {
-                // Case 1: Toggling top level category
-                let prefix = name.replace('*', '')
-
-                if (this.isLayerHidden(prefix)) {
-                    this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(prefix))
-                } else {
-                    this.hiddenLayers = this.hiddenLayers.filter(layer => !layer.includes(prefix))
-                    this.hiddenLayers.push(prefix)
-                }
-            }  else {
-                // Case 2: Toggling group
-                let topLevelCategory = name.split('|')[0]
-                let group = name.split('|')[1]
-                if (this.hiddenLayers.indexOf(topLevelCategory + '|') !== -1) {
-                    // Case a: Top level category is hidden
-                    this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(topLevelCategory + '|'))
-                    this.categories[topLevelCategory]
-                        .filter(category => category.type === topLevelCategory && category.group !== group)
-                        .map(category => category.group)
-                        .forEach(group => this.hiddenLayers.push(topLevelCategory + '|' + group))
-                } else if (this.hiddenLayers.indexOf(name) !== -1) {
-                    // Case b: Group is hidden
-                    this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(name))
-                } else {
-                    // Case c: Groups is not hidden, nor is top level category
-                    this.hiddenLayers.push(name)
+                    if (this.isLayerHidden(prefix)) {
+                        this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(prefix))
+                    } else {
+                        this.hiddenLayers = this.hiddenLayers.filter(layer => !layer.includes(prefix))
+                        this.hiddenLayers.push(prefix)
+                    }
+                }  else {
+                    // Case 2: Toggling group
+                    let topLevelCategory = name.split('|')[0]
+                    let group = name.split('|')[1]
+                    if (this.hiddenLayers.indexOf(topLevelCategory + '|') !== -1) {
+                        // Case a: Top level category is hidden
+                        this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(topLevelCategory + '|'))
+                        this.categories[topLevelCategory]
+                            .filter(category => category.type === topLevelCategory && category.group !== group)
+                            .map(category => category.group)
+                            .forEach(group => this.hiddenLayers.push(topLevelCategory + '|' + group))
+                    } else if (this.hiddenLayers.indexOf(name) !== -1) {
+                        // Case b: Group is hidden
+                        this.$delete(this.hiddenLayers, this.hiddenLayers.indexOf(name))
+                    } else {
+                        // Case c: Groups is not hidden, nor is top level category
+                        this.hiddenLayers.push(name)
+                    }
                 }
             }
+            this.updateNodeLayerState();
         },
         toggleDraw: function(type) {
-            console.log(this.$refs.map.mapObject.pm.Draw)
-            if (this.$refs.map.mapObject.pm.Draw[type]._enabled) {
-                this.$refs.map.mapObject.pm.disableDraw(type)
-            } else {
-                this.$refs.map.mapObject.pm.enableDraw(type, {
-                    snappable: false
-                })
+            if (type === 'ALL') {
+                this.map.pm.disableDraw('Line');
+                this.map.pm.disableDraw('Polygon');
+                this.editor.polyActive = false;
+                return;
             }
+
+            if (this.map.pm.Draw[type]._enabled) {
+                this.map.pm.disableDraw(type);
+                this.editor.polyActive = false;
+            } else {
+                this.map.pm.enableDraw(type, {
+                    snappable: false
+                });
+                this.editor.polyActive = true;
+            }
+
+            let toastMessage = this.editor.polyActive ? 'Drawing tools enabled' : 'Drawing tools disabled';
+            this.$toast.info({
+                message: toastMessage
+            })
         },
         initDraw: function(e) {
             e.workingLayer.on('pm:vertexadded', e => {
-                console.log(e.latlng)
                 this.editor.vertices.push([e.latlng.lat, e.latlng.lng])
             })
         },
@@ -2146,6 +2095,10 @@ export default {
             this.editor.workingLayers.push(e.layer)
         },
         endDraw: function(e) {
+            if (this.editor.vertices.length === 0) {
+                return;
+            }
+
             var data = new FormData()
             this.editor.vertices.forEach((element, index) => {
                 data.append('vertices[' + index + '][]', element[0])
@@ -2156,31 +2109,38 @@ export default {
             if (e.shape === 'Line') {
                 this.$request(true, 'ledges', data).then(resp => {
                     this.editor.vertices = []
-                    this.ledges.push(resp.data.data)
+                    let ledge = resp.data.data;
+                    this.ledges.push(ledge)
+                    this.buildLedge(ledge).addTo(this.overlays[ledge.level]['Navigation|Ledge']);
                     this.editor.workingLayers.forEach(el => {
-                        this.$refs.map.mapObject.removeLayer(el)
+                        this.map.removeLayer(el)
                     })
                     this.editor.workingLayers = []
                 })
             } else if (this.editor.mode === 'foliage') {
                 this.$request(true, 'foliage', data).then(resp => {
                     this.editor.vertices = []
-                    this.foliage.push(resp.data.data)
+                    let foliage = resp.data.data;
+                    this.foliage.push(foliage)
+                    this.buildFoliage(foliage).addTo(this.overlays[foliage.level]['Navigation|Foliage']);
                     this.editor.workingLayers.forEach(el => {
-                        this.$refs.map.mapObject.removeLayer(el)
+                        this.map.removeLayer(el)
                     })
                     this.editor.workingLayers = []
                 })
             } else if (this.editor.mode === 'disguises') {
-                data.append('disguiseId', this.editor.currentDisguise)
+                const disguiseId = this.editor.currentDisguise;
+                data.append('disguiseId', disguiseId)
                 data.append('type', this.editor.disguiseType)
                 this.$request(true, 'disguise-areas', data).then(resp => {
                     this.editor.vertices = []
+                    let disguiseArea = resp.data.data;
                     this.disguises
-                        .find(el => el.id == this.editor.currentDisguise)
-                        .areas.push(resp.data.data)
+                        .find(el => el.id == disguiseId)
+                        .areas.push(disguiseArea)
+                    this.buildDisguiseArea(disguiseArea).addTo(this.overlays[disguiseArea.level]['Disguises|' + disguiseArea.disguiseId]);
                     this.editor.workingLayers.forEach(el => {
-                        this.$refs.map.mapObject.removeLayer(el)
+                        this.map.removeLayer(el)
                     })
                     this.editor.workingLayers = []
                 })
@@ -2195,7 +2155,6 @@ export default {
             return latlngs
         },
         changeDisguise: function(disguise) {
-            console.log(disguise)
             this.editor.currentDisguise = disguise.id || disguise
             $(this.$refs.disguisePicker).selectpicker(
                 'val',
@@ -2204,39 +2163,127 @@ export default {
             $('#header-disguises')
                 .find('.name')
                 .click()
+            this.updateNodeLayerState();
+        },
+        partialChangeDisguise: function(disguise) {
+            // Uses the ID and doesn't propagate the change back.
+            this.editor.currentDisguise = disguise;
+            this.updateNodeLayerState();
         },
         calculateNumber(floor) {
-            var count = 0
-            for (var [key, val] of Object.entries(this.layerGroups)) {
-                if (!this.isLayerHidden(key)) {
-                    count += val.items.filter(el => el.level == floor).length
+            var count = 0;
+            for (var level in this.overlays) {
+                if (parseInt(level) !== floor) {
+                    continue;
+                }
+
+                let layerGroups = this.overlays[level];
+                for (let layerGroup in layerGroups) {
+                    if (!this.isLayerHidden(layerGroup) &&
+                        !layerGroup.startsWith('Disguises|') &&
+                        !layerGroup.startsWith('Navigation|Ledge') &&
+                        !layerGroup.startsWith('Navigation|Foliage')) {
+                        count += layerGroups[layerGroup].getLayers().length;
+                    }
                 }
             }
-            return count
+            return count + this.floorCountOverride[floor];
         },
         searchItem(event) {
             if (event.target.value === '') {
-                return
+                return;
             }
 
             $('.search-box[data-search="items"]')
                 .find('.bootstrap-select')
                 .addClass('item-selected')
-                .end()
-            var item = event.target.value.split(';')
-            if (this.isLayerHidden(item[0])) {
-                this.toggleLayer(item[0])
+                .end();
+            const item = event.target.value.split(';');
+            this.searchedItem = {
+                layer: item[0],
+                name: item[1]
+            };
+            this.updateNodeLayerState();
+        },
+        updateNodeLayerState() {
+            let itemName = null;
+            let layer = null;
+            let disguiseId = null;
+
+            if (this.searchedItem !== null) {
+                itemName = this.searchedItem.name;
+                layer = this.searchedItem.layer;
             }
-            var group = JSON.parse(JSON.stringify(this.layerGroups[item[0]]))
-            group.items = group.items.filter(el => el.name == item[1])
-            this.searchedItem = group
+            if (this.editor.currentDisguise !== 'NONE') {
+                disguiseId = parseInt(this.editor.currentDisguise);
+            }
+
+            this.floorsWithSearchResults = [];
+            this.floorCountOverride = [];
+            for (const floorString in this.overlays) {
+                const floor = parseInt(floorString);
+                this.floorCountOverride[floor] = 0;
+                const floorLayers = this.overlays[floor];
+                for (const key in floorLayers) {
+                    const currentFloor = floor === parseInt(this.currentLayer);
+                    const forceOff = (layer !== key || itemName === null);
+
+                    // Find the button that toggles this layer and see if it's active or not.
+                    if (key !== 'Navigation|Ledge' &&
+                        key !== 'Navigation|Foliage' &&
+                        !key.startsWith('Disguises|')) {
+                        for (const node in floorLayers[key].getLayers()) {
+                            const nodeProperties = floorLayers[key].getLayers()[node];
+
+                            if (this.editor.mode === '') {
+                                nodeProperties.dragging.disable();
+                            } else {
+                                nodeProperties.dragging.enable();
+                            }
+
+
+                            if (currentFloor && !this.isLayerHidden(key)) {
+                                $(nodeProperties._icon).css('display', 'block');
+                            } else {
+                                $(nodeProperties._icon).css('display', 'none');
+                            }
+
+                            if (nodeProperties.options.custom.node.name === itemName && !forceOff) {
+                                if (this.isLayerHidden(key)) {
+                                    if (currentFloor) {
+                                        $(nodeProperties._icon).css('display', 'block');
+                                    }
+                                    this.floorCountOverride[floor]++;
+                                }
+                                $(nodeProperties._icon).addClass('search-result');
+                                if (this.floorsWithSearchResults.indexOf(floor) === -1) {
+                                    this.floorsWithSearchResults.push(floor);
+                                }
+                            } else {
+                                $(nodeProperties._icon).removeClass('search-result');
+                            }
+
+                            if (nodeProperties.options.custom.node.deleted === true) {
+                                this.map.removeLayer(nodeProperties);
+                            }
+                        }
+                    }
+
+                    if (key.startsWith('Disguises|')) {
+                        this.disguises.forEach(disguise => {
+                            this.toggleLayerGroup(floorLayers['Disguises|' + disguise.id],
+                                disguise.id === disguiseId && floor === parseInt(this.currentLayer));
+                        });
+                    }
+
+                    if (key === 'Navigation|Ledge' || key === 'Navigation|Foliage') {
+                        this.toggleLayerGroup(floorLayers[key], (currentFloor && !this.isLayerHidden(key)));
+                    }
+                }
+            }
         },
         hasSearchResults(floor) {
-            if (this.searchedItem == null) return false
-            return (
-                this.searchedItem.items.filter(el => el.level == floor).length >
-                0
-            )
+            return this.floorsWithSearchResults.indexOf(floor) !== -1;
         },
         isSearchResult(item) {
             if (this.searchedItem == null) return false
@@ -2246,12 +2293,13 @@ export default {
             )
         },
         clearSearch() {
-            this.searchedItem = null
+            this.searchedItem = null;
             $('.search-box[data-search="items"]')
                 .find('.bootstrap-select')
                 .removeClass('item-selected')
-                .end()
-            $(this.$refs.itemSearch).selectpicker('val', '')
+                .end();
+            $(this.$refs.itemSearch).selectpicker('val', '');
+            this.updateNodeLayerState();
         },
         showCopyDisguiseModal() {
             $('#copy-disguises-modal').modal('show')
@@ -2289,6 +2337,10 @@ export default {
         }
     },
     created: function() {
+        const $body = $('body');
+        $body.on('click', '[data-action="edit-btn"]', this.editMarker);
+        $body.on('click', '[data-action="delete-btn"]', this.deleteMarker);
+
         if (this.game === null || this.game.slug !== this.$route.params.slug)
             this.$store.dispatch('loadGame', this.$route.params.slug)
         this.$request(
@@ -2303,6 +2355,10 @@ export default {
                 this.$route.params.difficulty +
                 '/map'
         ).then(resp => {
+            if (this.$store.state.mission == null) {
+                this.$store.commit('SET_MISSION', resp.data.mission);
+            }
+
             this.$route.meta.title = resp.data.mission.name
             this.currentLayer = resp.data.mission.startingFloorNumber
             for (var group in resp.data.nodes) {
@@ -2323,39 +2379,153 @@ export default {
             this.nodes = resp.data.nodes
             this.searchableNodes = resp.data.searchableNodes
             resp.data.categories.forEach(category => {
-                if (!this.categories[category.type])
-                    this.categories[category.type] = []
-                this.categories[category.type].push(category)
-                this.layerGroups[category.type + '|' + category.group] =
-                    resp.data.nodes[category.type].items[category.group]
-            })
-            console.log(this.layerGroups)
+                if (!this.categories[category.type]) {
+                    this.categories[category.type] = [];
+                }
+                this.categories[category.type].push(category);
+            });
+
+            // Initialize g_overlays for each floor
+            for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                this.overlays[i] = {};
+            }
+
+            resp.data.categories.forEach(category => {
+                for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                    this.overlays[i][category.type + '|' + category.group] = L.layerGroup();
+                    this.layerGroups.push(this.overlays[i][category.type + '|' + category.group]);
+                }
+            });
+
+            // Layers for disguises
+            console.log(resp.data.disguises);
+            resp.data.disguises.forEach(disguise => {
+                for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                    this.overlays[i]['Disguises|' + disguise.id] = L.layerGroup();
+                    this.layerGroups.push(this.overlays[i]['Disguises|' + disguise.id]);
+                }
+            });
+
+            for (let typeName in resp.data.nodes) {
+                let nodeType = resp.data.nodes[typeName];
+
+                for (let groupName in nodeType.items) {
+                    let group = nodeType.items[groupName];
+                    group.items.forEach(node => {
+                        let marker = this.buildMarker(node).bindPopup(this.buildPopup);
+                        if (node.tooltip !== '') {
+                            marker.bindTooltip(node.tooltip);
+                        }
+
+                        marker.addTo(this.overlays[node.level][nodeType.name + '|' + group.name]);
+                    })
+                }
+            }
+
+            resp.data.ledges.forEach(ledge => {
+                this.buildLedge(ledge).addTo(this.overlays[ledge.level]['Navigation|Ledge']);
+            });
+
+            resp.data.foliage.forEach(foliage => {
+                this.buildFoliage(foliage).addTo(this.overlays[foliage.level]['Navigation|Foliage']);
+            });
+
+            resp.data.disguises.forEach(disguise => {
+                disguise.areas.forEach(area => {
+                    this.buildDisguiseArea(area).addTo(this.overlays[area.level]['Disguises|' + disguise.id]);
+                });
+            });
+
             this.$nextTick(() => {
-                this.$refs.map.mapObject.setView(
-                    [
-                        Number(this.mission.mapCenterLatitude),
-                        Number(this.mission.mapCenterLongitude)
-                    ],
-                    3
-                )
-                $('#map-control').append(
-                    this.$refs.map.mapObject.zoomControl.getContainer()
-                )
-                this.mapLoaded = true
+                // Build tile layers for each floor
+                for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                    let mapTileLayer = L.tileLayer(this.mapUrl + i + '/{z}/{x}/{y}.png', {
+                        noWrap: true,
+                        minZoom: 3,
+                        maxZoom: 5
+                    });
+                    this.layerGroups.push(mapTileLayer);
+                    this.mapLayers[i] = mapTileLayer;
+                }
+
+                if (this.mission.satelliteView) {
+                    let mapTileLayer = L.tileLayer(this.mapUrl + '-99/{z}/{x}/{y}.png', {
+                        noWrap: true,
+                        minZoom: 3,
+                        maxZoom: 5
+                    });
+                    this.layerGroups.push(mapTileLayer);
+                    this.mapLayers[-99] = mapTileLayer;
+                }
+
+                this.map = L.map('map', {
+                    maxZoom: 5,
+                    minZoom: 3,
+                    crs: L.CRS.Simple,
+                    layers: this.layerGroups,
+                    renderer: L.canvas()
+                }).setView([this.mission.mapCenterLatitude, this.mission.mapCenterLongitude], 3);
+                let topLeftCoordinate = this.mission.topLeftCoordinate.split(',');
+                let bottomRightCoordinate = this.mission.bottomRightCoordinate.split(',');
+                this.map.setMaxBounds([topLeftCoordinate, bottomRightCoordinate]);
+
+                const zoom = L.control.zoom({position: 'topright'});
+                zoom.addTo(this.map);
+                $('#map-control').append(zoom.getContainer());
+
+                for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                    this.map.removeLayer(this.mapLayers[i]);
+                }
+                if (this.mission.satelliteView) {
+                    this.map.removeLayer(this.mapLayers[-99]);
+                }
+
+                this.map.addLayer(this.mapLayers[this.mission.startingFloorNumber]);
+
+                // "Show" all items; CSS will handle showing / hiding
+                for (let i = this.mission.lowestFloorNumber; i <= this.mission.highestFloorNumber; i++) {
+                    for (let j in this.overlays[i]) {
+                        this.toggleLayerGroup(this.overlays[i][j], true);
+                    }
+                }
+                this.updateNodeLayerState();
+
+                this.mapLoaded = true;
                 //Is not needed directly at start
                 this.$request(false, 'v1/editor/templates').then(resp => {
-                    this.editor.templates = resp.data
+                    this.editor.templates = resp.data;
                     this.$nextTick(() => {
                         $('.selectpicker').selectpicker()
                     })
-                })
+                });
                 this.$request(false, 'v1/editor/icons').then(resp => {
-                    this.editor.icons = resp.data
+                    this.editor.icons = resp.data;
                     this.$nextTick(() => {
-                        $(this.$refs.iconPicker).selectpicker('destroy')
+                        $(this.$refs.iconPicker).selectpicker('destroy');
                         $(this.$refs.iconPicker).selectpicker()
                     })
-                })
+                });
+
+                this.map.on('click', this.addMarker);
+
+                this.map.on('pm:drawstart', this.initDraw);
+
+                this.map.on('pm:create', this.pmLayer);
+
+                this.map.on('pm:drawend', this.endDraw);
+
+                this.map.on('zoomend', () => {
+                    let zoomLevel = this.map.getZoom();
+                    console.log(zoomLevel);
+
+                    var fonts = {
+                        3: '.8em',
+                        4: '1em',
+                        5: '1.2em'
+                    };
+
+                    $('.area-icon').css('font-size', fonts[zoomLevel]);
+                });
             })
         })
     }
@@ -2375,6 +2545,8 @@ html {
 
 .header {
     max-width: 368px;
+    margin-top: 20px;
+    margin-bottom: 20px;
 
     a {
         opacity: 0.85;
@@ -2393,9 +2565,9 @@ html {
     width: 100%;
     height: 100%;
 
-    /*.leaflet-control-container {
-          display: none;
-        }*/
+    .leaflet-control-container {
+        display: none;
+    }
 
     .leaflet-popup-close-button {
         font-size: 2rem;
@@ -2601,15 +2773,27 @@ html {
     }
 }
 
-.leaflet-marker-icon.search-result {
-    z-index: 9999 !important;
-    background: rgba(255, 0, 60, 0.75);
-    padding: 15px !important;
-    margin: -33px 0 0 -33px !important;
-    border-radius: 50%;
-    border: 2px solid #ff003c;
-    opacity: 0.85 !important;
-    box-sizing: content-box;
+.leaflet-marker-icon {
+    &.search-result {
+        z-index: 9999 !important;
+        background: rgba(255, 0, 60, 0.75);
+        padding: 15px !important;
+        margin: -33px 0 0 -33px !important;
+        border-radius: 50%;
+        border: 2px solid #ff003c;
+        opacity: 0.85 !important;
+        box-sizing: content-box;
+    }
+
+    &.area-icon {
+        color: #fff;
+        text-shadow: #000 1px 1px 1px;
+        font-size: 0.8em;
+        width: inherit !important;
+        height: inherit !important;
+        white-space: nowrap;
+        text-align: center;
+    }
 }
 
 .accordion {
@@ -2848,6 +3032,14 @@ html {
             color: #000;
             background: #fff;
         }
+
+        .flag {
+            margin: -20px -24px -24px -24px !important;
+            transform: scale(.50) !important;
+            -ms-transform: scale(.50) !important;
+            -webkit-transform: scale(.50) !important;
+            -moz-transform: scale(.50) !important;
+        }
     }
 }
 
@@ -3006,9 +3198,14 @@ html {
 .editor-enabled {
     color: #fff;
     text-transform: uppercase;
-    border: solid 2px #fff;
+    border: solid 2px #ff003c;
     text-align: center;
     margin-bottom: 5px;
+    background-color: #ff003c;
+
+    h3 {
+        margin: .5rem 0;
+    }
 }
 
 .floor-toggle {
@@ -3161,4 +3358,9 @@ html {
         border: solid 2px #fff;
     }
 }
+
+    #editModal .dropdown-toggle img {
+        background: rgba(0, 0, 0, .15);
+        border-radius: 3px;
+    }
 </style>

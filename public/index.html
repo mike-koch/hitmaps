@@ -17,19 +17,20 @@
     <link rel="manifest" href="<%= BASE_URL %>site.webmanifest">
     <link rel="mask-icon" href="<%= BASE_URL %>safari-pinned-tab.svg" color="#ff1439">
     <link rel="shortcut icon" href="<%= BASE_URL %>favicon.ico">
-    <meta name="apple-mobile-web-app-title" content="HITMAN&trade; 2 Maps">
-    <meta name="application-name" content="HITMAN&trade; 2 Maps">
+    <meta name="apple-mobile-web-app-title" content="HITMAPS">
+    <meta name="application-name" content="HITMAPS">
     <meta name="msapplication-TileColor" content="#aabdc6">
     <meta name="theme-color" content="#aabdc6">
-    <title>Home | HITMAN™ 2 Maps</title>
+    <title>Home | HITMAPS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
           integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
           crossorigin="anonymous">
-    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.5.0/css/all.css"
-          integrity="sha384-j8y0ITrvFafF4EkV1mPW0BKm6dp3c+J9Fky22Man50Ofxo2wNe5pT1oZejDH9/Dt"
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.2/css/all.css"
+          integrity="sha384-XxNLWSzCxOe/CFcHcAiJAZ7LarLmw3f4975gOO6QkxvULbGGNDoSOTzItGUG++Q+"
           crossorigin="anonymous">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.5/css/bootstrap-select.min.css">
     <link href="https://fonts.googleapis.com/css?family=Roboto:300,300i,500,500i" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Lato:400,700|PT+Serif:400,700&display=swap" rel="stylesheet">
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"
             integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
@@ -43,11 +44,24 @@
     <script src="https://www.google.com/recaptcha/api.js?onload=vueRecaptchaApiLoaded&render=explicit" async defer></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/5.8.2/firebase-messaging.js"></script>
+
+    <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+            integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+            crossorigin=""></script>
+    <script src="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.min.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+          integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+          crossorigin=""/>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet.pm@latest/dist/leaflet.pm.css" />
     <script>
         firebase.initializeApp({
             apiKey: "AIzaSyDEqqb-AA5R7V6GjmvY4QPQN7ZHJzKsX64",
-            projectId: "hitman2maps",
-            messagingSenderId: "458558604415"
+            authDomain: "hitmaps.firebaseapp.com",
+            databaseURL: "https://hitmaps.firebaseio.com",
+            projectId: "hitmaps",
+            storageBucket: "hitmaps.appspot.com",
+            messagingSenderId: "458558604415",
+            appId: "1:458558604415:web:9c0365be0363486339ab4a"
         });
     </script>
     <script src="<%= BASE_URL %>js/firebase.js"></script>

@@ -22,5 +22,6 @@ class NodeWithNotesViewModel {
     public $approved;
     public $image;
     public $tooltip;
+    public $quantity;
     public $searchable;
 }

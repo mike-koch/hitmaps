@@ -3,4 +3,4 @@ User-agent: *
 Disallow: /api/
 Disallow: /maps/
 
-Sitemap: https://www.hitman2maps.com/sitemap.txt
+Sitemap: https://www.hitmaps.com/sitemap.txt

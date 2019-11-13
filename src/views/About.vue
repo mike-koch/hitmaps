@@ -13,17 +13,17 @@
                  alt="Picture of MrMike"
                  class="img-fluid"
                  style="display: inline-block; vertical-align: text-bottom">
-            <p style="display: inline-block;margin-left: 5px;">I'm Mike Koch (MrMike), creator of hitman2maps.com. I'm currently working as a web developer while
-                working on hitman2maps.com in my spare time.</p>
-            <p>I started working on hitman2maps.com a month or so before HITMAN&trade; 2 was released, as I was not
+            <p style="display: inline-block;margin-left: 5px;">I'm Mike Koch (MrMike), creator of HITMAPS. I'm currently working as a web developer while
+                working on HITMAPS in my spare time.</p>
+            <p>I started working on HITMAPS a month or so before HITMAN&trade; 2 was released, as I was not
             seeing any progress made on hitmanmaps.com. By building a site that allows outside contributions, maps
             for all six starting locations were created far faster than I could ever imagine.</p>
             <h3>Are you Affiliated With IO Interactive or HITMAN&trade; Maps?</h3>
-            <p>Nope. Not at all. hitmanmaps.com was created by Winterbirds, which heavily influenced hitman2maps.com,
+            <p>Nope. Not at all. hitmanmaps.com was created by Winterbirds, which heavily influenced HITMAPS,
             as I wanted to provide a similar user experience to what hitmanmaps.com users were used to using.  However,
                 I've never spoken to the creator of hitmanmaps.com.</p>
             <h3>Special Thanks</h3>
-            <p>I'd like to thank the following for making HITMAN&trade; 2 Maps what it is today:</p>
+            <p>I'd like to thank the following for making HITMAPS what it is today:</p>
             <div class="row">
                 <div class="col">
                     <div class="media">
@@ -37,14 +37,14 @@
                         </div>
                     </div>
                     <div class="media">
-                        <a href="https://www.jetbrains.com" target="_blank">
+                        <a href="https://www.jetbrains.com/?from=Hitman2Maps" target="_blank">
                             <img v-webp src="/img/png/logos/jetbrains.png" alt="JetBrains Logo" class="align-self-start mr-3" height="64" width="64">
                         </a>
                         <div class="media-body">
                             <h5 class="mt-0">
-                                <a href="https://www.jetbrains.com" target="_blank">JetBrains</a>
+                                <a href="https://www.jetbrains.com/?from=Hitman2Maps" target="_blank">JetBrains</a>
                             </h5>
-                            <p>JetBrains provides hitman2maps with a free open-source license to all of their products.</p>
+                            <p>JetBrains provides HITMAPS with a free open-source license to all of their products.</p>
                         </div>
                     </div>
                     <div class="media">
@@ -53,13 +53,13 @@
                             <h5 class="mt-0">
                                 <a href="https://www.readme.io" target="_blank">ReadMe</a>
                             </h5>
-                            <p>ReadMe provides a free open-source license to document hitman2maps's public API.</p>
+                            <p>ReadMe provides a free open-source license to document HITMAPS's public API.</p>
                         </div>
                     </div>
                 </div>
                 <div class="col">
                     <h5>The Community</h5>
-                    <p>The community is vital to HITMAN&trade; 2 Maps. Without them, this site would not be where it is
+                    <p>The community is vital to HITMAPS. Without them, this site would not be where it is
                     today (I would not have had the motivation to do it all by myself 😂).</p>
                 </div>
             </div>

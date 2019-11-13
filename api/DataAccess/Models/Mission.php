@@ -109,6 +109,11 @@ class Mission {
     public $difficulties = [];
 
     /**
+     * @ORM\Column(type="string")
+     */
+    public $background;
+
+    /**
      * @return mixed
      */
     public function getId(): int {
@@ -360,5 +365,19 @@ class Mission {
      */
     public function setMissionType(string $missionType): void {
         $this->missionType = $missionType;
+    }
+
+    /**
+     * @return string
+     */
+    public function getBackground(): string {
+        return $this->background;
+    }
+
+    /**
+     * @param string $background
+     */
+    public function setBackground(string $background): void {
+        $this->background = $background;
     }
 }

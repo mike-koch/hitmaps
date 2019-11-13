@@ -7,4 +7,5 @@ class MapMetadataViewModel {
     public $tileLocation;
     public $name;
     public $type;
+    public $background;
 }

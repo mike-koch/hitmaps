@@ -101,6 +101,11 @@ class Node {
      */
     public $tooltip;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    public $quantity;
+
     public function __construct() {
         $this->dateCreated = new \DateTime("now");
     }
@@ -352,5 +357,19 @@ class Node {
      */
     public function setTooltip($tooltip): void {
         $this->tooltip = $tooltip;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQuantity(): int {
+        return $this->quantity;
+    }
+
+    /**
+     * @param mixed $quantity
+     */
+    public function setQuantity(int $quantity): void {
+        $this->quantity = $quantity;
     }
 }

@@ -13,12 +13,12 @@ export default {
     },
     watch: {
         title: function(val) {
-            document.title = `${val} | HITMAN™ 2 Maps`
+            document.title = `${val} | HITMAPS`
         },
     },
     mounted() {
         if (this.title) {
-            document.title = `${this.title} | HITMAN™ 2 Maps`
+            document.title = `${this.title} | HITMAPS`
         }
     },
 }

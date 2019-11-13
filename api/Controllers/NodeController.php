@@ -135,6 +135,7 @@ class NodeController {
                 $nodeViewModel->group = $node->getGroup();
                 $nodeViewModel->image = $node->getImage();
                 $nodeViewModel->tooltip = $node->getTooltip();
+                $nodeViewModel->quantity = $node->getQuantity();
                 $nodeViewModel->notes = [];
 
                 /* @var $categoryViewModel CategoryViewModel */
@@ -218,11 +219,17 @@ class NodeController {
         $node->setMissionId($missionId);
         $node->setName($postData['name'] !== null ? trim($postData['name']) : '');
         $node->setTooltip($postData['name'] !== null ? trim($postData['name']) : '');
+        if (isset($postData['quantity']) && intval($postData['quantity']) > 1) {
+            $quantity = intval($postData['quantity']);
+            $node->setTooltip($node->getTooltip() . " (x{$quantity})");
+        }
+
         $node->setType($type);
         $node->setCreatedBy($user->getId());
         $node->setTarget('');
         $node->setSearchable($postData['searchable']);
         $node->setImage(isset($postData['image']) && $postData['image'] !== '' ? $postData['image'] : null);
+        $node->setQuantity(isset($postData['quantity']) ? $postData['quantity'] : 1);
 
         switch ($subgroup) {
             case 'sabotage':
@@ -276,6 +283,10 @@ class NodeController {
             case 'camera':
             case 'frisk':
                 $node->setTooltip($node->getGroup());
+                break;
+            case 'area':
+                $node->setTooltip('');
+                $node->setDifficulty('ALL');
                 break;
             default:
                 $node->setTarget($postData['target']);

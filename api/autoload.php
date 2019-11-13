@@ -1,4 +1,7 @@
 <?php
+
+use Predis\Client;
+
 require __DIR__ . '/vendor/autoload.php';
 
 spl_autoload_register(function ($class) {
@@ -15,10 +18,9 @@ spl_autoload_register(function ($class) {
 $builder = new \DI\ContainerBuilder();
 $settings = new \Config\Settings();
 
-// TODO Rollbar logging
-
 $applicationContext = $builder->build();
 
+// region Doctrine
 $databaseConfig = \Doctrine\ORM\Tools\Setup::createConfiguration($settings->loggingEnvironment === 'production');
 $driver = new \Doctrine\ORM\Mapping\Driver\AnnotationDriver(new \Doctrine\Common\Annotations\AnnotationReader(), [__DIR__ . '/DataAccess/Models']);
 \Doctrine\Common\Annotations\AnnotationRegistry::registerLoader('class_exists');
@@ -33,6 +35,20 @@ $databaseConnection = [
 ];
 $entityManager = \Doctrine\ORM\EntityManager::create($databaseConnection, $databaseConfig);
 $applicationContext->set(\Doctrine\ORM\EntityManager::class, $entityManager);
+// endregion
+
+// region Redis
+if ($settings->useRedis) {
+    $redis = new Predis\Client([
+        'scheme' => 'tcp',
+        'host' => $settings->redisHost,
+        'port' => $settings->redisPort
+    ]);
+    $applicationContext->set(Client::class, $redis);
+} else {
+    $applicationContext->set(Client::class, null);
+}
+// endregion
 
 if ($settings->loggingEnvironment !== 'development') {
     // TODO Rollbar configuration

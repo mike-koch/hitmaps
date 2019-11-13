@@ -74,7 +74,7 @@ class ElusiveTargetUpdater {
         $client = new Client();
         $response = $client->request('GET', 'https://auth.hitman.io/status', [
             'headers' => [
-                'User-Agent' => 'hitman2maps.com',
+                'User-Agent' => 'hitmaps.com',
                 'Accept' => 'application/json'
             ]
         ]);

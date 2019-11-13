@@ -25,7 +25,7 @@
             <img class="img-fluid" src="{{ settings.cdnLocation }}/{{ model.tileLocation }}" alt="Mission Thumbnail">
             <div class="footer">
                 <div class="footer-image">
-                    <img src="/img/game-icons/mission-inverted.png" class="img-fluid" alt="Mission Icon">
+                    <img src="http://localhost:8080/img/game-icons/mission-inverted.png" class="img-fluid" alt="Mission Icon">
                 </div>
                 <div class="footer-text">
                     <h2>{{ model.missionType }}</h2>
@@ -170,7 +170,7 @@
                                     {% for groupName,group in type.items %}
                                         <div class="{{ group.collapsible ? 'full-width' : 'half-width' }}">
                                             <div class="name" data-layer="{{ typeName }}|{{ groupName }}">
-                                                <img src="/img/map-icons/{{ group.icon }}.png" alt="{{ groupName }} Icon" class="img-fluid">
+                                                <img src="http://localhost:8080/img/map-icons/{{ group.icon }}.png" alt="{{ groupName }} Icon" class="img-fluid">
                                                 <span>{{ groupName }}</span>
                                             </div>
                                             {% if group.collapsible %}
@@ -183,7 +183,7 @@
                                                         {% for node in group.items %}
                                                             <li>
                                                                 {% if node.icon != group.icon %}
-                                                                    <img src="/img/map-icons/{{ node.icon }}.png" alt="{{ node.name }} Icon" class="img-fluid">
+                                                                    <img src="http://localhost:8080/img/map-icons/{{ node.icon }}.png" alt="{{ node.name }} Icon" class="img-fluid">
                                                                 {% endif %}
                                                                 {{ node.name }}
                                                             </li>
@@ -423,7 +423,7 @@
                                             <optgroup label="{{ type }}">
                                                 {% for category in categories %}
                                                     <option value="{{ type }}|{{ category.subgroup }}"
-                                                            data-content="<img height='24' width='24' src='/img/map-icons/{{ category.icon }}.png' alt='{{ category.group }} Icon'> {{ category.group }}"
+                                                            data-content="<img height='24' width='24' src='http://localhost:8080/img/map-icons/{{ category.icon }}.png' alt='{{ category.group }} Icon'> {{ category.group }}"
                                                             data-icon="{{ category.icon }}"
                                                             data-searchable="{{ category.searchable }}"
                                                             {% if category.requireName %} data-name="true" {% endif %}
@@ -450,7 +450,7 @@
                                         {% for group,icons in model.icons %}
                                             <optgroup label="{{ group }}">
                                                 {% for icon in icons %}
-                                                    <option data-content="<img height='24' width='24' src='/img/map-icons/{{ icon.icon }}.png' alt='{{ icon.altText }} Icon'> {{ icon.altText }}" value="{{ icon.icon }}">{{ icon.altText }}</option>
+                                                    <option data-content="<img height='24' width='24' src='http://localhost:8080/img/map-icons/{{ icon.icon }}.png' alt='{{ icon.altText }} Icon'> {{ icon.altText }}" value="{{ icon.icon }}">{{ icon.altText }}</option>
                                                 {% endfor %}
                                             </optgroup>
                                         {% endfor %}
@@ -792,7 +792,7 @@
 
                 // Build tile layers for each floor
                 for (var j = g_lowestFloor; j <= g_highestFloor; j++) {
-                    var mapTileLayer = L.tileLayer('/maps/{{ model.mapFolderName }}/tiles/' + j + '/{z}/{x}/{y}.png', {
+                    var mapTileLayer = L.tileLayer('/api/maps/{{ model.mapFolderName }}/tiles/' + j + '/{z}/{x}/{y}.png', {
                         noWrap: true,
                         minZoom: 3,
                         maxZoom: 5
@@ -802,7 +802,7 @@
                 }
 
                 if (g_satelliteView) {
-                    var mapTileLayer = L.tileLayer('/maps/{{ model.mapFolderName }}/tiles/-99/{z}/{x}/{y}.png', {
+                    var mapTileLayer = L.tileLayer('/api/maps/{{ model.mapFolderName }}/tiles/-99/{z}/{x}/{y}.png', {
                         noWrap: true,
                         minZoom: 3,
                         maxZoom: 5
@@ -818,6 +818,8 @@
                     layers: allLayerGroups
                 }).setView([{{ model.mapCenterLatitude }}, {{ model.mapCenterLongitude }}], 3);
                 g_map.setMaxBounds([[{{ model.topLeftCoordinate }}], [{{ model.bottomRightCoordinate }}]]);
+
+                // TODO Migrate this
                 g_map.addEventListener('click', function(e) {
                     if (parseInt($('input[type="hidden"][name="edit-mode"]').val()) !== 1) {
                         return;
@@ -846,6 +848,8 @@
                         .find('input[name="id"]').val(-1).end()
                         .modal('show');
                 });
+
+
                 var zoom = L.control.zoom({position: 'topright'});
                 zoom.addTo(g_map);
                 $('#map-control').append(zoom.getContainer());
@@ -859,6 +863,7 @@
                 }
 
                 g_map.addLayer(g_mapLayers[g_startingFloor]);
+
 
                 // Show the starting level's items
                 for (var j = g_lowestFloor; j <= g_highestFloor; j++) {
@@ -1279,7 +1284,7 @@
 
         function buildMarker(node) {
             return L.marker([node.latitude, node.longitude], {
-                icon: L.icon({iconUrl: '/img/map-icons/' + node.icon + '.png',
+                icon: L.icon({iconUrl: 'http://localhost:8080/img/map-icons/' + node.icon + '.png',
                     iconSize: [32, 32],
                     iconAnchor: [16, 16],
                     popupAnchor: [0, 0]

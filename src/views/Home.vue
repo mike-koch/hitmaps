@@ -6,14 +6,21 @@
     >
         <header class="row">
             <div class="col text-center site-header">
-                <h1>Interactive Maps For</h1>
                 <img
                     v-webp
-                    src="/img/png/logos/hitman2.png"
+                    src="/img/png/logos/hitmaps.png"
                     class="img-fluid"
                 />
+                <h1>{{ $t('interactive-maps-for-hitman') }}</h1>
             </div>
         </header>
+        <div class="row dashboard">
+            <div class="col one-year">
+                <a href="/one-year">
+                    HITMAPS: One Year Later - Learn About the Past, Present, and Future of the Site
+                </a>
+            </div>
+        </div>
         <div
             class="row loading"
             v-if="games.length === 0 && elusiveTargets.length === 0"
@@ -61,14 +68,55 @@
                             />
                         </div>
                         <div class="text">
-                            <h2>{{ game.type }}</h2>
+                            <h2>{{ $t("game-type." + game.type) }}</h2>
                             <h1>{{ game.fullName }}</h1>
                         </div>
                     </div>
                 </router-link>
             </div>
+            <div class="elusive-target col-lg"
+                 id="promo"
+                 v-if="showPromo === 1"
+                 :style="{
+                    backgroundImage:
+                        'url(/img/png/promo/speedrun-competition2.png)',
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundRepeat: 'no-repeat'
+                }">
+                <a href="https://discord.gg/X2B8myT" target="_blank">
+                    <p>&nbsp;</p>
+                    <div class="countdown">
+                        <img
+                                src="/img/game-icons/elusive-target-reminaing-time.png"
+                        />
+                        <div class="timer not-playable">
+                            <div class="target-arrives">{{ (new Date(promoStartDate) > new Date()) ? 'Event Begins' : 'Event Ends' }}</div>
+                            <countdown
+                                    class="elusive-countdown"
+                                    :date="
+                                    new Date(promoStartDate) >
+                                    new Date()
+                                        ? promoStartDate
+                                        : promoEndDate
+                                "
+                            ></countdown>
+                        </div>
+                    </div>
+                    <div class="game-info">
+                        <div class="image">
+                            <i class="fab fa-discord fa-3x" style="width: 48px; height: 48px"></i>
+                        </div>
+                        <div class="text">
+                            <h2>Frote7's</h2>
+                            <h1>Speedrun Competition #2</h1>
+                        </div>
+                    </div>
+                </a>
+            </div>
             <div
                 class="elusive-target col-lg"
+                v-if="showPromo === 0"
                 v-bind:style="{
                     backgroundImage:
                         'url(' +
@@ -98,7 +146,7 @@
                                     new Date()
                             }"
                         >
-                            <div class="target-arrives">TARGET ARRIVES</div>
+                            <div class="target-arrives">{{ $t('elusive-target.target-arrives') }}</div>
                             <countdown
                                 class="elusive-countdown"
                                 :date="
@@ -114,8 +162,8 @@
                             @click="showBriefing"
                             src="/img/game-icons/briefing-transparent.png"
                             class="normal img-fluid briefing-icon float-right"
-                            alt="Briefing Icon"
-                            v-tooltip:left="'Mission Briefing'"
+                            :alt="$t('elusive-target.briefing-icon')"
+                            v-tooltip:left="$t('elusive-target.mission-briefing')"
                         />
                     </div>
                     <div class="elusive-target-info">
@@ -123,21 +171,21 @@
                             <img
                                 src="/img/game-icons/elusive-target.png"
                                 class="normal img-fluid"
-                                alt="Elusive Target Icon"
+                                :alt="$t('elusive-target-icon')"
                             />
                             <img
                                 src="/img/game-icons/elusive-target-inverted.png"
                                 class="inverted img-fluid"
-                                alt="Elusive Target Icon"
+                                :alt="$t('elusive-target-icon')"
                             />
                         </div>
                         <div class="text">
-                            <h2>Elusive Target</h2>
+                            <h2>{{ $t('game-type.Elusive Target') }}</h2>
                             <h1>
                                 {{
                                     elusiveTarget != null
                                         ? elusiveTarget.name
-                                        : 'Coming soon'
+                                        : $t('elusive-target.coming-soon')
                                 }}
                             </h1>
                         </div>
@@ -145,19 +193,17 @@
                             onclick="return false;"
                             @click="showNotificationModal"
                             class="image elusive-notification float-right notification-icon"
-                            v-tooltip:left="
-                                'Manage Elusive Target Notifications'
-                            "
+                            v-tooltip:left="$t('elusive-target.notifications.manage-notifications')"
                         >
                             <img
                                 src="/img/game-icons/notification.png"
                                 class="normal img-fluid"
-                                alt="Notification Icon"
+                                :alt="$t('elusive-target.notifications.notification-icon')"
                             />
                             <img
                                 src="/img/game-icons/notification-inverted.png"
                                 class="inverted img-fluid"
-                                alt="Notification Icon"
+                                :alt="$t('elusive-target.notifications.notification-icon')"
                             />
                         </div>
                     </div>
@@ -169,35 +215,33 @@
                             <img
                                 src="/img/game-icons/elusive-target.png"
                                 class="normal img-fluid"
-                                alt="Elusive Target Icon"
+                                :alt="$t('elusive-target-icon')"
                             />
                             <img
                                 src="/img/game-icons/elusive-target-inverted.png"
                                 class="inverted img-fluid"
-                                alt="Elusive Target Icon"
+                                :alt="$t('elusive-target-icon')"
                             />
                         </div>
                         <div class="text">
-                            <h2>Elusive Target</h2>
-                            <h1>Coming soon</h1>
+                            <h2>{{ $t('game-type.Elusive Target') }}</h2>
+                            <h1>{{ $t('elusive-target.coming-soon') }}</h1>
                         </div>
                         <div
                             onclick="return false;"
                             @click="showNotificationModal"
                             class="image float-right notification-icon"
-                            v-tooltip:left="
-                                'Manage Elusive Target Notifications'
-                            "
+                            v-tooltip:left="$t('elusive-target.notifications.manage-notifications')"
                         >
                             <img
                                 src="/img/game-icons/notification.png"
                                 class="normal img-fluid"
-                                alt="Notification Icon"
+                                :alt="$t('elusive-target.notifications.notification-icon')"
                             />
                             <img
                                 src="/img/game-icons/notification-inverted.png"
                                 class="inverted img-fluid"
-                                alt="Notification Icon"
+                                :alt="$t('elusive-target.notifications.notification-icon')"
                             />
                         </div>
                     </div>
@@ -256,14 +300,14 @@
                                 <img
                                     src="/img/game-icons/modal-close.png"
                                     class="normal img-fluid"
-                                    alt="Notification Icon"
+                                    :alt="$t('form.close-icon')"
                                 />
                                 <img
                                     src="/img/game-icons/modal-close-inverted.png"
                                     class="inverted img-fluid"
-                                    alt="Notification Icon"
+                                    :alt="$t('form.close-icon')"
                                 />
-                                Close
+                                {{ $t('form.close') }}
                             </button>
                         </div>
                     </div>
@@ -285,63 +329,42 @@
                                 class="modal-title"
                                 id="notification-modal-label"
                             >
-                                <span
-                                    class="badge badge-pill badge-warning"
-                                    style="border-radius: 0; font-size: 1.3rem"
-                                >
-                                    BETA
-                                </span>
-                                Manage Notifications
+                                {{ $t('elusive-target.notifications.manage-notifications-modal-title') }}
                             </h5>
                         </div>
                         <div class="modal-body d-flex flex-column">
                             <div id="checking-notification-status">
-                                <h6>
-                                    Checking to see if notifications are enabled
-                                    on this device...
-                                </h6>
+                                <h6>{{ $t('elusive-target.notifications.checking-if-enabled') }}</h6>
                                 <div class="spinner-grow" role="status">
-                                    <span class="sr-only">Loading...</span>
+                                    <span class="sr-only">{{ $t('form.loading') }}</span>
                                 </div>
                             </div>
                             <div
                                 id="notifications-unsupported"
                                 style="display: none"
                             >
-                                <h6>
-                                    Unfortunately, notifications are not
-                                    supported on this device. Please try to
-                                    enroll using a supported device.
-                                </h6>
+                                <h6>{{ $t('elusive-target.notifications.unsupported-browser') }}</h6>
                                 <ul>
                                     <li>
                                         iOS
                                         <ul>
                                             <li>
-                                                <a
-                                                    href="https://itunes.apple.com/us/app/google-chrome/id535886823?mt=8"
-                                                >
+                                                <a href="https://itunes.apple.com/us/app/google-chrome/id535886823?mt=8">
                                                     Google Chrome
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://itunes.apple.com/us/app/firefox-web-browser/id989804926?mt=8"
-                                                >
+                                                <a href="https://itunes.apple.com/us/app/firefox-web-browser/id989804926?mt=8">
                                                     Firefox
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://itunes.apple.com/us/app/opera-touch-web-browser/id1411869974?mt=8"
-                                                >
+                                                <a href="https://itunes.apple.com/us/app/opera-touch-web-browser/id1411869974?mt=8">
                                                     Opera
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://itunes.apple.com/us/app/brave-browser-fast-adblocker/id1052879175"
-                                                >
+                                                <a href="https://itunes.apple.com/us/app/brave-browser-fast-adblocker/id1052879175">
                                                     Brave
                                                 </a>
                                             </li>
@@ -351,23 +374,17 @@
                                         Android
                                         <ul>
                                             <li>
-                                                <a
-                                                    href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=en_US"
-                                                >
+                                                <a href="https://play.google.com/store/apps/details?id=com.android.chrome&hl=en_US">
                                                     Google Chrome
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=en_US"
-                                                >
+                                                <a href="https://play.google.com/store/apps/details?id=org.mozilla.firefox&hl=en_US">
                                                     Firefox
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://play.google.com/store/apps/details?id=com.brave.browser&hl=en_US"
-                                                >
+                                                <a href="https://play.google.com/store/apps/details?id=com.brave.browser&hl=en_US">
                                                     Brave
                                                 </a>
                                             </li>
@@ -377,24 +394,18 @@
                                         Desktop
                                         <ul>
                                             <li>
-                                                <a
-                                                    href="https://www.google.com/chrome/"
-                                                >
+                                                <a href="https://www.google.com/chrome/">
                                                     Google Chrome
                                                 </a>
                                             </li>
                                             <li>Microsoft Edge</li>
                                             <li>
-                                                <a
-                                                    href="https://www.mozilla.org/en-US/firefox/new/"
-                                                >
+                                                <a href="https://www.mozilla.org/en-US/firefox/new/">
                                                     Firefox
                                                 </a>
                                             </li>
                                             <li>
-                                                <a
-                                                    href="https://www.opera.com/computer"
-                                                >
+                                                <a href="https://www.opera.com/computer">
                                                     Opera
                                                 </a>
                                             </li>
@@ -403,30 +414,20 @@
                                 </ul>
                             </div>
                             <div id="enrollment-required" style="display: none">
-                                <h6>
-                                    Your device is currently not set up to
-                                    receive notifications. Click "Enroll" below
-                                    to begin setting up your device.
-                                </h6>
+                                <h6>{{ $t('elusive-target.notifications.device-not-enrolled') }}</h6>
                                 <p id="error-container"></p>
                             </div>
                             <div
                                 id="notifications-blocked"
                                 style="display: none"
                             >
-                                <h6>
-                                    Your device is currently blocking
-                                    notifications from hitman2maps.com. Please
-                                    unblock this site from your device, refresh
-                                    the page, and try to enroll your device
-                                    again.
-                                </h6>
+                                <h6>{{ $t('elusive-target.notifications.notifications-blocked') }}</h6>
                             </div>
                             <div
                                 id="notification-settings"
                                 style="display: none"
                             >
-                                <h6>Send me a notification when...</h6>
+                                <h6>{{ $t('elusive-target.notifications.send-me-a-notification-when') }}</h6>
                                 <div class="custom-control custom-checkbox">
                                     <input
                                         type="checkbox"
@@ -439,12 +440,8 @@
                                         "
                                         v-model="notifications.almostPlayable"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-coming"
-                                    >
-                                        An upcoming Elusive Target is almost
-                                        playable
+                                    <label class="custom-control-label" for="elusive-target-coming">
+                                        {{ $t('elusive-target.notifications.announced') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -459,12 +456,8 @@
                                         "
                                         v-model="notifications.becomesPlayable"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-playable"
-                                    >
-                                        The Elusive Target arrives and becomes
-                                        playable
+                                    <label class="custom-control-label" for="elusive-target-playable">
+                                        {{ $t('elusive-target.notifications.playable') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -478,12 +471,8 @@
                                         "
                                         v-model="notifications.sevenDays"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-7"
-                                    >
-                                        The Elusive Target is available for 7
-                                        more days
+                                    <label class="custom-control-label" for="elusive-target-7">
+                                        {{ $t('elusive-target.notifications.7-days') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -497,12 +486,8 @@
                                         "
                                         v-model="notifications.fiveDays"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-5"
-                                    >
-                                        The Elusive Target is available for 5
-                                        more days
+                                    <label class="custom-control-label" for="elusive-target-5">
+                                        {{ $t('elusive-target.notifications.5-days') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -516,12 +501,8 @@
                                         "
                                         v-model="notifications.threeDays"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-3"
-                                    >
-                                        The Elusive Target is available for 3
-                                        more days
+                                    <label class="custom-control-label" for="elusive-target-3">
+                                        {{ $t('elusive-target.notifications.3-days') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -535,12 +516,8 @@
                                         "
                                         v-model="notifications.oneDay"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-1"
-                                    >
-                                        The Elusive Target is available for 1
-                                        more day
+                                    <label class="custom-control-label" for="elusive-target-1">
+                                        {{ $t('elusive-target.notifications.1-day') }}
                                     </label>
                                 </div>
                                 <div class="custom-control custom-checkbox">
@@ -554,11 +531,8 @@
                                         "
                                         v-model="notifications.ended"
                                     />
-                                    <label
-                                        class="custom-control-label"
-                                        for="elusive-target-end"
-                                    >
-                                        The Elusive Target has left
+                                    <label class="custom-control-label" for="elusive-target-end">
+                                        {{ $t('elusive-target.notifications.ended') }}
                                     </label>
                                 </div>
                                 <input type="hidden" name="firebase-token" />
@@ -575,14 +549,14 @@
                                 <img
                                     src="/img/game-icons/modal-continue.png"
                                     class="normal img-fluid"
-                                    alt="Enroll Icon"
+                                    :alt="$t('elusive-target.notifications.enroll-icon')"
                                 />
                                 <img
                                     src="/img/game-icons/modal-continue-inverted.png"
                                     class="inverted img-fluid"
-                                    alt="Enroll Icon"
+                                    :alt="$t('elusive-target.notifications.enroll-icon')"
                                 />
-                                Enroll
+                                {{ $t('elusive-target.notifications.enroll') }}
                             </button>
                             <button
                                 type="button"
@@ -592,14 +566,14 @@
                                 <img
                                     src="/img/game-icons/modal-close.png"
                                     class="normal img-fluid"
-                                    alt="Notification Icon"
+                                    :alt="$t('form.close-icon')"
                                 />
                                 <img
                                     src="/img/game-icons/modal-close-inverted.png"
                                     class="inverted img-fluid"
-                                    alt="Notification Icon"
+                                    :alt="$t('form.close-icon')"
                                 />
-                                Close
+                                {{ $t('form.close') }}
                             </button>
                         </div>
                     </div>
@@ -627,6 +601,9 @@ export default {
     },
     data() {
         return {
+            showPromo: 0,
+            promoStartDate: '2019-09-13T19:00:00+00:00',
+            promoEndDate: '2019-09-22T21:59:59+00:00',
             games: [],
             elusiveTargets: [],
             activeElusiveIndex: 0,
@@ -805,15 +782,15 @@ export default {
                 this.elusiveTarget = this.elusiveTargets[0]
             }
 
-            const that = this
-            setInterval(function() {
+            var that = this;
+            /*setInterval(function() {
                 if (++that.activeElusiveIndex >= that.elusiveTargets.length) {
                     that.activeElusiveIndex = 0
                 }
 
                 that.elusiveTarget =
                     that.elusiveTargets[that.activeElusiveIndex]
-            }, 10000)
+            }, 10000);*/
         })
     }
 }
@@ -897,6 +874,14 @@ function updateCheckboxState(
 <style lang="scss" scoped>
 .site-header {
     margin: 0 20px;
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    img {
+        max-height: 100px;
+    }
 }
 
 @media (min-width: 992px) {
@@ -1028,6 +1013,7 @@ function updateCheckboxState(
             img {
                 width: 48px;
                 height: 48px;
+                margin-right: 5px;
             }
 
             .timer {
@@ -1045,6 +1031,7 @@ function updateCheckboxState(
                     font-size: 2rem;
                     vertical-align: middle;
                     font-weight: 600;
+                    text-transform: uppercase;
                 }
 
                 &.not-playable {
@@ -1052,6 +1039,7 @@ function updateCheckboxState(
 
                     .target-arrives {
                         display: block;
+                        text-transform: uppercase;
                     }
 
                     .elusive-countdown {
@@ -1060,6 +1048,32 @@ function updateCheckboxState(
                     }
                 }
             }
+        }
+    }
+
+    .one-year {
+        /*background-color: rgba(0,0,0,.5);*/
+        background-repeat: no-repeat;
+        background-position: center;
+        background-image: url('/img/jpg/one-year/miami.jpg');
+        background-attachment: fixed;
+        background-size: 150%;
+        margin-left: 3px;
+        margin-right: 3px;
+        padding-left: 0;
+        padding-right: 0;
+        text-align: center;
+        border: 5px solid #fff;
+
+        a {
+            background-color: rgba(0,0,0,.5);
+            width: 100%;
+            display: block;
+            font-size: 2rem;
+            color: white;
+            padding-top: 20px;
+            padding-bottom: 20px;
+            text-shadow: 2px 2px #000;
         }
     }
 }

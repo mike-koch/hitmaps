@@ -6,7 +6,7 @@ Vue.use(Vuex)
 export default new Vuex.Store({
     state: {
         game: null,
-        mission: null,
+        mission: null
     },
 
     mutations: {
@@ -15,7 +15,7 @@ export default new Vuex.Store({
         },
         SET_MISSION(state, mission) {
             state.mission = mission
-        },
+        }
     },
     actions: {
         async loadGame(context, id) {

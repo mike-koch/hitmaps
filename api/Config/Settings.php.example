@@ -32,4 +32,9 @@ class Settings {
     public $twitterConsumerSecret = '';
     public $twitterAccessToken = '';
     public $twitterAccessTokenSecret = '';
+
+    // Redis
+    public $useRedis = false;
+    public $redisHost = '';
+    public $redisPort = 6379;
 }

@@ -4,12 +4,16 @@
         style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
     >
         <header class="row">
-            <div class="col text-center">
-                <h1>Interactive Maps For</h1>
+            <div class="col text-center site-header">
                 <router-link :to="{ name: 'home' }">
-                    <img src="/img/png/logos/hitman2.png" class="img-fluid" />
+                    <img
+                            v-webp
+                            src="/img/png/logos/hitmaps.png"
+                            class="img-fluid"
+                    />
                 </router-link>
-                <h2>Manage Your Profile</h2>
+                <h1>{{ $t('interactive-maps-for-hitman') }}</h1>
+                <h2>{{ $t('profile.manage-profile') }}</h2>
             </div>
         </header>
         <div
@@ -23,11 +27,11 @@
         <div class="row" v-if="model.email !== ''">
             <div class="col login">
                 <div class="login-card">
-                    <h3>Change Name</h3>
+                    <h3>{{ $t('profile.change-name') }}</h3>
                     <div class="form-group row has-feedback">
                         <label for="email" class="col-form-label col-md-4">
                             <i class="fas fa-envelope"></i>
-                            Email
+                            {{ $t('authentication.email') }}
                         </label>
                         <div class="col-md-8">
                             <input
@@ -44,7 +48,7 @@
                     <div class="form-group row has-feedback">
                         <label for="name" class="col-form-label col-md-4">
                             <i class="fas fa-user"></i>
-                            Name
+                            {{ $t('profile.name') }}
                         </label>
                         <div class="col-md-8">
                             <input
@@ -69,7 +73,8 @@
                                 type="submit"
                                 @click="changeName"
                             >
-                                <i class="fas fa-check"></i> Save Name
+                                <i class="fas fa-check"></i>
+                                {{ $t('profile.save-name') }}
                             </button>
                         </div>
                     </div>
@@ -77,14 +82,14 @@
             </div>
             <div class="col login">
                 <div class="login-card">
-                    <h3>Change Password</h3>
+                    <h3>{{ $t('profile.change-password') }}</h3>
                     <div class="form-group row has-feedback">
                         <label
                             for="current-password"
                             class="col-form-label col-md-5"
                         >
                             <i class="fa fa-key"></i>
-                            Current Password
+                            {{ $t('profile.current-password') }}
                         </label>
                         <div class="col-md-7">
                             <input
@@ -105,7 +110,7 @@
                     <div class="form-group row has-feedback">
                         <label for="password" class="col-form-label col-md-5">
                             <i class="fa fa-key"></i>
-                            New Password
+                            {{ $t('profile.new-password') }}
                         </label>
                         <div class="col-md-7">
                             <input
@@ -130,7 +135,7 @@
                             class="col-form-label col-md-5"
                         >
                             <i class="fa fa-key"></i>
-                            Confirm New Password
+                            {{ $t('profile.confirm-new-password') }}
                         </label>
                         <div class="col-md-7">
                             <input
@@ -156,7 +161,8 @@
                                 type="submit"
                                 @click="changePassword"
                             >
-                                <i class="fas fa-check"></i> Update Password
+                                <i class="fas fa-check"></i>
+                                {{ $t('profile.update-password') }}
                             </button>
                         </div>
                     </div>
@@ -205,22 +211,7 @@ export default {
                         title: 'Changes Saved',
                         message: resp.data.data.message
                     })
-                })
-            /*this.$validator.validateAll("login").then((result) => {
-                    if (result) {
-                        var data = new FormData()
-                        data.append("email", this.login.email)
-                        data.append("password", this.login.password)
-                        data.append("g-recaptcha-response", this.recaptcha)
-                        this.$http.post(this.$domain + "/api/web/user/login", data).then(resp => {
-                            this.login.messages = resp.data.messages
-                            if (resp.data.token !== null) {
-                                localStorage.setItem('token', resp.data.token);
-                                this.$router.push({path: this.referer});
-                            }
-                        })
-                    }
-                });*/
+                });
         },
         changePassword: function() {
             const data = new FormData()
@@ -264,6 +255,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.site-header {
+    margin: 0 20px;
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    img {
+        max-height: 100px;
+    }
+}
+
 .row {
     .col.login {
         margin: 40px;

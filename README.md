@@ -1,5 +1,5 @@
-# HITMAN Maps
-HITMAN Maps is an interactive site for viewing maps for HITMAN (2016) and HITMAN 2 (2018).
+# HITMAPS
+HITMAPS is an interactive site for viewing maps for the Hitman series.
 
 # Getting Started
 1. Fork the repo to your own GitLab account

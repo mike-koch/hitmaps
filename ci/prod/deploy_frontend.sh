@@ -14,4 +14,4 @@ mv zip_output.txt frontend
 
 lftp -d -e "set ssl:verify-certificate no; mirror -P $NUMBER_OF_CONCURRENT_UPLOADS -Rv frontend/ $REMOTE_DIR; quit;" ftp://$USERNAME:$PASSWORD@$HOST
 
-curl https://www.hitman2maps.com/unzip-build.php?zip=frontend\&access-key=$ACCESS_KEY
+curl https://www.hitmaps.com/unzip-build.php?zip=frontend\&access-key=$ACCESS_KEY

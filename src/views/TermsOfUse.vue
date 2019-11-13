@@ -8,17 +8,17 @@
             <hr>
             <h3>Terminology</h3>
             <p>
-                "HITMAN&trade; 2 Maps" ("we", "site", "the site", "the service",
-                "hitman2maps.com") refers to the HITMAN&trade; 2 Maps website. These terms
-                are to be bound at all times and are available on the HITMAN&trade; 2 Maps
+                "HITMAPS" ("we", "site", "the site", "the service",
+                "hitmaps.com") refers to the HITMAPS website. These terms
+                are to be bound at all times and are available on the HITMAPS
                 website. The terms of this agreement shall be active one day after
-                last updated (shown below) and set forth by the HITMAN&trade; 2 Maps
+                last updated (shown below) and set forth by the HITMAPS
                 administration.
             </p>
             <h3>Usage</h3>
             <p>
                 By using any service or product from or visiting the website of
-                HITMAN&trade; 2 Maps, you automatically agree to the following terms. You
+                HITMAPS, you automatically agree to the following terms. You
                 must also explicitly agree to these terms when creating an account
                 on the site. It is your responsibility to familiarize yourself with
                 any modifications made to this agreement. Your continued use of this
@@ -109,7 +109,7 @@
                         Note: "Illegal" content is determined within the local,
                         state, and federal jurisdictions of the site. Any content
                         that violates these rules will be removed without warning.
-                        The HITMAN&trade; 2 Maps administration has the final say in all
+                        The HITMAPS administration has the final say in all
                         contributions and whether a contribution violates any of these
                         rules.
                     </p>
@@ -132,15 +132,16 @@
                 ><i
                 >These terms are subject to change at any time without
                     notice. The current terms of use will be available on the
-                    HITMAN&trade; 2 Maps website. Changes to these terms must be
+                    HITMAPS website. Changes to these terms must be
                     approved by the site administration.</i
                 ></b
                 >
             </p>
 
-            <div><br />Last Updated on 2019-07-29</div>
+            <div><br />Last Updated on 2019-11-07</div>
             <p>Prior Versions:</p>
             <ul>
+                <li><a href="https://gitlab.com/mike-koch/hitman-maps/raw/fb501f0270bf2d9b31f575057bb45db54d79ce42/src/views/TermsOfUse.vue">2019-07-29 to 2019-11-07</a></li>
                 <li><a href="https://gitlab.com/mike-koch/hitman-maps/raw/0866c005b0a73e452eadc05cbda57ffc993614eb/src/views/TermsOfUse.vue">2018-12-09 to 2019-07-29</a></li>
             </ul>
         </div>

@@ -1,6 +1,6 @@
 {
-    "name": "HITMAN\u2122 2 Maps",
-    "short_name": "HITMAN\u2122 2 Maps",
+    "name": "HITMAPS",
+    "short_name": "HITMAPS",
     "icons": [
         {
             "src": "/android-chrome-192x192.png",
@@ -15,7 +15,7 @@
     ],
     "theme_color": "#aabdc6",
     "background_color": "#aabdc6",
-    "start_url": "https://www.hitman2maps.com",
+    "start_url": "https://www.hitmaps.com",
     "display": "standalone",
     "gcm_sender_id": "103953800507"
 }

@@ -12,7 +12,7 @@
             <div class="col">
                 <img
                     src="/img/404.gif"
-                    alt="Janus being attacked with muffins"
+                    alt="Janus Being Attacked With Muffins"
                 />
                 <br />
                 <a
@@ -23,14 +23,9 @@
                 </a>
                 <br />
                 <br />
-                <p>
-                    It looks like we couldn't find the page you're looking for.
-                    We asked Janus to help, but he wasn't being cooperative,
-                    despite being offered several blueberry muffins.
-                </p>
                 <a href="/" style="color: white">
                     <i class="fas fa-arrow-left"></i>
-                    Back to the homepage
+                    Back to Home
                 </a>
             </div>
         </div>

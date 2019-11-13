@@ -462,13 +462,14 @@
                 contact us using the information below.<br /><br />
             </div>
 
-            <div class="innerText">hitman2maps.com</div>
+            <div class="innerText">hitmaps.com</div>
             OH
             <div class="innerText">USA</div>
             <div class="innerText">mkoch227@gmail.com</div>
-            <div class="innerText"><br />Last Edited on 2019-07-29</div>
+            <div class="innerText"><br />Last Edited on 2019-11-07</div>
             <p>Prior Versions:</p>
             <ul>
+                <li><a href="https://gitlab.com/mike-koch/hitman-maps/raw/fb501f0270bf2d9b31f575057bb45db54d79ce42/src/views/PrivacyPolicy.vue">2019-07-29 to 2019-11-07</a></li>
                 <li><a href="https://gitlab.com/mike-koch/hitman-maps/raw/0866c005b0a73e452eadc05cbda57ffc993614eb/src/views/PrivacyPolicy.vue">2018-12-09 to 2019-07-29</a></li>
             </ul>
         </div>

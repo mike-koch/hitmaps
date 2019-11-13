@@ -1,19 +1,19 @@
-{% block subject 'HITMAN™ 2 Maps - Verify Your Account' %}
+{% block subject 'HITMAPS - Verify Your Account' %}
 
 {% block body_text %}
     Hello {{ model.name }},
 
-    Please click the following link to verify your hitman2maps.com account:
+    Please click the following link to verify your hitmaps.com account:
 
-    {{ constants.siteDomain }}api/web/user/verify?token={{ model.verificationToken|url_encode }}
+    {{ constants.siteDomain }}/api/web/user/verify?token={{ model.verificationToken|url_encode }}
 
     This link will expire in 24 hours. If you are unable to click the link, copy and paste it into your browser's address bar.
 
-    You received this email because an account was created at the HITMAN™ 2 Maps website under this e-mail address. If you
+    You received this email because an account was created at the HITMAPS website under this e-mail address. If you
     did not sign up, you may simply delete this email.
 
     ---------
-    © {{ constants.currentYear }} hitman2maps.com
+    © {{ constants.currentYear }} hitmaps.com
     HITMAN™, HITMAN™ 2, the HITMAN™ logo, images, and text are the property of IO Interactive.
     ---------
 
@@ -288,8 +288,7 @@
                                                                                                 <tr style="line-height:0px;line-height:0px;">
                                                                                                     <td style="padding-right: 0px; padding-left: 0px;" align="center">
                                                                                                         <![endif]-->
-                                                                                                        <h4 style="font-size: 16px;">Interactive Maps for</h4>
-                                                                                                        <h3 style="font-size: 20px;">HITMAN™ 2</h3>
+                                                                                                        <h3 style="font-size: 20px;">HITMAPS</h3>
                                                                                                         {#<img class="center fixedwidth" align="center" border="0" src="{{ constants.siteDomain }}images/logo.png" alt="Image" title="Image" style="outline: none;text-decoration: none;-ms-interpolation-mode: bicubic;clear: both;display: block !important;border: 0;height: auto;float: none;width: 100%;max-width: 240px" width="240">#}
                                                                                                         <!--[if mso]>
                                                                                                     </td>
@@ -377,7 +376,7 @@
                                                                                                                 <center style="color:#ffffff; font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; font-size:16px;">
                                                                                                                     <![endif]-->
                                                                                                                     <div style="color: #ffffff; background-color: #414a5c; border-radius: 4px; -webkit-border-radius: 4px; -moz-border-radius: 4px; max-width: 230px; width: 200px;width: auto; border-top: 0px solid transparent; border-right: 0px solid transparent; border-bottom: 0px solid transparent; border-left: 0px solid transparent; padding-top: 15px; padding-right: 15px; padding-bottom: 15px; padding-left: 15px; font-family: 'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; text-align: center; mso-border-alt: none;">
-                                                                                                                        <a href="{{ constants.siteDomain }}api/web/user/verify?token={{ model.verificationToken|url_encode }}">
+                                                                                                                        <a href="{{ constants.siteDomain }}/api/web/user/verify?token={{ model.verificationToken|url_encode }}">
                                                                                                                         <span style="font-size:16px;line-height:32px;color: #ffffff">VERIFY ACCOUNT</span>
                                                                                                                         </a>
                                                                                                                     </div>
@@ -466,7 +465,7 @@
                                                                                                         <![endif]-->
                                                                                                         <div style="line-height:120%;color:#a8bf6f;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif; padding-right: 0px; padding-left: 0px; padding-top: 20px; padding-bottom: 0px;">
                                                                                                             <div style="font-size:12px;line-height:14px;color:#a8bf6f;font-family:'Montserrat', 'Trebuchet MS', 'Lucida Grande', 'Lucida Sans Unicode', 'Lucida Sans', Tahoma, sans-serif;text-align:left;">
-                                                                                                                <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="color: rgb(255, 255, 255); font-size: 12px; line-height: 14px;"> © {{ constants.currentYear }} hitman2maps.com</span><br></p>
+                                                                                                                <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="color: rgb(255, 255, 255); font-size: 12px; line-height: 14px;"> © {{ constants.currentYear }} hitmaps.com</span><br></p>
                                                                                                                 <p style="margin: 0;font-size: 12px;line-height: 14px;text-align: center"><span style="color: rgb(255, 255, 255); font-size: 12px; line-height: 14px;">HITMAN™, HITMAN™ 2, the HITMAN™ logo, images, and text are the property of IO Interactive.</span><br></p>
                                                                                                                 <br>
                                                                                                             </div>

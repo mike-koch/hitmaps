@@ -5,6 +5,7 @@ import Location from './views/Location.vue'
 import TermsOfUse from './views/TermsOfUse.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import About from "./views/About";
+import OneYear from "./views/SpecialEvents/OneYear";
 
 Vue.use(Router)
 
@@ -26,6 +27,11 @@ export default new Router({
             path: '/privacy-policy',
             name: 'privacy-policy',
             component: PrivacyPolicy,
+        },
+        {
+            path: '/one-year',
+            name: 'one-year',
+            component: OneYear
         },
         {
             path: '/about',

@@ -1,6 +1,6 @@
 <template>
     <div class="wrapper">
-        <p>Loading...</p>
+        <p>{{ $t('form.loading') }}</p>
         <video autoplay loop muted class="img-fluid" alt="Loading">
             <source src="/video/loader.webm" type="video/webm" />
             <source src="/video/loader.mp4" type="video/mp4" />

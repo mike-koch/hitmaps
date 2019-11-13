@@ -5,6 +5,8 @@ import axios from 'axios'
 import store from './store/store'
 import titleMixin from './util/title'
 import ImageLoader from './plugins/ImageLoader'
+import i18n from './i18n'
+import CountryFlag from 'vue-country-flag'
 
 axios.defaults.withCredentials = true
 
@@ -49,6 +51,8 @@ Vue.prototype.$request = (post, endpoint, data) => {
         }
     })
 }
+
+Vue.component('country-flag', CountryFlag);
 
 Vue.mixin(titleMixin)
 Vue.use(ImageLoader)
@@ -109,8 +113,34 @@ Vue.directive('tooltip', {
     },
 });
 
+const langMixin = {
+    methods: {
+        lang: function(key, defaultString) {
+            if (this.$t && this.$te) {
+                if (this.$te(key)) {
+                    return this.$t(key)
+                }
+
+                console.warn("[i18n] Could not find i18n entry for key: '" + key + "'. Using '" + defaultString + "' instead.");
+                return defaultString;
+            }
+            console.error('$t or $te is undefined!');
+
+            if (defaultString) {
+                console.warn("[i18n] Could not find i18n entry for key: '" + key + "'. Using '" + defaultString + "' instead.");
+                return defaultString;
+            }
+            console.warn("[i18n] Could not find i18n entry for key: '" + key + "', and defaultString is undefined.");
+            return key;
+        }
+    }
+};
+
+Vue.mixin(langMixin);
+
 new Vue({
     store,
     router,
-    render: h => h(App),
-}).$mount('#app')
+    i18n,
+    render: h => h(App)
+}).$mount('#app');

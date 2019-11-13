@@ -54,12 +54,12 @@
                             <img
                                 src="/img/game-icons/campaign-transparent.png"
                                 class="normal"
-                                alt="Home icon"
+                                :alt="$t('home-icon')"
                             />
                             <img
                                 src="/img/game-icons/campaign-inverted.png"
                                 class="inverted"
-                                alt="Home icon"
+                                :alt="$t('home-icon')"
                             />
                             Home
                         </router-link>
@@ -77,14 +77,14 @@
                             <img
                                 src="/img/game-icons/location-transparent.png"
                                 class="normal"
-                                alt="Location Icon"
+                                :alt="$t('location-icon')"
                             />
                             <img
                                 src="/img/game-icons/location.png"
                                 class="inverted"
-                                alt="Location Icon"
+                                :alt="$t('location-icon')"
                             />
-                            {{ location.destination }}
+                            {{ lang('locations.destinations.' + location.slug, location.destination) }}
                         </a>
                     </li>
                 </ul>
@@ -110,13 +110,13 @@
                         <img
                             src="/img/game-icons/location.png"
                             class="img-fluid"
-                            alt="Location Icon"
+                            :alt="$t('location-icon')"
                         />
                         <p>
-                            <span class="name">{{ location.destination }}</span>
+                            <span class="name">{{ lang('locations.destinations.' + location.slug, location.destination) }}</span>
                             <br />
                             <span class="country">
-                                {{ location.destinationCountry }}
+                                {{ lang('locations.countries.' + location.slug, location.destinationCountry) }}
                             </span>
                         </p>
                     </h2>
@@ -156,7 +156,7 @@
                                                 '/img/' + generateUrl(mission)
                                             "
                                             class="card-img-top"
-                                            alt=""
+                                            :alt="$t('mission-image')"
                                         />
                                         <img
                                             v-else
@@ -164,7 +164,7 @@
                                                 '/img/' + generateUrl(mission)
                                             "
                                             class="card-img-top"
-                                            alt=""
+                                            :alt="$t('mission-image')"
                                         />
                                         <div
                                             class="card-img-overlay d-flex flex-column justify-content-end"
@@ -176,17 +176,17 @@
                                             <img
                                                 src="/img/game-icons/mission-inverted.png"
                                                 class="normal img-fluid"
-                                                alt="Mission Icon"
+                                                :alt="$t('mission-icon')"
                                             />
                                             <img
                                                 src="/img/game-icons/mission.png"
                                                 class="inverted img-fluid"
-                                                alt="Mission Icon"
+                                                :alt="$t('mission-icon')"
                                             />
                                         </div>
                                         <div class="text">
-                                            <h2>{{ mission.missionType }}</h2>
-                                            <h1>{{ mission.name }}</h1>
+                                            <h2>{{ lang('mission-types.' + mission.missionType.toLowerCase(), mission.missionType) }}</h2>
+                                            <h1>{{ mission.missionType !== 'Elusive Target' ? lang('missions.' + mission.slug, mission.name) : mission.name }}</h1>
                                         </div>
                                     </div>
                                 </div>
@@ -240,7 +240,7 @@
                                                         "
                                                         class="inverted"
                                                     />
-                                                    {{ difficulty }}
+                                                    {{ lang('difficulties.' + difficulty, difficulty) }}
                                                 </div>
                                             </router-link>
                                         </div>
@@ -251,17 +251,17 @@
                                         <img
                                             src="/img/game-icons/mission-inverted.png"
                                             class="normal img-fluid"
-                                            alt="Mission Icon"
+                                            :alt="$t('mission-icon')"
                                         />
                                         <img
                                             src="/img/game-icons/mission.png"
                                             class="inverted img-fluid"
-                                            alt="Mission Icon"
+                                            :alt="$t('mission-icon')"
                                         />
                                     </div>
                                     <div class="text">
-                                        <h2>{{ mission.missionType }}</h2>
-                                        <h1>{{ mission.name }}</h1>
+                                        <h2>{{ lang('mission-types.' + mission.missionType.toLowerCase(), mission.missionType) }}</h2>
+                                        <h1>{{ lang('missions.' + mission.slug, mission.name) }}</h1>
                                     </div>
                                 </div>
                             </div>

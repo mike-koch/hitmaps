@@ -4,7 +4,7 @@ namespace Config;
 
 
 class Constants {
-    public $siteDomain = 'https://www.hitman2maps.com';
+    public $siteDomain = 'https://www.hitmaps.com';
     public $currentYear;
     public $cacheHash;
 

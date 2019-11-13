@@ -4,12 +4,16 @@
         style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
     >
         <header class="row">
-            <div class="col text-center">
-                <h1>Interactive Maps For</h1>
+            <div class="col text-center site-header">
                 <router-link :to="{ name: 'home' }">
-                    <img src="/img/png/logos/hitman2.png" class="img-fluid" />
+                    <img
+                            v-webp
+                            src="/img/png/logos/hitmaps.png"
+                            class="img-fluid"
+                    />
                 </router-link>
-                <h2>Login or Create an Account</h2>
+                <h1>{{ $t('interactive-maps-for-hitman') }}</h1>
+                <h2>{{ $t('authentication.login-or-create-an-account') }}</h2>
             </div>
         </header>
         <div class="row">
@@ -21,11 +25,11 @@
                     {{ message.messageHtml }}
                 </alert>
                 <div class="login-card" v-if="!register.registrationComplete">
-                    <h3>Create an Account</h3>
+                    <h3>{{ $t('authentication.create-an-account') }}</h3>
                     <div class="form-group row">
                         <label for="name" class="col-md-3 col-form-label">
                             <i class="fas fa-user-plus"></i>
-                            Name
+                            {{ $t('profile.name') }}
                         </label>
                         <div class="col-md-9">
                             <input
@@ -51,7 +55,7 @@
                     <div class="form-group row">
                         <label for="email" class="col-md-3 col-form-label">
                             <i class="fas fa-envelope"></i>
-                            Email
+                            {{ $t('authentication.email') }}
                         </label>
                         <div class="col-md-9">
                             <input
@@ -78,7 +82,7 @@
                     <div class="form-group row">
                         <label for="password" class="col-md-3 col-form-label">
                             <i class="fas fa-key"></i>
-                            Password
+                            {{ $t('authentication.password') }}
                         </label>
                         <div class="col-md-9">
                             <input
@@ -107,7 +111,7 @@
                             class="col-md-3 col-form-label"
                         >
                             <i class="fas fa-key"></i>
-                            Confirm Password
+                            {{ $t('authentication.confirm-password') }}
                         </label>
                         <div class="col-md-9">
                             <input
@@ -144,14 +148,18 @@
                                         v-validate="'required'"
                                         required
                                     />
-                                    I agree to the
-                                    <a href="/terms-of-use" target="_blank">
-                                        Terms of Use
-                                    </a>
-                                    and
-                                    <a href="/privacy-policy" target="_blank">
-                                        Privacy Policy
-                                    </a>
+                                    <i18n path="authentication.agree-to-terms">
+                                        <span slot="termsOfUse">
+                                            <a href="/terms-of-use" target="_blank">
+                                                {{ $t('authentication.terms-of-use') }}
+                                            </a>
+                                        </span>
+                                        <span slot="privacyPolicy">
+                                            <a href="/privacy-policy" target="_blank">
+                                                {{ $t('authentication.privacy-policy') }}
+                                            </a>
+                                        </span>
+                                    </i18n>
                                 </label>
                             </div>
                         </div>
@@ -192,14 +200,14 @@
                         <img
                             src="/img/game-icons/modal-continue.png"
                             class="normal img-fluid"
-                            alt="Register Icon"
+                            :alt="$t('form.submit-icon')"
                         />
                         <img
                             src="/img/game-icons/modal-continue-inverted.png"
                             class="inverted img-fluid"
-                            alt="Register Icon"
+                            :alt="$t('form.submit-icon')"
                         />
-                        Register
+                        {{ $t('authentication.register') }}
                     </game-button>
                 </div>
                 <div class="sign-in-button">
@@ -208,14 +216,14 @@
                             <img
                                 src="/img/game-icons/modal-close.png"
                                 class="normal img-fluid"
-                                alt="Cancel Icon"
+                                :alt="$t('form.cancel-icon')"
                             />
                             <img
                                 src="/img/game-icons/modal-close-inverted.png"
                                 class="inverted img-fluid"
-                                alt="Cancel Icon"
+                                :alt="$t('form.cancel-icon')"
                             />
-                            Back to Login
+                            {{ $t('authentication.back-to-login') }}
                         </game-button>
                     </router-link>
                 </div>
@@ -309,6 +317,18 @@ export default {
 </script>
 
 <style lang="scss" scoped>
+.site-header {
+    margin: 0 20px;
+
+    h1 {
+        margin-top: 20px;
+    }
+
+    img {
+        max-height: 100px;
+    }
+}
+
 .row {
     .col-md-6.register {
         background: transparent;

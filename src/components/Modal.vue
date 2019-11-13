@@ -28,51 +28,9 @@
                 </div>
                 <div class="modal-body d-flex flex-column">
                     <slot></slot>
-                    <!--<div class="row">
-                        <div
-                                v-if="
-                                        elusiveTarget.videoBriefingUrl != null
-                                    "
-                                class="col-xl"
-                        >
-                            <div
-                                    class="embed-responsive embed-responsive-16by9"
-                            >
-                                <iframe
-                                        :src="
-                                                elusiveTarget.videoBriefingUrl
-                                            "
-                                        class="embed-responsive-item"
-                                        frameborder="0"
-                                        allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                                        allowfullscreen
-                                ></iframe>
-                            </div>
-                        </div>
-                        <div class="col-xl">
-                            <p v-html="elusiveTarget.briefing"></p>
-                        </div>
-                    </div>-->
                 </div>
                 <div class="modal-footer">
                     <slot name="modal-footer"></slot>
-                    <!--<button
-                            type="button"
-                            class="btn btn-block btn-secondary"
-                            data-dismiss="modal"
-                    >
-                        <img
-                                src="/img/game-icons/modal-close.png"
-                                class="normal img-fluid"
-                                alt="Notification Icon"
-                        />
-                        <img
-                                src="/img/game-icons/modal-close-inverted.png"
-                                class="inverted img-fluid"
-                                alt="Notification Icon"
-                        />
-                        Close
-                    </button>-->
                 </div>
             </div>
         </div>

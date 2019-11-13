@@ -4,7 +4,9 @@
             seconds | twoDigits
         }}
     </div>
-    <div v-else>{{ days }} DAYS</div>
+    <div v-else>
+        {{ $t('elusive-target.n-days', { days: days }) }}
+    </div>
 </template>
 
 <script>
@@ -17,10 +19,7 @@ export default {
     },
     computed: {
         parsedDate: function() {
-            return (
-                new Date(this.date).getTime() -
-                this.now.getTimezoneOffset() * 60000
-            )
+            return new Date(this.date).getTime()
         },
         seconds: function() {
             return Math.trunc(((this.parsedDate - this.now) / 1000) % 60)

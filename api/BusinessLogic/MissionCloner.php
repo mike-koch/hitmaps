@@ -47,6 +47,7 @@ class MissionCloner {
         $newMission->setBeginEffectiveDate($beginningTime);
         $newMission->setEndEffectiveDate($endTime);
         $newMission->setMissionType(MissionType::ELUSIVE_TARGET);
+        $newMission->setBackground($originalMission->getBackground());
         $this->entityManager->persist($newMission);
         $this->entityManager->flush();
 
