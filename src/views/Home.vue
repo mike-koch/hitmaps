@@ -79,7 +79,7 @@
                  v-if="showPromo === 1"
                  :style="{
                     backgroundImage:
-                        'url(/img/png/promo/speedrun-competition2.png)',
+                        'url(/img/png/promo/speedrun-competition3.png)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
@@ -109,7 +109,7 @@
                         </div>
                         <div class="text">
                             <h2>Frote7's</h2>
-                            <h1>Speedrun Competition #2</h1>
+                            <h1>Speedrun Competition #3</h1>
                         </div>
                     </div>
                 </a>
@@ -601,9 +601,9 @@ export default {
     },
     data() {
         return {
-            showPromo: 0,
-            promoStartDate: '2019-09-13T19:00:00+00:00',
-            promoEndDate: '2019-09-22T21:59:59+00:00',
+            showPromo: 1,
+            promoStartDate: '2019-11-15T11:00:00+00:00',
+            promoEndDate: '2019-11-24T22:59:59+00:00',
             games: [],
             elusiveTargets: [],
             activeElusiveIndex: 0,
@@ -791,6 +791,9 @@ export default {
                 that.elusiveTarget =
                     that.elusiveTargets[that.activeElusiveIndex]
             }, 10000);*/
+            setInterval(() => {
+                this.showPromo = !!this.showPromo ? 0 : 1;
+            }, 5000);
         })
     }
 }
