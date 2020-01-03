@@ -1,7 +1,7 @@
 <template>
     <div
         class="content"
-        style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
+        style="background: url('https://media.hitmaps.com/img/backgrounds/menu_bg.jpg') no-repeat center center fixed; background-size: cover"
     >
         <header class="row">
             <div class="col text-center site-header">
@@ -18,7 +18,7 @@
         </header>
         <div class="row">
             <div class="col-md-6 offset-md-3 login">
-                <alert v-for="message in login.messages" :type="message.type">
+                <alert v-for="message in login.messages" :key="message.messageHtml" :type="message.type">
                     {{ message.messageHtml }}
                 </alert>
                 <alert v-if="this.$route.hash === '#verified'" type="success">

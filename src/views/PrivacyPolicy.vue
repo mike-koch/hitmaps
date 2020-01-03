@@ -1,7 +1,7 @@
 <template>
     <div
         class="content"
-        style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
+        style="background: url('https://media.hitmaps.com/img/backgrounds/menu_bg.jpg') no-repeat center center fixed; background-size: cover"
     >
         <div class="inner-content">
             <h1>Privacy Policy</h1>
@@ -473,20 +473,43 @@
                 <li><a href="https://gitlab.com/mike-koch/hitman-maps/raw/0866c005b0a73e452eadc05cbda57ffc993614eb/src/views/PrivacyPolicy.vue">2018-12-09 to 2019-07-29</a></li>
             </ul>
         </div>
+        <div class="home-button">
+            <router-link :to="{ name: 'home' }">
+                <game-button>
+                    <img src="/img/game-icons/campaign.png"
+                         class="normal img-fluid"
+                         alt="Return Home" />
+                    <img src="/img/game-icons/campaign-inverted.png"
+                         class="inverted img-fluid"
+                         alt="Return Home"
+                    />
+                    Home
+                </game-button>
+            </router-link>
+        </div>
     </div>
 </template>
 
 <script>
 import Alert from "../components/Alert";
+import GameButton from "../components/GameButton";
 export default {
     name: 'privacy-policy',
-    components: {Alert},
+    components: {GameButton, Alert},
     title: 'Privacy Policy',
 }
 </script>
 
 <style lang="scss" scoped>
 .content {
+    > .home-button {
+        margin: 20px;
+
+        a:hover {
+            text-decoration: none;
+        }
+    }
+
     > .inner-content {
         background-color: white;
         margin: 20px;

@@ -1,7 +1,7 @@
 {
-    "interactive-maps-for": "Interactive Maps For",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
-        "change-language": "Change Language",
+        "change-language": "Zmień Język",
         "footer": "Translations are maintained and updated by the HITMAN™️ 2 Maps community. If a translation is incorrect, please {submitACorrection}.",
         "submit-a-correction": "submit a correction"
     },
@@ -9,7 +9,7 @@
         "close-icon": "Close icon",
         "submit-icon": "Submit icon",
         "cancel-icon": "Cancel icon",
-        "close": "Close",
+        "close": "Zamknij",
         "loading": "Ładowanie...",
         "select": "Wybierz",
         "copy": "Kopiuj",
@@ -30,9 +30,9 @@
         "notifications": {
             "notification-icon": "Notification Icon",
             "enroll-icon": "Enroll Icon",
-            "enroll": "Enroll",
+            "enroll": "Zapisz się",
             "manage-notifications": "Manage Elusive Target Notifications",
-            "manage-notifications-modal-title": "Manage Notifications",
+            "manage-notifications-modal-title": "Zarządzanie powiadomieniami",
             "checking-if-enabled": "Checking to see if notifications are enabled on this device...",
             "unsupported-browser": "Unfortunately, notifications are not supported on this device. Please try to enroll using a supported device.",
             "device-not-enrolled": "Your device is currently not set up to receive notifications. Click \"Enroll\" below to begin setting up your device.",
@@ -46,7 +46,7 @@
             "1-day": "The Elusive Target is available for 1 more day",
             "ended": "The Elusive Target has left"
         },
-        "n-days": "{days} Days"
+        "n-days": "{days} Dni"
     },
     "elusive-target-icon": "Elusive Target Icon",
     "home-icon": "Home Icon",
@@ -70,7 +70,7 @@
     "locations": {
         "destinations": {
             "ica-facility": "ICA Facility",
-            "paris": "Paris",
+            "paris": "Paryż",
             "sapienza": "Sapienza",
             "marrakesh": "Marrakesh",
             "bangkok": "Bangkok",
@@ -236,6 +236,8 @@
         "category": "Category",
         "icon": "Icon",
         "name": "Name",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Quantity",
         "name-note": "Enter the name as it appears in-game.",
         "action": "Action",
@@ -250,7 +252,7 @@
         "direction-up-down": "Up and Down",
         "direction-down": "Down Only",
         "notes": "Notatki",
-        "reqirement": "Requirement",
+        "requirement": "Requirement",
         "warning": "Warning",
         "information": "Information",
         "description": "Description",
@@ -271,29 +273,29 @@
         "update-password": "Update Password"
     },
     "authentication": {
-        "log-out": "Log Out",
-        "login-or-create-an-account": "Login or Create an Account",
+        "log-out": "Wyloguj się",
+        "login-or-create-an-account": "Zaloguj się lub utwórz konto",
         "account-verified": "Account verified! You may now log in.",
         "unable-to-verify-account": "We were not able to verify your account. Make sure you clicked the activation link from the most recent email you received, and that the link did not expire.",
-        "sign-in": "Sign In",
-        "email": "Email",
-        "password": "Password",
-        "confirm-password": "Confirm Password",
-        "forgot-password": "I forgot my password",
+        "sign-in": "Zaloguj się",
+        "email": "Adres e-mail",
+        "password": "Hasło",
+        "confirm-password": "Potwierdź hasło",
+        "forgot-password": "Nie pamiętam hasła",
         "forgot-password-modal": "Forgot your password? No problem! Enter your email below and we will send you an email with a link to reset your password.",
-        "create-an-account": "Create an Account",
+        "create-an-account": "Utwórz konto",
         "agree-to-terms": "I agree to the {termsOfUse} and {privacyPolicy}",
         "terms-of-use": "Terms of Use",
         "privacy-policy": "Privacy Policy",
-        "register": "Register",
+        "register": "Zarejestruj się",
         "back-to-login": "Back to Login"
     },
     "404": {
-        "page-not-found": "Page Not Found",
+        "page-not-found": "Nie znaleziono strony",
         "janus-being-attacked": "Janus being attacked with muffins",
         "image-caption": "It looks like we couldn't find the page you're looking for. We asked Janus to help, but he wasn't being cooperative, despite being offered several blueberry muffins."
     },
-    "back-to-home": "Back to the homepage",
+    "back-to-home": "Wróć do strony głównej",
     "footer": {
         "disclaimer": "HITMAN™, HITMAN™ 2, the HITMAN™ logo, images, and text are the property of {ioiLink}.",
         "io-interactive": "IO Interactive",

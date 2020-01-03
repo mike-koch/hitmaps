@@ -229,6 +229,11 @@ class NodeController {
         $node->setTarget('');
         $node->setSearchable($postData['searchable']);
         $node->setImage(isset($postData['image']) && $postData['image'] !== '' ? $postData['image'] : null);
+        if (strpos($node->getImage(), 'https://media.hitmaps.com') !== 0) {
+            // Can't link to anywhere other than https://media.hitmaps.com
+            $node->setImage(null);
+        }
+
         $node->setQuantity(isset($postData['quantity']) ? $postData['quantity'] : 1);
 
         switch ($subgroup) {
@@ -241,6 +246,7 @@ class NodeController {
             case 'agency-pickup':
                 if ($postData['pickup-type'] === 'large') {
                     $node->setTarget('Agency Pickup');
+                    $node->setIcon('agency-pickup');
                     if ($node->getName() !== '') {
                         $node->setTooltip('Agency Pickup: ' . $node->getName());
                     } else {
@@ -248,8 +254,9 @@ class NodeController {
                     }
                 } else {
                     $node->setTarget('Hidden Stash');
+                    $node->setIcon('agency-pickup-stash');
                     if ($node->getName() !== '') {
-                        $node->setTarget('Hidden Stash: ' . $node->getName());
+                        $node->setTooltip('Hidden Stash: ' . $node->getName());
                     } else {
                         $node->setTooltip('Hidden Stash');
                     }

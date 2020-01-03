@@ -20,10 +20,8 @@
                         <a
                             href="https://discord.gg/eZqhZah"
                             target="_blank"
-                            data-toggle="tooltip"
-                            :title="$t('footer.join-the-discord')"
                         >
-                            <span class="fa-stack fa-2x">
+                            <span class="fa-stack fa-2x" v-tooltip:top="$t('footer.join-the-discord')">
                                 <i class="fas fa-square fa-stack-2x"></i>
                                 <i
                                     class="fab fa-discord fa-stack-1x fa-inverse"
@@ -33,10 +31,8 @@
                         <a
                             href="https://www.hitmanforum.com/t/interactive-maps-for-hitman-2/27897"
                             target="_blank"
-                            data-toggle="tooltip"
-                            :title="$t('footer.hitmanforum')"
                         >
-                            <span class="fa-stack fa-2x">
+                            <span class="fa-stack fa-2x" v-tooltip:top="$t('footer.hitmanforum')">
                                 <i class="fas fa-square fa-stack-2x"></i>
                                 <i
                                     class="fas fa-comments fa-stack-1x fa-inverse"
@@ -47,25 +43,21 @@
                             href="https://hitmanstat.us"
                             target="_blank"
                             data-toggle="tooltip"
-                            :title="$t('footer.hitman-status')"
                         >
-                            <span class="fa-stack fa-2x">
+                            <span class="fa-stack fa-2x" v-tooltip:top="$t('footer.hitman-status')">
                                 <i class="fas fa-square fa-stack-2x"></i>
                                 <i
                                     class="fas fa-user-tie fa-stack-1x fa-inverse"
                                 ></i>
                             </span>
                         </a>
-                        <a
-                            href="https://status.hitmaps.com"
-                            data-toggle="tooltip"
-                            :title="$t('footer.hitman2maps-status')"
-                        >
-                            <span class="fa-stack fa-2x">
+                        <a href="https://www.patreon.com/mike_koch"
+                           target="_blank"
+                           data-toggle="tooltip"
+                           class="patreon-button">
+                            <span class="fa-stack fa-2x" v-tooltip:top="$t('footer.patreon')">
                                 <i class="fas fa-square fa-stack-2x"></i>
-                                <i
-                                    class="fas fa-shield-check fa-stack-1x fa-inverse"
-                                ></i>
+                                <i class="fab fa-patreon fa-stack-1x fa-inverse"></i>
                             </span>
                         </a>
                     </div>
@@ -95,6 +87,13 @@
                             <router-link :to="{ name: 'about' }">
                                 <i class="fas fa-info-circle"></i>
                                 {{ $t('footer.about') }}
+                            </router-link>
+                        </span>
+                        |
+                        <span class="footer-link">
+                            <router-link :to="{ name: 'support-the-site' }">
+                                <i class="fas fa-money-bill-alt"></i>
+                                {{ 'Support the Site' }}
                             </router-link>
                         </span>
                     </div>
@@ -185,6 +184,14 @@ footer {
 
             .fa-stack > .fa-stack-1x {
                 color: #000;
+            }
+        }
+
+        &.patreon-button {
+            color: #e7705c;
+
+            &:hover {
+                color: #cd685c;
             }
         }
     }

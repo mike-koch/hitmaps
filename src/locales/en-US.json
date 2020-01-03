@@ -236,6 +236,8 @@
         "category": "Category",
         "icon": "Icon",
         "name": "Name",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Quantity",
         "name-note": "Enter the name as it appears in-game.",
         "action": "Action",
@@ -250,7 +252,7 @@
         "direction-up-down": "Up and Down",
         "direction-down": "Down Only",
         "notes": "Notes",
-        "reqirement": "Requirement",
+        "requirement": "Requirement",
         "warning": "Warning",
         "information": "Information",
         "description": "Description",
@@ -300,7 +302,7 @@
         "join-the-discord": "Join the HITMAN™ 2 Maps Discord",
         "hitmanforum": "hitmanforum.com Discussion",
         "hitman-status": "HITMAN™ Server Status - Made With <3 by Hardware",
-        "hitman2maps-status": "HITMAN™ 2 Maps Server Status",
+        "patreon": "Support My Work on Patreon",
         "about": "About"
     }
 }

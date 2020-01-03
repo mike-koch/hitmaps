@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Interactive Maps For",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "言語を変更",
         "footer": "Translations are maintained and updated by the HITMAN™️ 2 Maps community. If a translation is incorrect, please {submitACorrection}.",
@@ -236,6 +236,8 @@
         "category": "カテゴリ",
         "icon": "アイコン",
         "name": "名称",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "個数",
         "name-note": "Enter the name as it appears in-game.",
         "action": "アクション",
@@ -250,7 +252,7 @@
         "direction-up-down": "Up and Down",
         "direction-down": "Down Only",
         "notes": "Notes",
-        "reqirement": "Requirement",
+        "requirement": "Requirement",
         "warning": "Warning",
         "information": "Information",
         "description": "説明",

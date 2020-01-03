@@ -1,7 +1,7 @@
 <template>
     <div
         class="content"
-        style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
+        style="background: url('https://media.hitmaps.com/img/backgrounds/menu_bg.jpg') no-repeat center center fixed; background-size: cover"
     >
         <div class="inner-content">
             <h1>About</h1>
@@ -64,18 +64,42 @@
                 </div>
             </div>
         </div>
+        <div class="home-button">
+            <router-link :to="{ name: 'home' }">
+                <game-button>
+                    <img src="/img/game-icons/campaign.png"
+                         class="normal img-fluid"
+                         alt="Return Home" />
+                    <img src="/img/game-icons/campaign-inverted.png"
+                         class="inverted img-fluid"
+                         alt="Return Home"
+                    />
+                    Home
+                </game-button>
+            </router-link>
+        </div>
     </div>
 </template>
 
 <script>
+import GameButton from "../components/GameButton";
 export default {
     name: 'about',
+    components: {GameButton},
     title: 'About',
 }
 </script>
 
 <style lang="scss" scoped>
 .content {
+    > .home-button {
+        margin: 20px;
+
+        a:hover {
+            text-decoration: none;
+        }
+    }
+
     > .inner-content {
         background-color: white;
         margin: 20px;

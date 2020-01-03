@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Mapa Interativo para",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "Mudar Idioma",
         "footer": "As traduções são mantidas e atualizadas pela comunidade HITMAN™ ️2 Maps. Se uma tradução estiver incorreta, por favor {submitACorrection}.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "Checando se as notificações estão ativas neste aparelho...",
             "unsupported-browser": "Infelizmente, as notificações não são suportadas neste dispositivo. Por favor, tente se inscrever usando um dispositivo suportado.",
             "device-not-enrolled": "No momento, seu dispositivo não está configurado para receber notificações. Clique em \"Inscrever-se\" abaixo para começar a configurar seu dispositivo.",
-            "notifications-blocked": "Seu dispositivo está bloqueando notificações de hitmaps.com. Por favor desbloqueie este site do seu dispositivo, recarregue a página, e tente se inscrever novamente.",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "Enviar notificação quando...",
             "announced": "O próximo Alvo Elusivo é anunciado",
             "playable": "O Alvo Elusivo chegou e está jogável",
@@ -236,6 +236,8 @@
         "category": "Categoria",
         "icon": "Ícone",
         "name": "Nome",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Quantidade",
         "name-note": "Digite o nome como aparece no jogo.",
         "action": "Ação",
@@ -250,7 +252,7 @@
         "direction-up-down": "Para Cima e Para Baixo",
         "direction-down": "Para Baixo Apenas",
         "notes": "Notas",
-        "reqirement": "Requisito",
+        "requirement": "Requisito",
         "warning": "Alerta",
         "information": "Informação",
         "description": "Descrição",

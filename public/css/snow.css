@@ -1,0 +1,33 @@
+.snow-wrapper:before {
+    height: 100%;
+    top: 0;
+    position: absolute;
+    left: 0;
+    right: 0;
+    content: "";
+    overflow: hidden;
+    text-indent: -9999px;
+    z-index: 2;
+    background-image: url(../img/snow/flake1.png), url(../img/snow/flake2.png), url(../img/snow/flake3.png);
+    background-repeat: repeat, repeat, repeat;
+    background-position: 0 0, 0 0, 0 0, 50% 0;
+    animation: snow 30s linear infinite;
+    -webkit-animation: snow 30s linear infinite;
+}
+
+@keyframes snow {
+    from {
+        background-position: 0 0, 0 0, 0 0;
+    }
+    to {
+        background-position: 500px 1000px,400px 400px,300px 300px;
+    }
+}
+@-webkit-keyframes snow {
+    from {
+        background-position: 0 0, 0 0, 0 0;
+    }
+    to {
+        background-position: 500px 1000px,400px 400px,300px 300px;
+    }
+}

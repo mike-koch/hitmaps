@@ -1,10 +1,10 @@
 <template>
     <div>
-        <div v-if="!mapLoaded && mission != null" class="overlay" :style="'background: #ccc url(\'/img/jpg/mission-backgrounds/' + mission.background + '.jpg\') no-repeat; background-size: cover'">
+        <div v-if="!mapLoaded && mission != null" class="overlay" :style="'background: #ccc url(' + mission.backgroundUrl + ') no-repeat; background-size: cover'">
             <div class="overlay-container">
                 <img
                     class="img-fluid"
-                    :src="'/img/' + loadingTile"
+                    :src="loadingTile"
                     alt="Mission Thumbnail"
                 />
                 <div class="footer">
@@ -1171,6 +1171,21 @@
                             </small>
                         </div>
                     </div>
+                    <div class="form-group row">
+                        <label for="image"
+                               class="col-sm-2 col-form-label">
+                            {{ $t('map.image-url') }}
+                        </label>
+                        <div class="col-sm-10">
+                            <input type="text"
+                                   name="image"
+                                   v-model="currentCategory.image"
+                                   class="form-control">
+                            <small class="form-text text-muted">
+                                {{ $t('map.image-url-note') }}
+                            </small>
+                        </div>
+                    </div>
                     <div
                             class="form-group row"
                             v-if="currentCategory.requirePickup"
@@ -1214,7 +1229,7 @@
                                         class="form-check-label"
                                         for="small"
                                 >
-                                    {{ $t('stash.small') }}
+                                    {{ $t('map.stash-small') }}
                                 </label>
                             </div>
                         </div>
@@ -1490,22 +1505,16 @@ export default {
         },
         loadingTile: function() {
             if (this.mission.missionType !== 'Elusive Target') {
-                return (
-                    'png/mission-thumbnails/' +
-                    this.$route.params.slug +
-                    '/' +
-                    this.mission.slug +
-                    '.png'
-                )
+                return this.mission.tileUrl;
             }
 
             if (this.game != null && this.game.slug == 'hitman') {
                 return (
-                    'jpg/elusive-targets/legacy/' + this.mission.slug + '.jpg'
+                    '/img/jpg/elusive-targets/legacy/' + this.mission.slug + '.jpg'
                 )
             }
 
-            return 'jpg/elusive-targets/' + this.mission.slug + '.jpg'
+            return '/img/jpg/elusive-targets/' + this.mission.slug + '.jpg'
         },
         game: function() {
             return this.$store.state.game
@@ -1642,7 +1651,7 @@ export default {
             }
 
             if (node.image !== null) {
-                $template.find('img').attr('src', '/img/png/' + node.image + '.png');
+                $template.find('img').attr('src', node.image);
             } else {
                 $template.find('img').remove();
             }
@@ -1771,6 +1780,7 @@ export default {
             this.currentCategory.action = item.target
             this.currentCategory.target = item.target
             this.currentCategory.image = item.image
+            this.currentCategory.pickupType = item.pickupType
 
             $('#editModal').modal('show')
         },

@@ -40,6 +40,11 @@ class Location {
     public $slug;
 
     /**
+     * @ORM\Column(type="string", name="background_url")
+     */
+    public $backgroundUrl;
+
+    /**
      * @return mixed
      */
     public function getId() {
@@ -121,5 +126,19 @@ class Location {
      */
     public function setSlug($slug) {
         $this->slug = $slug;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getBackgroundUrl() {
+        return $this->backgroundUrl;
+    }
+
+    /**
+     * @param mixed $backgroundUrl
+     */
+    public function setBackgroundUrl($backgroundUrl): void {
+        $this->backgroundUrl = $backgroundUrl;
     }
 }

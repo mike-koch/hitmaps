@@ -1,8 +1,7 @@
 <template>
     <div
-        v-webp
         class="content"
-        style="background: url('/img/jpg/backgrounds/loading.jpg') no-repeat center center fixed; background-size: cover"
+        style="background: url('https://media.hitmaps.com/img/backgrounds/menu_bg.jpg') no-repeat center center fixed; background-size: cover"
     >
         <header class="row">
             <div class="col text-center site-header">
@@ -14,13 +13,6 @@
                 <h1>{{ $t('interactive-maps-for-hitman') }}</h1>
             </div>
         </header>
-        <div class="row dashboard">
-            <div class="col one-year">
-                <a href="/one-year">
-                    HITMAPS: One Year Later - Learn About the Past, Present, and Future of the Site
-                </a>
-            </div>
-        </div>
         <div
             class="row loading"
             v-if="games.length === 0 && elusiveTargets.length === 0"
@@ -37,10 +29,9 @@
                 class="game col-lg"
                 v-for="game in games"
                 :key="game.id"
-                v-webp
                 v-bind:style="{
                     backgroundImage:
-                        'url(/img/jpg/backgrounds/' + game.slug + '.jpg)',
+                        'url(' + game.tileUrl + ')',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
@@ -601,7 +592,7 @@ export default {
     },
     data() {
         return {
-            showPromo: 1,
+            showPromo: 0,
             promoStartDate: '2019-11-15T11:00:00+00:00',
             promoEndDate: '2019-11-24T22:59:59+00:00',
             games: [],
@@ -791,9 +782,9 @@ export default {
                 that.elusiveTarget =
                     that.elusiveTargets[that.activeElusiveIndex]
             }, 10000);*/
-            setInterval(() => {
+            /*setInterval(() => {
                 this.showPromo = !!this.showPromo ? 0 : 1;
-            }, 5000);
+            }, 5000);*/
         })
     }
 }

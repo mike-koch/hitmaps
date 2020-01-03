@@ -109,9 +109,14 @@ class Mission {
     public $difficulties = [];
 
     /**
-     * @ORM\Column(type="string")
+     * @ORM\Column(type="string", name="background_url")
      */
-    public $background;
+    public $backgroundUrl;
+
+    /**
+     * @ORM\Column(type="string", name="tile_url")
+     */
+    public $tileUrl;
 
     /**
      * @return mixed
@@ -370,14 +375,28 @@ class Mission {
     /**
      * @return string
      */
-    public function getBackground(): string {
-        return $this->background;
+    public function getBackgroundUrl(): string {
+        return $this->backgroundUrl;
     }
 
     /**
-     * @param string $background
+     * @param string $backgroundUrl
      */
-    public function setBackground(string $background): void {
-        $this->background = $background;
+    public function setBackgroundUrl(string $backgroundUrl): void {
+        $this->backgroundUrl = $backgroundUrl;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getTileUrl() {
+        return $this->tileUrl;
+    }
+
+    /**
+     * @param mixed $tileUrl
+     */
+    public function setTileUrl($tileUrl): void {
+        $this->tileUrl = $tileUrl;
     }
 }

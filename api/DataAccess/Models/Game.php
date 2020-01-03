@@ -40,6 +40,11 @@ class Game {
     public $icon;
 
     /**
+     * @ORM\Column(type="string", name="tile_url")
+     */
+    public $tileUrl;
+
+    /**
      * @return mixed
      */
     public function getId(): int {
@@ -123,4 +128,17 @@ class Game {
         $this->icon = $icon;
     }
 
+    /**
+     * @return mixed
+     */
+    public function getTileUrl() {
+        return $this->tileUrl;
+    }
+
+    /**
+     * @param mixed $tileUrl
+     */
+    public function setTileUrl($tileUrl): void {
+        $this->tileUrl = $tileUrl;
+    }
 }

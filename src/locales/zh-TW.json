@@ -1,8 +1,8 @@
 {
-    "interactive-maps-for": "可互動式地圖：",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "變更語言",
-        "footer": "翻譯內容是隨時由 HITMAN™️ 2 Maps 社群 維護與更新的，若您發現翻譯內容有誤，請輸入正確內容： {submitACorrection}。",
+        "footer": "翻譯內容是隨時由 HITMAN™️ 2 Maps 社群 維護與更新的，若您發現翻譯內容有誤，請{submitACorrection}。",
         "submit-a-correction": "提交修正內容"
     },
     "form": {
@@ -236,6 +236,8 @@
         "category": "分類",
         "icon": "圖示",
         "name": "名稱",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "數量",
         "name-note": "請輸入與遊戲中相符的名稱：",
         "action": "動作",
@@ -250,7 +252,7 @@
         "direction-up-down": "向上與向下",
         "direction-down": "僅向下",
         "notes": "註記",
-        "reqirement": "所需物品",
+        "requirement": "所需物品",
         "warning": "警告",
         "information": "資訊",
         "description": "說明",

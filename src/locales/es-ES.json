@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Mapas Interactivos Para",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "Cambiar el Idioma",
         "footer": "Traducciones son mantenidas y actualizadas por la comunidad HITMAN™ ️2 Maps. Si una traducción es incorrecta, por favor {submitACorrection}.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "Comprobando si las notificaciones están habilitadas en este dispositivo...",
             "unsupported-browser": "Lamentablemente, las notificaciones no son apoyado en este dispositivo. Por favor intenta inscribirse con un dispositivo soportado.",
             "device-not-enrolled": "Su dispositivo no está configurado actualmente arriba para recibir notificaciones. Haga clic \"Inscribirse\" a continuación para empezar a configurar su dispositivo.",
-            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page and try to register your device again.",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "Envíame una notificación cuando...",
             "announced": "Se anuncia un próximo Objetivo Esquivo",
             "playable": "El Objetivo Esquivo llega y se vuelve jugable",
@@ -236,6 +236,8 @@
         "category": "Categoría",
         "icon": "Icono",
         "name": "Nombre",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Cantidad",
         "name-note": "Ingresa el nombre tal como aparece en el juego.",
         "action": "Acción",
@@ -250,7 +252,7 @@
         "direction-up-down": "Arriba y Abajo",
         "direction-down": "Sólo abajo",
         "notes": "Notas",
-        "reqirement": "Requisito",
+        "requirement": "Requisito",
         "warning": "Advertencia",
         "information": "Información",
         "description": "Descripción",

@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Mappe interattive per",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "Cambia Lingua",
         "footer": "Le traduzioni sono gestite e aggiornate dalla community di HITMAN™ ️2 Maps. Se una traduzione non è corretta, per favore {submitACorrection}.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "Verifica in corso se le notifiche sono abilitate su questo dispositivo...",
             "unsupported-browser": "Le notifiche non sono supportate su questo dispositivo. Si prega di abilitare le notifiche usando un dispositivo supportato.",
             "device-not-enrolled": "Il tuo dispositivo non è impostato per ricevere le notifiche. Fai clic su \"Abilita\" per iniziare a impostare il tuo dispositivo.",
-            "notifications-blocked": "Il tuo dispositivo sta attualmente bloccando le notifiche da hitmaps.com. Per risolvere questo problema sblocca questo sito dal dispositivo, aggiorna la pagina e prova ad abilitare nuovamente il dispositivo.",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "Inviami una notifica quando...",
             "announced": "Un Bersaglio Elusivo viene annunciato",
             "playable": "Il Bersaglio Elusivo arriva e diventa disponibile",
@@ -236,6 +236,8 @@
         "category": "Categoria",
         "icon": "Icona",
         "name": "Nome",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Quantità",
         "name-note": "Inserisci il nome per come appare nel gioco.",
         "action": "Azione",
@@ -250,7 +252,7 @@
         "direction-up-down": "Salita e discesa",
         "direction-down": "Solo discesa",
         "notes": "Note",
-        "reqirement": "Requisiti",
+        "requirement": "Requisiti",
         "warning": "Avvertimento",
         "information": "Informazioni",
         "description": "Descrizione",

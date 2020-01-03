@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Интерактивные карты для",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "Изменить язык",
         "footer": "Переводы поддерживаются и обновляются сообществом HITMAN™ 2 Maps. Если перевод неверен, пожалуйста, {submitACorrection}.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "Проверка включены ли уведомления на данном устройстве...",
             "unsupported-browser": "К сожалению, уведомления недоступны на этом устройстве. Пожалуйста, попробуйте войти используя поддерживаемое устройство",
             "device-not-enrolled": "В настоящий момент ваше устройство не настроено на получение уведомлений. Нажмите \"Настроить\" ниже, чтобы начать настройку вашего устройства",
-            "notifications-blocked": "В настоящее время ваше устройство блокирует уведомления с сайта hitmaps.com. Пожалуйста, разблокируйте этот сайт на вашем устройстве, обновите страницу и попробуйте настроить ваше устройство еще раз",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "Пришлите мне уведомление, когда...",
             "announced": "Анонсирована следующая Неуловимая цель",
             "playable": "Неуловимая цель прибывает, можно играть",
@@ -236,6 +236,8 @@
         "category": "Категория",
         "icon": "Иконка",
         "name": "Название",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Количество",
         "name-note": "Введите название, как отображается в игре",
         "action": "Действие",
@@ -250,7 +252,7 @@
         "direction-up-down": "Вверх и вниз",
         "direction-down": "Только вниз",
         "notes": "Примечания",
-        "reqirement": "Требования",
+        "requirement": "Требования",
         "warning": "Внимание",
         "information": "Информация",
         "description": "Описание",

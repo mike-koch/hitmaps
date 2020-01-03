@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "互动式地图",
+    "interactive-maps-for-hitman": "为杀手™系列提供的互动地图",
     "language-modal": {
         "change-language": "界面语言设置",
         "footer": "翻译由HITMAN™ 2 Maps社区维护和更新。如果翻译不正确，请{submitACorrection}.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "检查在当前设备是否开启通知功能",
             "unsupported-browser": "抱歉，通知功能暂不支持您的设备，请使用支持该功能的设备",
             "device-not-enrolled": "你的设备目前还未开启接收通知的选项，点击下方的“添加”开启接收通知。",
-            "notifications-blocked": "您当前的设备阻止了来自hitmaps.com的通知。请解除设备对该网站的限制，刷新网页并再次重新授权该设备。",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "当....时候给我发送通知",
             "announced": "一个即将到来的行踪不定的目标被公布",
             "playable": "行踪不定的目标已经到达并且任务可以游玩了",
@@ -236,6 +236,8 @@
         "category": "分类",
         "icon": "图标",
         "name": "名称",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "数量",
         "name-note": "输入游戏内的名称",
         "action": "行动",
@@ -250,7 +252,7 @@
         "direction-up-down": "上下皆可",
         "direction-down": "仅向下",
         "notes": "备注",
-        "reqirement": "需求",
+        "requirement": "需求",
         "warning": "警告",
         "information": "信息",
         "description": "说明",

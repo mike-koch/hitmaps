@@ -111,7 +111,7 @@ $klein->respond('GET', '/api/v1/games/[:game]/locations/[:location]/missions/[:m
     $metadata = new \Controllers\ViewModels\MapMetadataViewModel();
     $metadata->name = $mission->getName();
     $metadata->type = $mission->getMissionType();
-    $metadata->background = $mission->getBackground();
+    $metadata->background = $mission->getBackgroundUrl();
     $metadata->tileLocation = buildTileUrlForMission($mission, $location->getGame(), $applicationContext);
 
     return $response->json($metadata);

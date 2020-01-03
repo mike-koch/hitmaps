@@ -6,6 +6,7 @@ import TermsOfUse from './views/TermsOfUse.vue'
 import PrivacyPolicy from './views/PrivacyPolicy.vue'
 import About from "./views/About";
 import OneYear from "./views/SpecialEvents/OneYear";
+import SupportTheSite from "./views/SupportTheSite";
 
 Vue.use(Router)
 
@@ -37,6 +38,11 @@ export default new Router({
             path: '/about',
             name: 'about',
             component: About,
+        },
+        {
+            path: '/support-the-site',
+            name: 'support-the-site',
+            component: SupportTheSite,
         },
         {
             path: '/games/:slug',

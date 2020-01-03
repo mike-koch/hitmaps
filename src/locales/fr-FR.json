@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Cartes interactives pour",
+    "interactive-maps-for-hitman": "Cartes interactives de la série Hitman",
     "language-modal": {
         "change-language": "Changer la Langue",
         "footer": "Les traductions sont gérées et mises à jour par la communauté HITMAN™ 2 Maps. Si une traduction est incorrecte, veuillez {submitACorrection}.",
@@ -126,7 +126,7 @@
         "situs-inversus": "Situs Inversus",
         "patient-zero": "Patient Zéro",
         "nightcall": "L'appel de la Nuit",
-        "the-mills-reverie": "The Mills Reverie",
+        "the-mills-reverie": "La Rêverie de Mills",
         "finish-line": "La Ligne d'Arrivée",
         "three-headed-serpent": "Le serpent à Trois Têtes",
         "embrace-of-the-serpent": "Étreinte du Serpent",
@@ -236,6 +236,8 @@
         "category": "Catégorie",
         "icon": "Icône",
         "name": "Nom",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Quantité",
         "name-note": "Entrez le nom tel qu'il apparaît dans le jeu.",
         "action": "Action",
@@ -250,7 +252,7 @@
         "direction-up-down": "Montée et descente",
         "direction-down": "Descente seulement",
         "notes": "Remarques",
-        "reqirement": "Prérequis",
+        "requirement": "Prérequis",
         "warning": "Avertissement",
         "information": "Information",
         "description": "Description",

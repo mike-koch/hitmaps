@@ -1,5 +1,5 @@
 {
-    "interactive-maps-for": "Interaktive Karten für",
+    "interactive-maps-for-hitman": "Interactive Maps for the Hitman Series",
     "language-modal": {
         "change-language": "Sprache ändern",
         "footer": "Die Übersetzungen werden von Mitgliedern der HITMAN™️ 2 Maps-Community erstellt und aktualisiert. {submitACorrection}, wenn eine Übersetzung fehlerhaft ist.",
@@ -36,7 +36,7 @@
             "checking-if-enabled": "Prüfe, ob Mitteilungen auf diesem Gerät aktiviert sind...",
             "unsupported-browser": "Leider werden Mitteilungen von diesem Gerät nicht unterstützt. Bitte melden Sie sich mit einem unterstützten Gerät an.",
             "device-not-enrolled": "Ihr Gerät ist derzeit nicht eingerichtet, um Mitteilungen zu erhalten. Klicken Sie auf \"Anmelden\" um mit der Einrichtung zu beginnen.",
-            "notifications-blocked": "Ihr Gerät blockiert derzeit Mitteilungen von hitmaps.com. Bitte geben Sie die Seite auf Ihrem Gerät frei, aktualisieren die Seite und versuchen die Anmeldung für Ihr Gerät erneut.",
+            "notifications-blocked": "Your device is currently blocking notifications from hitmaps.com. Please unblock this site from your device, refresh the page, and try to enroll your device again.",
             "send-me-a-notification-when": "Eine Benachrichtigung senden, wenn...",
             "announced": "Ein schwer zu fassendes Ziel angekündigt wurde",
             "playable": "Das schwer zu fassende Ziel verfügbar ist und gespielt werden kann",
@@ -236,6 +236,8 @@
         "category": "Kategorie",
         "icon": "Symbol",
         "name": "Bezeichnung",
+        "image-url": "Image URL",
+        "image-url-note": "Images must be linked to https://media.hitmaps.com",
         "quantity": "Anzahl",
         "name-note": "Gebe die Bezeichnung so wie im Spiel ein.",
         "action": "Aktion",
@@ -250,7 +252,7 @@
         "direction-up-down": "Hinauf und abwärts",
         "direction-down": "Nur abwärts",
         "notes": "Anmerkungen",
-        "reqirement": "Anforderung",
+        "requirement": "Anforderung",
         "warning": "Warnung",
         "information": "Informationen",
         "description": "Beschreibung",
