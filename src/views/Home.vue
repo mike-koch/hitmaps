@@ -619,6 +619,7 @@
                             Do you play it safe? Takes longer, but you wouldn't have to restart. Or do you play it risky to get
                             that awesome time, with the potential of a lot of restarts.
                         </p>
+                        <alert type="info">Matches run from <b>January 10</b> to <b>January 19</b>!</alert>
                     </div>
                 </div>
                 <div class="modal-header" style="padding-left: 0">
@@ -665,12 +666,14 @@ import CxltToaster from 'cxlt-vue2-toastr'
 import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 import Vue from 'vue'
 import Modal from "../components/Modal";
+import Alert from "../components/Alert";
 
 Vue.use(CxltToaster)
 export default {
     name: 'home',
     title: 'Home',
     components: {
+        Alert,
         Modal,
         Countdown,
         Loader
