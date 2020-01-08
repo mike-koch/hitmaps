@@ -818,6 +818,11 @@ $klein->respond('POST', '/api/notifications', function(\Klein\Request $request, 
     return $response->code(204);
 });
 
+$klein->respond('GET', '/api/twitch/roulette-rivals', function() use ($applicationContext) {
+    return $applicationContext->get(\Controllers\TwitchController::class)->getRouletteRivalsStreamers();
+});
+
+// Backend processes
 $klein->respond('GET', '/api/push-elusive-target-status', function() use ($applicationContext) {
     $config = new Config\Settings();
     if ($config->accessKey !== $_GET['access-key']) {

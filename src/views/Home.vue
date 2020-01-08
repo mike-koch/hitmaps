@@ -70,14 +70,14 @@
                  v-if="showPromo === 1"
                  :style="{
                     backgroundImage:
-                        'url(/img/png/promo/speedrun-competition3.png)',
+                        'url(/img/png/promo/roulette-rivals.png)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
                 }">
-                <a href="https://discord.gg/X2B8myT" target="_blank">
+                <a href="https://discord.gg/yUjhHTr" target="_blank">
                     <p>&nbsp;</p>
-                    <div class="countdown">
+                    <div class="countdown" v-if="new Date(promoStartDate) > new Date()" style="background: rgba(0,0,0,.4)">
                         <img
                                 src="/img/game-icons/elusive-target-reminaing-time.png"
                         />
@@ -99,8 +99,25 @@
                             <i class="fab fa-discord fa-3x" style="width: 48px; height: 48px"></i>
                         </div>
                         <div class="text">
-                            <h2>Frote7's</h2>
-                            <h1>Speedrun Competition #3</h1>
+                            <h2>Live Competition</h2>
+                            <h1>Roulette Rivals</h1>
+                        </div>
+                        <div
+                                onclick="return false;"
+                                @click="showRouletteRivalsModal"
+                                class="image elusive-notification float-right notification-icon"
+                                v-tooltip:left="'More Information'"
+                        >
+                            <img
+                                    src="/img/game-icons/briefing-transparent.png"
+                                    class="normal img-fluid"
+                                    alt="More Information Icon"
+                            />
+                            <img
+                                    src="/img/game-icons/briefing-inverted.png"
+                                    class="inverted img-fluid"
+                                    alt="More Information Icon"
+                            />
                         </div>
                     </div>
                 </a>
@@ -570,6 +587,72 @@
                     </div>
                 </div>
             </div>
+            <modal modal-title="Roulette Rivals"
+                   id="roulette-rivals-modal"
+                   tabindex="-1"
+                   dismissable>
+                <div class="row">
+                    <div class="col-md-6 col-sm-12">
+                        <div class="embed-responsive embed-responsive-16by9">
+                            <iframe src="https://www.youtube.com/embed/lsehCHDKbV8"
+                                    class="embed-responsive-item"
+                                    frameborder="0"
+                                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                                    allowfullscreen
+                            ></iframe>
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-12">
+                        <p>
+                            In Roulette Rivals you go headsup against another player in main missions. Once a mission is selected,
+                            an admin will spin the hitman roulette wheel (made by Kotti).
+                        </p>
+                        <p>
+                            The admin will give the roulette restrictions info to both players, and give the sign to officially
+                            start the match. Players are allowed to use every item and spawn location they want.
+                        </p>
+                        <p>
+                            Whoever finishes the mission with a 5 star SA rating first in real time, wins the map. Repeat: This
+                            is NOT about the fastest time, but about who ever finishes the mission first with a 5 star SA rating.
+                        </p>
+                        <p>
+                            Do you play it safe? Takes longer, but you wouldn't have to restart. Or do you play it risky to get
+                            that awesome time, with the potential of a lot of restarts.
+                        </p>
+                    </div>
+                </div>
+                <div class="modal-header" style="padding-left: 0">
+                    <h5><i class="fab fa-twitch"></i> Competitors Currently Streaming</h5>
+                </div>
+                <div class="streams">
+                    <div class="row">
+                        <div class="col-md-6 col-sm-12 twitch-stream featured">
+                            <iframe
+                                    src="https://player.twitch.tv/?autoplay=false&channel=MrMike227"
+                                    height="270"
+                                    width="100%"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    autoplay="false"
+                                    allowfullscreen="true">
+                            </iframe>
+                            <p><i class="fas fa-award"></i> MrMike227 (Creator of HITMAPS™️)</p>
+                        </div>
+                        <div v-for="stream in streams" class="col-md-6 col-sm-12 twitch-stream">
+                            <iframe
+                                    :src="'https://player.twitch.tv/?autoplay=false&channel=' + stream.user_name"
+                                    height="270"
+                                    width="100%"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    autoplay="false"
+                                    allowfullscreen="true">
+                            </iframe>
+                            <p>{{ stream.user_name }}</p>
+                        </div>
+                    </div>
+                </div>
+            </modal>
         </div>
         <input type="hidden" name="notification-environment" />
     </div>
@@ -581,19 +664,21 @@ import Loader from '../components/Loader.vue'
 import CxltToaster from 'cxlt-vue2-toastr'
 import 'cxlt-vue2-toastr/dist/css/cxlt-vue2-toastr.css'
 import Vue from 'vue'
+import Modal from "../components/Modal";
 
 Vue.use(CxltToaster)
 export default {
     name: 'home',
     title: 'Home',
     components: {
+        Modal,
         Countdown,
         Loader
     },
     data() {
         return {
-            showPromo: 0,
-            promoStartDate: '2019-11-15T11:00:00+00:00',
+            showPromo: 1,
+            promoStartDate: '2020-01-10T00:00:00+00:00',
             promoEndDate: '2019-11-24T22:59:59+00:00',
             games: [],
             elusiveTargets: [],
@@ -618,12 +703,17 @@ export default {
                 threeDays: false,
                 oneDay: false,
                 ended: false
-            }
+            },
+            streams: []
         }
     },
     methods: {
         saveGameData() {
             //this.$store.commit("SET_GAME", )
+        },
+        showRouletteRivalsModal(e) {
+            e.preventDefault();
+            $('#roulette-rivals-modal').modal('show')
         },
         showBriefing(e) {
             e.preventDefault()
@@ -782,9 +872,22 @@ export default {
                 that.elusiveTarget =
                     that.elusiveTargets[that.activeElusiveIndex]
             }, 10000);*/
-            /*setInterval(() => {
+            setInterval(() => {
                 this.showPromo = !!this.showPromo ? 0 : 1;
-            }, 5000);*/
+            }, 5000);
+        });
+        this.$http.get(this.$domain + '/api/twitch/roulette-rivals').then(resp => {
+            let streams = resp.data.data;
+
+            let filteredStreams = [];
+            streams.forEach(stream => {
+                let streamTitle = stream.title.toLowerCase();
+                if (streamTitle.includes('roulette') && streamTitle.includes('rivals')) {
+                    filteredStreams.push(stream);
+                }
+            });
+
+            this.streams = streams;
         })
     }
 }
@@ -1002,7 +1105,7 @@ function updateCheckboxState(
     .elusive-target {
         .countdown {
             padding: 15px 15px 0;
-            margin-bottom: 1rem;
+            padding-bottom: 1rem;
 
             img {
                 width: 48px;
@@ -1148,6 +1251,16 @@ function updateCheckboxState(
                     }
                 }
             }
+        }
+    }
+}
+
+.streams {
+    .twitch-stream {
+        padding: 10px;
+
+        &.featured {
+            background: #ffffcc;
         }
     }
 }

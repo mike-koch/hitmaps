@@ -26,6 +26,7 @@
         "guzzlehttp/guzzle": "^6.3",
         "abraham/twitteroauth": "^1.0",
         "firebase/php-jwt": "^5.0",
-        "predis/predis": "^1.1"
+        "predis/predis": "^1.1",
+        "nicklaw5/twitch-api-php": "^2.1"
     }
 }

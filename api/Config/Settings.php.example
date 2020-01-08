@@ -33,6 +33,9 @@ class Settings {
     public $twitterAccessToken = '';
     public $twitterAccessTokenSecret = '';
 
+    // Twitch
+    public $twitchClientId = '';
+
     // Redis
     public $useRedis = false;
     public $redisHost = '';
