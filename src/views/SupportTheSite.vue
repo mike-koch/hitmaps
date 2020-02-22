@@ -17,6 +17,26 @@
                 <i class="fab fa-patreon"></i>
                 Become a Patron
             </a>
+            <p>Current Patrons:</p>
+            <ul>
+                <li>
+                    <b>Master Assassin</b>
+                    <ul>
+                        <li>
+                            <a href="https://www.youtube.com/watch?v=gG7uCskUOrA">
+                                <img style="max-height: 128px; max-width: 128px;" src="https://media.hitmaps.com/patrons/mow.jpg" class="img-fluid" alt="Mow's Profile Photo">
+                                <p>mow</p>
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <b>Assassin</b>
+                    <ul>
+                        <li>Notex</li>
+                    </ul>
+                </li>
+            </ul>
             <h3 style="margin-top: 20px;">PayPal</h3>
             <p>
                 I currently accept tips/contributions via PayPal. Simply click the button below to make a contribution.
@@ -85,7 +105,7 @@ export default {
             font-size: 1.25rem;
         }
 
-        p {
+        p, ul {
             font-family: 'Roboto', 'Arial', sans-serif;
             font-weight: lighter;
         }
@@ -94,6 +114,7 @@ export default {
             color: #000;
 
             &.patreon-button {
+                margin-bottom: 20px;
                 border-radius: 0;
                 background: #e7705c;
                 color: #fff;

@@ -162,7 +162,7 @@
                                         ></div>
                                     </div>
                                     <div class="card-footer">
-                                        <div class="image">
+                                        <div class="image" v-if="mission.missionType !== 'Ghost Mode'">
                                             <img
                                                 src="/img/game-icons/mission-inverted.png"
                                                 class="normal img-fluid"
@@ -172,6 +172,18 @@
                                                 src="/img/game-icons/mission.png"
                                                 class="inverted img-fluid"
                                                 :alt="$t('mission-icon')"
+                                            />
+                                        </div>
+                                        <div class="image" v-else>
+                                            <img
+                                                    src="/img/game-icons/ghost-mode-inverted.png"
+                                                    class="normal img-fluid"
+                                                    :alt="$t('mission-icon')"
+                                            />
+                                            <img
+                                                    src="/img/game-icons/ghost-mode.png"
+                                                    class="inverted img-fluid"
+                                                    :alt="$t('mission-icon')"
                                             />
                                         </div>
                                         <div class="text">
@@ -236,16 +248,28 @@
                                     </div>
                                 </div>
                                 <div class="card-footer">
-                                    <div class="image">
+                                    <div class="image" v-if="mission.missionType !== 'Ghost Mode'">
                                         <img
-                                            src="/img/game-icons/mission-inverted.png"
-                                            class="normal img-fluid"
-                                            :alt="$t('mission-icon')"
+                                                src="/img/game-icons/mission-inverted.png"
+                                                class="normal img-fluid"
+                                                :alt="$t('mission-icon')"
                                         />
                                         <img
-                                            src="/img/game-icons/mission.png"
-                                            class="inverted img-fluid"
-                                            :alt="$t('mission-icon')"
+                                                src="/img/game-icons/mission.png"
+                                                class="inverted img-fluid"
+                                                :alt="$t('mission-icon')"
+                                        />
+                                    </div>
+                                    <div class="image" v-else>
+                                        <img
+                                                src="/img/game-icons/ghost-mode-inverted.png"
+                                                class="normal img-fluid"
+                                                :alt="$t('mission-icon')"
+                                        />
+                                        <img
+                                                src="/img/game-icons/ghost-mode.png"
+                                                class="inverted img-fluid"
+                                                :alt="$t('mission-icon')"
                                         />
                                     </div>
                                     <div class="text">

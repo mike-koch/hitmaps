@@ -5,10 +5,10 @@ namespace BusinessLogic\Twitch;
 
 use Config\Settings;
 
-class RouletteRivalsStreamRetriever {
+class TwitchStreamRetriever {
     const HITMAN_2_GAME_ID = 506342;
 
-    public function getRouletteRivalsStreamers() {
+    public function getCurrentStreams() {
         $settings = new Settings();
         $clientID = ['Client-ID:' . $settings->twitchClientId];
         $ch = curl_init();

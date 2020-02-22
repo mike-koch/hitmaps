@@ -818,8 +818,8 @@ $klein->respond('POST', '/api/notifications', function(\Klein\Request $request, 
     return $response->code(204);
 });
 
-$klein->respond('GET', '/api/twitch/roulette-rivals', function() use ($applicationContext) {
-    return $applicationContext->get(\Controllers\TwitchController::class)->getRouletteRivalsStreamers();
+$klein->respond('GET', '/api/twitch/current-streams', function() use ($applicationContext) {
+    return $applicationContext->get(\Controllers\TwitchController::class)->getCurrentStreams();
 });
 
 // Backend processes

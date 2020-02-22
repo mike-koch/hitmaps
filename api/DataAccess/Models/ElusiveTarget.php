@@ -85,6 +85,11 @@ class ElusiveTarget {
     private $endNotificationSent;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $reactivated;
+
+    /**
      * @return mixed
      */
     public function getId(): int {
@@ -301,5 +306,19 @@ class ElusiveTarget {
      */
     public function setEndNotificationSent($endNotificationSent): void {
         $this->endNotificationSent = $endNotificationSent;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getReactivated() {
+        return $this->reactivated;
+    }
+
+    /**
+     * @param mixed $reactivated
+     */
+    public function setReactivated($reactivated): void {
+        $this->reactivated = $reactivated;
     }
 }

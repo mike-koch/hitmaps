@@ -1,21 +1,39 @@
 <template>
     <div
         class="content"
-        style="background: url('https://media.hitmaps.com/img/backgrounds/menu_bg.jpg') no-repeat center center fixed; background-size: cover"
+        style="background: url('/img/jpg/promo/gm-background.jpg') no-repeat center center fixed; background-size: cover"
     >
-        <header class="row">
+        <header class="row" style="margin-top: 200px">
             <div class="col text-center site-header">
+                <h1>GRAND FINALS ON FEBRUARY 23</h1>
+                <h1>SPONSORED BY</h1>
                 <img
                     v-webp
                     src="/img/png/logos/hitmaps.png"
                     class="img-fluid"
                 />
+                <div class="row" style="margin-top: 20px;" v-if="new Date() > new Date('2020-02-23T23:59:59+00:00')">
+                    <div class="col-md-6 col-sm-12 offset-md-3">
+                        <div class="embed-responsive embed-responsive-16by9"
+                             style="min-height: 310px">
+                            <iframe
+                                    src="https://player.twitch.tv/?autoplay=false&channel=Frote7"
+                                    height="270"
+                                    width="50%"
+                                    frameborder="0"
+                                    scrolling="no"
+                                    autoplay="false"
+                                    allowfullscreen="true">
+                            </iframe>
+                        </div>
+                    </div>
+                </div>
                 <h1>{{ $t('interactive-maps-for-hitman') }}</h1>
             </div>
         </header>
         <div
-            class="row loading"
-            v-if="games.length === 0 && elusiveTargets.length === 0"
+                class="row loading"
+                v-if="games.length === 0 && elusiveTargets.length === 0"
         >
             <div class="loader">
                 <loader></loader>
@@ -25,6 +43,7 @@
             class="row dashboard"
             v-if="games.length > 0 || elusiveTargets.length > 0"
         >
+
             <div
                 class="game col-lg"
                 v-for="game in games"
@@ -70,19 +89,21 @@
                  v-if="showPromo === 1"
                  :style="{
                     backgroundImage:
-                        'url(/img/png/promo/roulette-rivals.png)',
+                        'url(/img/png/promo/gm2.png)',
                     backgroundSize: 'cover',
                     backgroundPosition: 'center',
                     backgroundRepeat: 'no-repeat'
                 }">
                 <a href="https://discord.gg/yUjhHTr" target="_blank">
-                    <p>&nbsp;</p>
+                    <p>
+                        <img src="/img/png/promo/gm-title.gif" class="img-fluid">
+                    </p>
                     <div class="countdown" v-if="new Date(promoStartDate) > new Date()" style="background: rgba(0,0,0,.4)">
                         <img
                                 src="/img/game-icons/elusive-target-reminaing-time.png"
                         />
                         <div class="timer not-playable">
-                            <div class="target-arrives">{{ (new Date(promoStartDate) > new Date()) ? 'Event Begins' : 'Event Ends' }}</div>
+                            <div class="target-arrives">{{ (new Date(promoStartDate) > new Date()) ? 'Matches Begin' : '' }}</div>
                             <countdown
                                     class="elusive-countdown"
                                     :date="
@@ -99,8 +120,8 @@
                             <i class="fab fa-discord fa-3x" style="width: 48px; height: 48px"></i>
                         </div>
                         <div class="text">
-                            <h2>Live Competition</h2>
-                            <h1>Roulette Rivals</h1>
+                            <h2>Ghost Mode</h2>
+                            <h1>Tournament #2</h1>
                         </div>
                         <div
                                 onclick="return false;"
@@ -341,6 +362,11 @@
                             </h5>
                         </div>
                         <div class="modal-body d-flex flex-column">
+                            <alert type="info">
+                                As of <b>January 10, 2020</b>, all traffic from hitman2maps.com is now being redirected
+                                to hitmaps.com. Due to this change, all Elusive Target push notification preferences have been <i>cleared</i>. Please
+                                re-subscribe if you wish to continue to receive Elusive Target push notifications. We apologize for any inconvenience.
+                            </alert>
                             <div id="checking-notification-status">
                                 <h6>{{ $t('elusive-target.notifications.checking-if-enabled') }}</h6>
                                 <div class="spinner-grow" role="status">
@@ -435,114 +461,164 @@
                                 id="notification-settings"
                                 style="display: none"
                             >
-                                <h6>{{ $t('elusive-target.notifications.send-me-a-notification-when') }}</h6>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-coming"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment +
-                                                '-elusive-target-coming'
-                                        "
-                                        v-model="notifications.almostPlayable"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-coming">
-                                        {{ $t('elusive-target.notifications.announced') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-playable"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment +
-                                                '-elusive-target-playable'
-                                        "
-                                        v-model="notifications.becomesPlayable"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-playable">
-                                        {{ $t('elusive-target.notifications.playable') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-7"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment + '-elusive-target-7'
-                                        "
-                                        v-model="notifications.sevenDays"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-7">
-                                        {{ $t('elusive-target.notifications.7-days') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-5"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment + '-elusive-target-5'
-                                        "
-                                        v-model="notifications.fiveDays"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-5">
-                                        {{ $t('elusive-target.notifications.5-days') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-3"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment + '-elusive-target-3'
-                                        "
-                                        v-model="notifications.threeDays"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-3">
-                                        {{ $t('elusive-target.notifications.3-days') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-1"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment + '-elusive-target-1'
-                                        "
-                                        v-model="notifications.oneDay"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-1">
-                                        {{ $t('elusive-target.notifications.1-day') }}
-                                    </label>
-                                </div>
-                                <div class="custom-control custom-checkbox">
-                                    <input
-                                        type="checkbox"
-                                        class="custom-control-input"
-                                        id="elusive-target-end"
-                                        @change="toggleNotificationState"
-                                        :data-firebase-topic="
-                                            environment + '-elusive-target-end'
-                                        "
-                                        v-model="notifications.ended"
-                                    />
-                                    <label class="custom-control-label" for="elusive-target-end">
-                                        {{ $t('elusive-target.notifications.ended') }}
-                                    </label>
-                                </div>
+                                <table class="table">
+                                    <thead>
+                                    <tr>
+                                        <td><b>{{ $t('elusive-target.notifications.send-me-a-notification-when') }}</b></td>
+                                        <td>{{ $t('elusive-target.notifications.new-et') }}</td>
+                                        <td>{{ $t('elusive-target.notifications.reactivated-et') }}</td>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.announced') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-coming"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-coming'"
+                                                   v-model="notifications.new.almostPlayable">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-coming"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-coming'"
+                                                   v-model="notifications.reactivation.almostPlayable">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.playable') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-playable"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-playable'"
+                                                   v-model="notifications.new.becomesPlayable">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-playable"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-playable'"
+                                                   v-model="notifications.reactivation.becomesPlayable">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.7-days') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-7"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-7'"
+                                                   v-model="notifications.new.sevenDays">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-7"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-7'"
+                                                   v-model="notifications.reactivation.sevenDays">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.5-days') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-5"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-5'"
+                                                   v-model="notifications.new.fiveDays">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-5"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-5'"
+                                                   v-model="notifications.reactivation.fiveDays">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.3-days') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-3"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-3'"
+                                                   v-model="notifications.new.threeDays">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-3"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-3'"
+                                                   v-model="notifications.reactivation.threeDays">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.1-day') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-1"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-1'"
+                                                   v-model="notifications.new.oneDay">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-1"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-1'"
+                                                   v-model="notifications.reactivation.oneDay">
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            {{ $t('elusive-target.notifications.ended') }}
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="elusive-target-end"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-elusive-target-end'"
+                                                   v-model="notifications.new.ended">
+                                        </td>
+                                        <td>
+                                            <input type="checkbox"
+                                                   class="form-check-input"
+                                                   id="reactivation-elusive-target-end"
+                                                   @change="toggleNotificationState"
+                                                   :data-firebase-topic="'hitmaps-' + environment + '-reactivation-elusive-target-end'"
+                                                   v-model="notifications.reactivation.ended">
+                                        </td>
+                                    </tr>
+                                    </tbody>
+                                </table>
                                 <input type="hidden" name="firebase-token" />
                             </div>
                         </div>
@@ -587,75 +663,96 @@
                     </div>
                 </div>
             </div>
-            <modal modal-title="Roulette Rivals"
-                   id="roulette-rivals-modal"
-                   tabindex="-1"
-                   dismissable>
-                <div class="row">
-                    <div class="col-md-6 col-sm-12">
-                        <div class="embed-responsive embed-responsive-16by9">
-                            <iframe src="https://www.youtube.com/embed/lsehCHDKbV8"
-                                    class="embed-responsive-item"
-                                    frameborder="0"
-                                    allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
-                                    allowfullscreen
-                            ></iframe>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-sm-12">
-                        <p>
-                            In Roulette Rivals you go headsup against another player in main missions. Once a mission is selected,
-                            an admin will spin the hitman roulette wheel (made by Kotti).
-                        </p>
-                        <p>
-                            The admin will give the roulette restrictions info to both players, and give the sign to officially
-                            start the match. Players are allowed to use every item and spawn location they want.
-                        </p>
-                        <p>
-                            Whoever finishes the mission with a 5 star SA rating first in real time, wins the map. Repeat: This
-                            is NOT about the fastest time, but about who ever finishes the mission first with a 5 star SA rating.
-                        </p>
-                        <p>
-                            Do you play it safe? Takes longer, but you wouldn't have to restart. Or do you play it risky to get
-                            that awesome time, with the potential of a lot of restarts.
-                        </p>
-                        <alert type="info">Matches run from <b>January 10</b> to <b>January 19</b>!</alert>
-                    </div>
-                </div>
-                <div class="modal-header" style="padding-left: 0">
-                    <h5><i class="fab fa-twitch"></i> Competitors Currently Streaming</h5>
-                </div>
-                <div class="streams">
-                    <div class="row">
-                        <div class="col-md-6 col-sm-12 twitch-stream featured">
-                            <iframe
-                                    src="https://player.twitch.tv/?autoplay=false&channel=MrMike227"
-                                    height="270"
-                                    width="100%"
-                                    frameborder="0"
-                                    scrolling="no"
-                                    autoplay="false"
-                                    allowfullscreen="true">
-                            </iframe>
-                            <p><i class="fas fa-award"></i> MrMike227 (Creator of HITMAPS™️)</p>
-                        </div>
-                        <div v-for="stream in streams" class="col-md-6 col-sm-12 twitch-stream">
-                            <iframe
-                                    :src="'https://player.twitch.tv/?autoplay=false&channel=' + stream.user_name"
-                                    height="270"
-                                    width="100%"
-                                    frameborder="0"
-                                    scrolling="no"
-                                    autoplay="false"
-                                    allowfullscreen="true">
-                            </iframe>
-                            <p>{{ stream.user_name }}</p>
-                        </div>
-                    </div>
-                </div>
-            </modal>
         </div>
+        <modal modal-title="Ghost Mode Tournament #2"
+               id="roulette-rivals-modal"
+               tabindex="-1"
+               dismissable>
+            <div class="row">
+                <div class="col-md-6 col-sm-12">
+                    <div class="embed-responsive embed-responsive-16by9"
+                         style="min-height: 310px">
+                        <iframe src="https://www.youtube.com/embed/c6q4hgt0fiE"
+                                class="embed-responsive-item"
+                                frameborder="0"
+                                allow="accelerometer; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen
+                        ></iframe>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12">
+                    <p>
+                        The second Ghost Mode Tournament, ran by Frote's Speedrun Community and sponsored by HITMAPS&trade;, is coming up!
+                    </p>
+                    <p>
+                        This double-elimination tournament is open to all platforms (PC, PS4, XB1) and is a separate tournament per platform.
+                        Each match is a best-of 3, except for the grand final which is best-of 5.
+                    </p>
+                    <alert type="info">Matches run from <b>February 7</b> to <b>February 23</b>!</alert>
+                </div>
+            </div>
+            <div class="modal-header" style="padding-left: 0">
+                <h5><i class="fab fa-twitch"></i> Competitors Currently Streaming</h5>
+            </div>
+            <div class="streams">
+                <div class="row">
+                    <div class="col-md-6 col-sm-12 twitch-stream featured">
+                        <iframe
+                                src="https://player.twitch.tv/?autoplay=false&channel=MrMike227"
+                                height="270"
+                                width="100%"
+                                frameborder="0"
+                                scrolling="no"
+                                autoplay="false"
+                                allowfullscreen="true">
+                        </iframe>
+                        <p><i class="fas fa-award"></i> MrMike227 (Creator of HITMAPS™️)</p>
+                    </div>
+                    <div v-for="stream in streams" class="col-md-6 col-sm-12 twitch-stream">
+                        <iframe
+                                :src="'https://player.twitch.tv/?autoplay=false&channel=' + stream.user_name"
+                                height="270"
+                                width="100%"
+                                frameborder="0"
+                                scrolling="no"
+                                autoplay="false"
+                                allowfullscreen="true">
+                        </iframe>
+                        <p>{{ stream.user_name }}</p>
+                    </div>
+                </div>
+            </div>
+        </modal>
         <input type="hidden" name="notification-environment" />
+        <div class="patreon" style="display: none">
+            <div class="row intro">
+                <div class="col-xs-12">
+                    <h1>
+                    <span class="fa-stack">
+                        <i class="fas fa-square fa-stack-2x"></i>
+                        <i class="fab fa-patreon fa-stack-1x fa-inverse"></i>
+                    </span>
+                        {{ $t('patreon.patreon-supporters') }}
+                    </h1>
+                    {{ $t('patreon.patreon-supporters-description') }}
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-md-3 col-sm-6 patron">
+                    <img src="https://media.hitmaps.com/patrons/mow.jpg" class="img-fluid" alt="Mow's Profile Photo">
+                    <p><b>Mow</b></p>
+                    <p>Master Assassin</p>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col" style="text-align: right">
+                    <a href="https://www.patreon.com/mike_koch" class="btn patreon-button">
+                        <i class="fab fa-patreon"></i>
+                        Become a Patron
+                    </a>
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
@@ -681,8 +778,8 @@ export default {
     data() {
         return {
             showPromo: 1,
-            promoStartDate: '2020-01-10T00:00:00+00:00',
-            promoEndDate: '2019-11-24T22:59:59+00:00',
+            promoStartDate: '2020-02-07T09:00:00+00:00',
+            promoEndDate: '2020-02-23T22:59:59+00:00',
             games: [],
             elusiveTargets: [],
             activeElusiveIndex: 0,
@@ -690,22 +787,44 @@ export default {
             environment: null,
             token: null,
             notifications: {
-                almostPlayable: false,
-                becomesPlayable: false,
-                sevenDays: false,
-                fiveDays: false,
-                threeDays: false,
-                oneDay: false,
-                ended: false
+                new: {
+                    almostPlayable: false,
+                    becomesPlayable: false,
+                    sevenDays: false,
+                    fiveDays: false,
+                    threeDays: false,
+                    oneDay: false,
+                    ended: false
+                },
+                reactivation: {
+                    almostPlayable: false,
+                    becomesPlayable: false,
+                    sevenDays: false,
+                    fiveDays: false,
+                    threeDays: false,
+                    oneDay: false,
+                    ended: false
+                }
             },
             previousNotificationsState: {
-                almostPlayable: false,
-                becomesPlayable: false,
-                sevenDays: false,
-                fiveDays: false,
-                threeDays: false,
-                oneDay: false,
-                ended: false
+                new: {
+                    almostPlayable: false,
+                    becomesPlayable: false,
+                    sevenDays: false,
+                    fiveDays: false,
+                    threeDays: false,
+                    oneDay: false,
+                    ended: false
+                },
+                reactivation: {
+                    almostPlayable: false,
+                    becomesPlayable: false,
+                    sevenDays: false,
+                    fiveDays: false,
+                    threeDays: false,
+                    oneDay: false,
+                    ended: false
+                }
             },
             streams: []
         }
@@ -768,69 +887,101 @@ export default {
             requestPermission(0)
         },
         toggleNotificationState() {
-            let sendRequest = false
-            let requestType = ''
-            let subscribing = false
-            if (
-                this.notifications.almostPlayable !==
-                this.previousNotificationsState.almostPlayable
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-coming'
-                subscribing = this.notifications.almostPlayable
+            let sendRequest = false;
+            let requestType = '';
+            let subscribing = false;
+            //region New
+            if (this.notifications.new.almostPlayable !==
+                this.previousNotificationsState.new.almostPlayable) {
+                sendRequest = true;
+                requestType = 'elusive-target-coming';
+                subscribing = this.notifications.new.almostPlayable;
             }
-            if (
-                this.notifications.becomesPlayable !==
-                this.previousNotificationsState.becomesPlayable
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-playable'
-                subscribing = this.notifications.becomesPlayable
+            if (this.notifications.new.becomesPlayable !==
+                this.previousNotificationsState.new.becomesPlayable) {
+                sendRequest = true;
+                requestType = 'elusive-target-playable';
+                subscribing = this.notifications.new.becomesPlayable;
             }
-            if (
-                this.notifications.sevenDays !==
-                this.previousNotificationsState.sevenDays
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-7'
-                subscribing = this.notifications.sevenDays
+            if (this.notifications.new.sevenDays !==
+                this.previousNotificationsState.new.sevenDays) {
+                sendRequest = true;
+                requestType = 'elusive-target-7';
+                subscribing = this.notifications.new.sevenDays;
             }
-            if (
-                this.notifications.fiveDays !==
-                this.previousNotificationsState.fiveDays
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-5'
-                subscribing = this.notifications.fiveDays
+            if (this.notifications.new.fiveDays !==
+                this.previousNotificationsState.new.fiveDays) {
+                sendRequest = true;
+                requestType = 'elusive-target-5';
+                subscribing = this.notifications.new.fiveDays;
             }
-            if (
-                this.notifications.threeDays !==
-                this.previousNotificationsState.threeDays
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-3'
-                subscribing = this.notifications.threeDays
+            if (this.notifications.new.threeDays !==
+                this.previousNotificationsState.new.threeDays) {
+                sendRequest = true;
+                requestType = 'elusive-target-3';
+                subscribing = this.notifications.new.threeDays;
             }
-            if (
-                this.notifications.oneDay !==
-                this.previousNotificationsState.oneDay
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-1'
-                subscribing = this.notifications.oneDay
+            if (this.notifications.new.oneDay !==
+                this.previousNotificationsState.new.oneDay) {
+                sendRequest = true;
+                requestType = 'elusive-target-1';
+                subscribing = this.notifications.new.oneDay;
             }
-            if (
-                this.notifications.ended !==
-                this.previousNotificationsState.ended
-            ) {
-                sendRequest = true
-                requestType = 'elusive-target-end'
-                subscribing = this.notifications.ended
+            if (this.notifications.new.ended !==
+                this.previousNotificationsState.new.ended) {
+                sendRequest = true;
+                requestType = 'elusive-target-end';
+                subscribing = this.notifications.new.ended;
             }
+            //endregion
+            //region Reactivation
+            if (this.notifications.reactivation.almostPlayable !==
+                this.previousNotificationsState.reactivation.almostPlayable) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-coming';
+                subscribing = this.notifications.reactivation.almostPlayable;
+            }
+            if (this.notifications.reactivation.becomesPlayable !==
+                this.previousNotificationsState.reactivation.becomesPlayable) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-playable';
+                subscribing = this.notifications.reactivation.becomesPlayable;
+            }
+            if (this.notifications.reactivation.sevenDays !==
+                this.previousNotificationsState.reactivation.sevenDays) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-7';
+                subscribing = this.notifications.reactivation.sevenDays;
+            }
+            if (this.notifications.reactivation.fiveDays !==
+                this.previousNotificationsState.reactivation.fiveDays) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-5';
+                subscribing = this.notifications.reactivation.fiveDays;
+            }
+            if (this.notifications.reactivation.threeDays !==
+                this.previousNotificationsState.reactivation.threeDays) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-3';
+                subscribing = this.notifications.reactivation.threeDays;
+            }
+            if (this.notifications.reactivation.oneDay !==
+                this.previousNotificationsState.reactivation.oneDay) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-1';
+                subscribing = this.notifications.reactivation.oneDay;
+            }
+            if (this.notifications.reactivation.ended !==
+                this.previousNotificationsState.reactivation.ended) {
+                sendRequest = true;
+                requestType = 'reactivation-elusive-target-end';
+                subscribing = this.notifications.reactivation.ended;
+            }
+            //endregion
 
             let data = new FormData()
             let token = $('input[name="firebase-token"]').val()
-            let topic = this.environment + '-' + requestType
+            let topic = 'hitmaps-' + this.environment + '-' + requestType
             data.append('token', token)
             data.append('state', subscribing ? 'SUBSCRIBING' : 'UNSUBSCRIBING')
             data.append('topic', topic)
@@ -844,13 +995,24 @@ export default {
                         token + '|' + topic,
                         subscribing ? '1' : '0'
                     )
-                    this.previousNotificationsState.almostPlayable = this.notifications.almostPlayable
-                    this.previousNotificationsState.becomesPlayable = this.notifications.becomesPlayable
-                    this.previousNotificationsState.sevenDays = this.notifications.sevenDays
-                    this.previousNotificationsState.fiveDays = this.notifications.fiveDays
-                    this.previousNotificationsState.threeDays = this.notifications.threeDays
-                    this.previousNotificationsState.oneDay = this.notifications.oneDay
-                    this.previousNotificationsState.ended = this.notifications.ended
+                    //region New
+                    this.previousNotificationsState.new.almostPlayable = this.notifications.new.almostPlayable;
+                    this.previousNotificationsState.new.becomesPlayable = this.notifications.new.becomesPlayable;
+                    this.previousNotificationsState.new.sevenDays = this.notifications.new.sevenDays;
+                    this.previousNotificationsState.new.fiveDays = this.notifications.new.fiveDays;
+                    this.previousNotificationsState.new.threeDays = this.notifications.new.threeDays;
+                    this.previousNotificationsState.new.oneDay = this.notifications.new.oneDay;
+                    this.previousNotificationsState.new.ended = this.notifications.new.ended;
+                    //endregion
+                    //region Reactivation
+                    this.previousNotificationsState.reactivation.almostPlayable = this.notifications.reactivation.almostPlayable;
+                    this.previousNotificationsState.reactivation.becomesPlayable = this.notifications.reactivation.becomesPlayable;
+                    this.previousNotificationsState.reactivation.sevenDays = this.notifications.reactivation.sevenDays;
+                    this.previousNotificationsState.reactivation.fiveDays = this.notifications.reactivation.fiveDays;
+                    this.previousNotificationsState.reactivation.threeDays = this.notifications.reactivation.threeDays;
+                    this.previousNotificationsState.reactivation.oneDay = this.notifications.reactivation.oneDay;
+                    this.previousNotificationsState.reactivation.ended = this.notifications.reactivation.ended;
+                    //endregion
                 })
             }
         }
@@ -879,18 +1041,67 @@ export default {
                 this.showPromo = !!this.showPromo ? 0 : 1;
             }, 5000);
         });
-        this.$http.get(this.$domain + '/api/twitch/roulette-rivals').then(resp => {
+        this.$http.get(this.$domain + '/api/twitch/current-streams').then(resp => {
+            let whitelistedStreams = [
+                'zeekomkommer69',
+                'supremecommanderike',
+                'camthechest',
+                'pokeredface456',
+                'sheikthegeek',
+                'mulletpride',
+                'bigdavedmr',
+                'mungadungalis',
+                'gkpunk',
+                'adoriaclub47',
+                'foppeh',
+                'mrmike227',
+                'ibbe040',
+                'vortigauntblade',
+                'tryagain_later',
+                'a_chicken_chicken',
+                'yellowzr1',
+                'chubbydarksoul',
+                'speedsterrunner217',
+                'chaos_agent_45',
+                'frote7',
+                'double_eagle',
+                'some_random_person',
+                'in4fun',
+                'devilvendetta',
+                'srarkady54',
+                'yannini',
+                'bongo_mann',
+                'davidredsox',
+                'gulitox',
+                'skulkwah',
+                'dribbleondosfm',
+                'johnnyaxxx',
+                'mendietinha',
+                'ninja_frosk',
+                'the_hermit_crab',
+                'sky1yyy',
+                'silversurfers1',
+                'barg_11',
+                'therealfuzk',
+                'karma4d'
+            ];
+
             let streams = resp.data.data;
 
             let filteredStreams = [];
             streams.forEach(stream => {
+                // Don't display myself twice
+                if (stream['user_name'] === 'MrMike227') {
+                    return;
+                }
+
                 let streamTitle = stream.title.toLowerCase();
-                if (streamTitle.includes('roulette') && streamTitle.includes('rivals')) {
+                if (streamTitle.includes('ghost') && streamTitle.includes('mode') && whitelistedStreams.includes(stream['user_name'].toLowerCase())) {
                     filteredStreams.push(stream);
                 }
             });
 
-            this.streams = streams;
+            this.streams = filteredStreams;
         })
     }
 }
@@ -933,54 +1144,138 @@ function updateCheckboxState(
     previousNotificationsState,
     environment
 ) {
-    notifications.almostPlayable =
+    //region New
+    notifications.new.almostPlayable =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-coming'
-        ) === '1'
-    notifications.becomesPlayable =
+            token + '|hitmaps-' + environment + '-elusive-target-coming'
+        ) === '1';
+    notifications.new.becomesPlayable =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-playable'
-        ) === '1'
-    notifications.sevenDays =
+            token + '|hitmaps-' + environment + '-elusive-target-playable'
+        ) === '1';
+    notifications.new.sevenDays =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-7'
-        ) === '1'
-    notifications.fiveDays =
+            token + '|hitmaps-' + environment + '-elusive-target-7'
+        ) === '1';
+    notifications.new.fiveDays =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-5'
-        ) === '1'
-    notifications.threeDays =
+            token + '|hitmaps-' + environment + '-elusive-target-5'
+        ) === '1';
+    notifications.new.threeDays =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-3'
-        ) === '1'
-    notifications.oneDay =
+            token + '|hitmaps-' + environment + '-elusive-target-3'
+        ) === '1';
+    notifications.new.oneDay =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-1'
-        ) === '1'
-    notifications.ended =
+            token + '|hitmaps-' + environment + '-elusive-target-1'
+        ) === '1';
+    notifications.new.ended =
         window.localStorage.getItem(
-            token + '|' + environment + '-elusive-target-ended'
-        ) === '1'
+            token + '|hitmaps-' + environment + '-elusive-target-end'
+        ) === '1';
+    //endregion
+    //region Reactivation
+    notifications.reactivation.almostPlayable =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-coming'
+        ) === '1';
+    notifications.reactivation.becomesPlayable =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-playable'
+        ) === '1';
+    notifications.reactivation.sevenDays =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-7'
+        ) === '1';
+    notifications.reactivation.fiveDays =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-5'
+        ) === '1';
+    notifications.reactivation.threeDays =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-3'
+        ) === '1';
+    notifications.reactivation.oneDay =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-1'
+        ) === '1';
+    notifications.reactivation.ended =
+        window.localStorage.getItem(
+            token + '|hitmaps-' + environment + '-reactivation-elusive-target-end'
+        ) === '1';
+    //endregion
 
-    previousNotificationsState.almostPlayable = notifications.almostPlayable
-    previousNotificationsState.becomesPlayable = notifications.becomesPlayable
-    previousNotificationsState.sevenDays = notifications.sevenDays
-    previousNotificationsState.fiveDays = notifications.fiveDays
-    previousNotificationsState.threeDays = notifications.threeDays
-    previousNotificationsState.oneDay = notifications.oneDay
-    previousNotificationsState.ended = notifications.ended
+    //region New
+    previousNotificationsState.new.almostPlayable = notifications.new.almostPlayable;
+    previousNotificationsState.new.becomesPlayable = notifications.new.becomesPlayable;
+    previousNotificationsState.new.sevenDays = notifications.new.sevenDays;
+    previousNotificationsState.new.fiveDays = notifications.new.fiveDays;
+    previousNotificationsState.new.threeDays = notifications.new.threeDays;
+    previousNotificationsState.new.oneDay = notifications.new.oneDay;
+    previousNotificationsState.new.ended = notifications.new.ended;
+    //endregion
+    //region Reactivation
+    previousNotificationsState.reactivation.almostPlayable = notifications.reactivation.almostPlayable;
+    previousNotificationsState.reactivation.becomesPlayable = notifications.reactivation.becomesPlayable;
+    previousNotificationsState.reactivation.sevenDays = notifications.reactivation.sevenDays;
+    previousNotificationsState.reactivation.fiveDays = notifications.reactivation.fiveDays;
+    previousNotificationsState.reactivation.threeDays = notifications.reactivation.threeDays;
+    previousNotificationsState.reactivation.oneDay = notifications.reactivation.oneDay;
+    previousNotificationsState.reactivation.ended = notifications.reactivation.ended;
+    //endregion
 }
 </script>
 <style lang="scss" scoped>
-.site-header {
-    margin: 0 20px;
-
-    h1 {
-        margin-top: 20px;
+.ghost-mode-trailer {
+    video {
+        position: fixed;
+        left: 0;
+        top: -300px;
+        min-width: 100%;
+        min-height: 100%;
+        height: inherit;
     }
+}
 
-    img {
-        max-height: 100px;
+@media (min-width: 768px) {
+
+}
+
+@media (max-width: 767px) {
+    .ghost-mode-trailer {
+        video {
+            top: -400px;
+        }
+        /*display: none;
+
+        img {
+            display: block;
+            position: fixed;
+            left: 0;
+            top: 0;
+            min-width: 100%;
+            min-height: 100%;
+        }*/
+    }
+}
+
+.embed-responsive-16by9::before {
+    padding-top: 21.25%;
+}
+
+header {
+    /*margin-top: 450px;*/
+
+    .site-header {
+        margin: 0 20px;
+
+        h1 {
+            margin-top: 20px;
+        }
+
+        img {
+            max-height: 100px;
+        }
     }
 }
 
@@ -1254,6 +1549,62 @@ function updateCheckboxState(
                     }
                 }
             }
+        }
+    }
+}
+
+#notification-settings {
+    td {
+        text-align: center;
+
+        .form-check-input {
+            margin-left: 0;
+        }
+
+        &:first-child {
+            text-align: left;
+        }
+    }
+}
+
+.patreon {
+    background: #fff;
+    padding: 40px;
+
+    .intro {
+        margin-bottom: 30px;
+
+        h1 {
+            font-family: 'nimbus_sans_lbold', sans-serif;
+            text-transform: uppercase;
+        }
+
+        i.fa-square {
+            color: #e7705c;
+        }
+    }
+
+    .patron {
+        text-align: center;
+
+        img {
+            max-height: 128px;
+            max-width: 128px;
+        }
+
+        p {
+            margin-bottom: 0;
+        }
+    }
+
+    .patreon-button {
+        margin-top: 30px;
+        border-radius: 0;
+        background: #e7705c;
+        color: #fff;
+
+        &:hover {
+            background: #cd685c;
         }
     }
 }

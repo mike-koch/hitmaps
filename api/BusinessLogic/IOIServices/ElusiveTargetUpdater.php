@@ -124,7 +124,6 @@ class ElusiveTargetUpdater {
                 $elusiveTarget = new ElusiveTarget();
                 $elusiveTarget->setName($elusiveTargetJson->name);
                 $image = file_get_contents($elusiveTargetJson->tile);
-                $settings = new Settings();
                 $fileName = "{$locationInfo['tileSaveLocation']}{$saveName}";
                 file_put_contents(__DIR__ . "/../../../img/jpg{$fileName}.jpg", $image);
                 $elusiveTarget->setImageUrl($fileName);
@@ -137,7 +136,23 @@ class ElusiveTargetUpdater {
                 $elusiveTarget->setEndNotificationSent(false);
                 $elusiveTarget->setMissionId($newMissionId);
             }
+
+            // I better remember to change this when the next HITMAN game comes out 😛
+            $reactivated = $elusiveTarget->getReactivated();
+            if (!$reactivated &&
+                new \DateTime($elusiveTargetJson->nextWindow->start) > new \DateTime('2020-01-01 00:00:00', new \DateTimeZone('UTC'))) {
+
+                $reactivated = true;
+                $elusiveTarget->setComingNotificationSent(false);
+                $elusiveTarget->setPlayableNotificationSent(false);
+                $elusiveTarget->setSevenDaysLeftNotificationSent(false);
+                $elusiveTarget->setFiveDaysLeftNotificationSent(false);
+                $elusiveTarget->setThreeDaysLeftNotificationSent(false);
+                $elusiveTarget->setOneDayLeftNotificationSent(false);
+                $elusiveTarget->setEndNotificationSent(false);
+            }
             $elusiveTarget->setBriefing($elusiveTargetJson->description);
+            $elusiveTarget->setReactivated($reactivated);
             $elusiveTarget->setBeginningTime(new \DateTime($elusiveTargetJson->nextWindow->start));
             $elusiveTarget->setEndingTime(new \DateTime($elusiveTargetJson->nextWindow->end));
             $this->entityManager->persist($elusiveTarget);

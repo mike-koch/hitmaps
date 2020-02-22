@@ -44,7 +44,9 @@
             "5-days": "The Elusive Target is available for 5 more days",
             "3-days": "The Elusive Target is available for 3 more days",
             "1-day": "The Elusive Target is available for 1 more day",
-            "ended": "The Elusive Target has left"
+            "ended": "The Elusive Target has left",
+            "new-et": "New Elusive Target",
+            "reactivated-et": "Reactivated Elusive Target"
         },
         "n-days": "{days} Days"
     },
@@ -53,6 +55,10 @@
     "location-icon": "Location Icon",
     "mission-image": "Mission Image",
     "mission-icon": "Mission Icon",
+    "patreon": {
+        "patreon-supporters": "Patreon Supporters",
+        "patreon-supporters-description": "Patreon helps defer HITMAPS'️ operation costs.  We'd like to extend a thank you to the people below, who have pledged at the \"Master Assassin\" level or higher."
+    },
     "difficulties": {
         "Casual": "Casual",
         "Professional": "Professional",
@@ -65,7 +71,8 @@
         "special assignment": "Special Assignment",
         "bonus episode": "Bonus Mission",
         "patient zero": "Patient Zero",
-        "sniper assassin": "Sniper Assassin"
+        "sniper assassin": "Sniper Assassin",
+        "ghost mode": "Ghost Mode"
     },
     "locations": {
         "destinations": {
@@ -138,7 +145,8 @@
         "the-last-yardbird": "The Last Yardbird",
         "the-pen-and-the-sword": "The Pen and the Sword",
         "crime-and-punishment": "Crime and Punishment",
-        "the-last-resort": "The Last Resort"
+        "the-last-resort": "The Last Resort",
+        "miami": "Miami"
     },
     "map": {
         "level-number": "Level {levelNumber}",

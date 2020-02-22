@@ -3,16 +3,16 @@
 namespace Controllers;
 
 
-use BusinessLogic\Twitch\RouletteRivalsStreamRetriever;
+use BusinessLogic\Twitch\TwitchStreamRetriever;
 
 class TwitchController {
     private $rouletteRivalsStreamRetriever;
 
-    public function __construct(RouletteRivalsStreamRetriever $rouletteRivalsStreamRetriever) {
+    public function __construct(TwitchStreamRetriever $rouletteRivalsStreamRetriever) {
         $this->rouletteRivalsStreamRetriever = $rouletteRivalsStreamRetriever;
     }
 
-    public function getRouletteRivalsStreamers() {
-        return $this->rouletteRivalsStreamRetriever->getRouletteRivalsStreamers();
+    public function getCurrentStreams() {
+        return $this->rouletteRivalsStreamRetriever->getCurrentStreams();
     }
 }
