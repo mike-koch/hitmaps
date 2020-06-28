@@ -5,6 +5,24 @@
         "footer": "Translations are maintained and updated by the HITMAPS™️ community. If a translation is incorrect, please {submitACorrection}.",
         "submit-a-correction": "sottoscrivi una correzione"
     },
+    "roulette": {
+        "introduction": "Introducing the HITMAPS™ Roulette. Initially based on Kotti's {hitmanRoulette}, HITMAPS™ Roulette takes Kotti's work and builds off of it to add new features, including:",
+        "hitman-roulette": "Hitman Roulette",
+        "list-item-tournament-mode": {
+            "header": "Tournament Mode:",
+            "details": "Create a head-to-head matchup against your friend (or rival ;) ). Set up match durations and send the spin to your opponent via read-only spin links. These links automatically refresh each time a new spin is sent."
+        },
+        "list-item-control": {
+            "header": "Fine-tuned Control:",
+            "details": "Don't like a specific kill condition, but don't want to lose the rest of the spin? Simply re-spin the specific condition."
+        },
+        "list-item-overlay": {
+            "header": "Stream Overlay:",
+            "details": "Using the tournament mode, you can copy a link to add as a browser source in OBS to provide a professional overlay for your streams / YouTube videos."
+        },
+        "visit-button": "Visit HITMAPS™ Roulette",
+        "footer": "HITMAPS™ Roulette: The official roulette of Roulette Rivals"
+    },
     "partnership": {
         "header": "Official Partner of Frote's Speedrun Community",
         "paragraph-1": "HITMAPS™️ is pleased to be partnered with Frote's Speedrun Community. Back in September 2019, HITMAPS™️ promoted Speedrun Competition #2, along with all future events. We are happy to announce this official partnership, which includes both software tailed towards Frote's Speedrun Community, along with the necessary infrastructure to run the software. Frote's Speedrun Community has also offered to promote HITMAPS™️ in return as HITMAPS™️ may play an important role for participants.",
