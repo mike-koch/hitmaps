@@ -45,7 +45,8 @@
     "game-type": {
         "Campaign": "Kampania",
         "Game Mode": "Tryb gry",
-        "Elusive Target": "Nieuchwytny cel"
+        "Elusive Target": "Nieuchwytny cel",
+        "Legacy Game": "Legacy Game"
     },
     "elusive-target": {
         "reactivated-target": "Reactivated Target",
@@ -340,5 +341,145 @@
         "twitter": "Follow HITMAPS™️ on Twitter",
         "patreon": "Support My Work on Patreon",
         "about": "About"
+    },
+    "absolution": {
+        "a-personal-contract": {
+            "gardens": "Gardens",
+            "greenhouse": "Greenhouse",
+            "mansion-ground-floor": "Mansion|Ground Floor",
+            "mansion-second-floor": "Mansion|Second Floor",
+            "diana": "Mansion|Diana"
+        },
+        "the-king-of-chinatown": {
+            "ground": "Chinatown Square|Ground",
+            "second-floor": "Chinatown Square|2nd Floor"
+        },
+        "terminus": {
+            "sewers": "Terminus Hotel|Sewers",
+            "basement": "Terminus Hotel|Basement",
+            "ground": "Terminus Hotel|Ground",
+            "7-floor": "Upper Floors|7th Floor",
+            "8-floor": "Upper Floors|8th Floor"
+        },
+        "run-for-your-life": {
+            "hotel-room": "Burning Hotel|Hotel Room",
+            "hotel-roof": "Burning Hotel|Hotel Roof",
+            "library-first-floor": "Library|1st Floor",
+            "library-second-floor": "Library|2nd Floor",
+            "library-third-floor": "Library|3rd Floor",
+            "library-fourth-floor": "Library|4th Floor",
+            "pigeon-coop": "Pigeon Coop",
+            "shangri-la": "Shangri-la",
+            "train-first-floor": "Train Station|1st Floor",
+            "train-second-floor": "Train Station|2nd Floor"
+        },
+        "hunter-and-hunted": {
+            "courtyard-tunnels": "Courtyard|Tunnels",
+            "courtyard-ground": "Courtyard|Ground",
+            "club-first-floor": "Vixen Club|1st Floor",
+            "club-second-floor": "Vixen Club|2nd Floor",
+            "club-third-floor": "Vixen Club|3rd Floor",
+            "dressing-room-first-floor": "Dressing Rooms|1st Floor",
+            "dressing-room-second-floor": "Dressing Rooms|2nd Floor",
+            "derelict-first-floor": "Derelict Building|1st Floor",
+            "derelict-second-floor": "Derelict Building|2nd Floor",
+            "store-first-floor": "Convenience Store|1st Floor",
+            "store-second-floor": "Convenience Store|2nd Floor",
+            "store-third-floor": "Convenience Store|3rd Floor",
+            "chinese-new-year-first-floor": "Chinese New Year|1st Floor",
+            "chinese-new-year-second-floor": "Chinese New Year|2nd Floor",
+            "loading-area": "Loading Area"
+        },
+        "rosewood": {
+            "victorias-ward": "Victoria's Ward",
+            "hallways-first-floor": "Orphanage Halls|1st Floor",
+            "hallways-second-floor": "Orphanage Halls|2nd Floor",
+            "central-heating": "Central Heating"
+        },
+        "welcome-to-hope": {
+            "great-balls-of-fire": "Great Balls of Fire"
+        },
+        "birdies-gift": {
+            "gun-shop-ground-floor": "Gun Shop|1st Floor",
+            "gun-shop-second-floor": "Gun Shop|2nd Floor"
+        },
+        "shaving-lenny": {
+            "streets-of-hope-first-floor": "Streets of Hope|1st Floor",
+            "streets-of-hope-second-floor": "Streets of Hope|2nd Floor",
+            "barbershop-first-floor": "Barbershop|1st Floor",
+            "barbershop-second-floor": "Barbershop|2nd Floor"
+        },
+        "end-of-the-road": {
+            "the-desert": "The Desert"
+        },
+        "dexter-industries": {
+            "dead-end": "Dead End",
+            "old-mill-first-floor": "Old Mill|1st Floor",
+            "old-mill-second-floor": "Old Mill|2nd Floor",
+            "descent-floor-1": "Descent|1st Floor",
+            "descent-floor-2": "Descent|2nd Floor",
+            "descent-floor-3": "Descent|3rd Floor",
+            "descent-floor-4": "Descent|4th Floor",
+            "descent-floor-5": "Descent|5th Floor",
+            "descent-floor-6": "Descent|6th Floor",
+            "factory-floor-1": "Factory Compound|1st Floor",
+            "factory-floor-2": "Factory Compound|2nd Floor",
+            "factory-floor-3": "Factory Compound|3rd Floor"
+        },
+        "death-factory": {
+            "test-facility-floor-1": "Test Facility|1st Floor",
+            "test-facility-floor-2": "Test Facility|2nd Floor",
+            "test-facility-floor-3": "Test Facility|3rd Floor",
+            "test-facility-top": "Test Facility|Test Facility Top",
+            "decontamination": "Decontamination",
+            "rnd-b3": "R&D|B3",
+            "rnd-b1": "R&D|B1",
+            "rnd-floor-1": "R&D|1st Floor"
+        },
+        "fight-night": {
+            "arena-floor-1": "The Arena|1st Floor",
+            "arena-floor-2": "The Arena|2nd Floor",
+            "arena-floor-3": "The Arena|3rd Floor",
+            "backstage": "Patriot's Hangar"
+        },
+        "attack-of-the-saints": {
+            "parking-floor-1": "Parking|1st Floor",
+            "parking-floor-2": "Parking|2nd Floor",
+            "reception": "Reception",
+            "cornfield": "Cornfield"
+        },
+        "skurkys-law": {
+            "courthouse-floor-1": "Courthouse|1st Floor",
+            "courthouse-floor-2": "Courthouse|2nd Floor",
+            "holding-cells": "Holding Cells",
+            "prison-floor-1": "Prison|1st Floor",
+            "prison-floor-2": "Prison|2nd Floor"
+        },
+        "operation-sledgehammer": {
+            "county-jail": "County Jail",
+            "outgunned": "Outgunned",
+            "burn": "Burn",
+            "hope-fair-floor-1": "Hope Fair|1st Floor",
+            "hope-fair-floor-2": "Hope Fair|2nd Floor"
+        },
+        "one-of-a-kind": {
+            "floor-1": "Tailor Shop|1st Floor",
+            "floor-2": "Tailor Shop|2nd Floor"
+        },
+        "blackwater-park": {
+            "blackwater-park": "Blackwater Park",
+            "penthouse-floor-1": "Penthouse|1st Floor",
+            "penthouse-floor-2": "Penthouse|2nd Floor"
+        },
+        "countdown": {
+            "roof-floor-1": "Blackwater Roof|1st Floor",
+            "roof-floor-2": "Blackwater Roof|2nd Floor",
+            "roof-floor-3": "Blackwater Roof|3rd Floor"
+        },
+        "absolution": {
+            "cemetery-entrance": "Cemetery Entrance",
+            "burnwood-family-tomb": "Burnwood Family Tomb",
+            "crematorium": "Crematorium"
+        }
     }
 }
