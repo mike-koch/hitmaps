@@ -333,7 +333,8 @@
     },
     "back-to-home": "回到首頁",
     "footer": {
-        "disclaimer": "HITMAN™、HITMAN™ 2 以及 HITMAN™ 的商標、圖示和文字均屬於 {ioiLink} 的財產。",
+        "disclaimer": "HITMAN™ is a trademark exclusively licensed to {ioiLink}.",
+        "developed-by": "Site developed and maintained by {mikeKochLink}.",
         "io-interactive": "IO Interactive",
         "join-the-discord": "Join the HITMAPS™ Discord",
         "hitmanforum": "hitmanforum.com 討論串",
