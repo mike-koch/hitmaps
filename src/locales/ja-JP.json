@@ -333,7 +333,8 @@
     },
     "back-to-home": "Back to the homepage",
     "footer": {
-        "disclaimer": "HITMAN™, HITMAN™ 2, the HITMAN™ logo, images, and text are the property of {ioiLink}.",
+        "disclaimer": "HITMAN™ is a trademark exclusively licensed to {ioiLink}.",
+        "developed-by": "Site developed and maintained by {mikeKochLink}.",
         "io-interactive": "IO Interactive",
         "join-the-discord": "Join the HITMAPS™ Discord",
         "hitmanforum": "hitmanforum.com Discussion",
